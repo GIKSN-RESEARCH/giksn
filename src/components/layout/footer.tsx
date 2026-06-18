@@ -70,7 +70,10 @@ export function Footer() {
 
         <p className="text-center text-xs text-muted-foreground">
           © {new Date().getFullYear()} {site.name}. Community-first frontier
-          research.
+          research.{" "}
+          <Link href="/api/feed.xml" className="underline hover:text-foreground">
+            RSS
+          </Link>
         </p>
       </div>
     </footer>
