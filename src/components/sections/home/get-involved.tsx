@@ -35,7 +35,7 @@ const paths = [
 
 export function GetInvolved() {
   return (
-    <Section id="get-involved" className="overflow-hidden" fullBleed>
+    <Section id="get-involved" className="overflow-hidden pt-0" fullBleed>
       <div className="relative w-full site-gutter-x">
         <RevealBlur>
           <SectionHeading
@@ -47,7 +47,7 @@ export function GetInvolved() {
           />
         </RevealBlur>
 
-        <RevealStagger className="mx-auto mt-14 grid max-w-4xl gap-6 sm:grid-cols-3">
+        <RevealStagger className="mx-auto mt-4 grid max-w-4xl gap-6 sm:grid-cols-3">
           {paths.map((path) => {
             const Icon = path.icon;
             return (
