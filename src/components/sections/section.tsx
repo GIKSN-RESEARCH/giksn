@@ -16,7 +16,7 @@ export function Section({
   fullBleed?: boolean;
 }) {
   return (
-    <section id={id} className={cn("relative py-24 sm:py-32", className)}>
+    <section id={id} className={cn("relative pt-16 pb-16 sm:pt-20 sm:pb-20", className)}>
       {fullBleed ? (
         <div className="relative z-10">{children}</div>
       ) : (
