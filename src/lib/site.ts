@@ -22,28 +22,28 @@ export const researchDomains = [
     title: "AGI",
     description:
       "Reasoning systems, alignment, capability scaling and the path toward general intelligence.",
-    focus: "Top priority — foundational work on intelligence itself.",
+    focus: "Understanding and building toward general intelligence: architectures, training, reasoning and the limits of current methods.",
   },
   {
     id: "deeptech",
     title: "Deeptech",
     description:
       "Novel materials, quantum-adjacent systems and breakthrough science translated into engineering.",
-    focus: "Top priority — where frontier science meets buildable systems.",
+    focus: "Hard, science-driven technology: novel compute, advanced materials and the engineering that turns research into real capability.",
   },
   {
     id: "hardware",
     title: "Hardware",
     description:
       "Custom silicon, edge compute, neuromorphic architectures and the physical layer of intelligence.",
-    focus: "Building the substrates that AGI runs on.",
+    focus: "The silicon and systems underneath modern AI: accelerators, memory, interconnect and the economics of compute.",
   },
   {
     id: "distributed",
     title: "Distributed Systems",
     description:
       "Decentralized protocols, fault-tolerant networks and coordination at planetary scale.",
-    focus: "Infrastructure for open, resilient research and deployment.",
+    focus: "How computation scales across many machines: collectives, sharding, fault tolerance and coordination at scale.",
   },
 ] as const;
 
