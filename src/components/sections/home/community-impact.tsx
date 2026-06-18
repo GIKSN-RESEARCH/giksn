@@ -90,7 +90,7 @@ const stats = [
 
 export function CommunityImpact() {
   return (
-    <Section id="community-impact" fullBleed>
+    <Section id="community-impact" className="pt-0" fullBleed>
       <div className="w-full site-gutter-x">
         <RevealScale>
           <div className="glass overflow-hidden rounded-2xl">
