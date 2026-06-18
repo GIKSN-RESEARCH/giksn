@@ -1,7 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, Users } from "lucide-react";
 
 import giksnWordmark from "@/../public/GIKSN_v2.png";
 import { HeroBackground } from "@/components/sections/home/hero-background";
+import { Button } from "@/components/ui/button";
 import { spaceGrotesk } from "@/lib/fonts";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -42,6 +45,21 @@ export function Hero() {
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
             {site.description}
           </p>
+
+          <div className="pointer-events-auto mt-8 flex flex-wrap gap-3">
+            <Button render={<Link href="/join" />} size="lg">
+              <Users className="size-4" aria-hidden />
+              Join the Community
+            </Button>
+            <Button
+              render={<Link href="/research" />}
+              variant="outline"
+              size="lg"
+            >
+              Explore Research
+              <ArrowRight className="size-4" aria-hidden />
+            </Button>
+          </div>
         </div>
       </div>
     </section>
