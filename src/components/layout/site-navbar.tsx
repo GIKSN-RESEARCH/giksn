@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import navLogo from "@/../public/1.png";
+import { AuthStatus } from "@/components/layout/auth-status";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { Nav } from "@/components/layout/nav";
 import { SocialLinks } from "@/components/layout/social-links";
@@ -48,10 +49,13 @@ export function SiteNavbar() {
           <MobileNav />
         </div>
 
-        <SocialLinks
-          variant="icon"
-          className="relative z-10 shrink-0 gap-0.5 sm:gap-1"
-        />
+        <div className="relative z-10 flex shrink-0 items-center gap-3 sm:gap-4">
+          <AuthStatus variant="desktop" />
+          <SocialLinks
+            variant="icon"
+            className="gap-0.5 sm:gap-1"
+          />
+        </div>
       </div>
     </header>
   );
