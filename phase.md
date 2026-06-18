@@ -39,85 +39,85 @@
 - [x] **Mission / Vision** section — four domains, correlations, bootstrap stance, values
 - [x] **Research Pillars** — four cards (static placeholders; 3D micro-models next)
 - [x] **Current Work & Explainers** — featured initiatives, open questions (seed content)
-- [x] **Latest Publications & Insights** — seed placeholders (DB wiring in 1.6)
+- [x] **Latest Publications & Insights** — DB-backed featured/latest from admin publishes
 - [x] **Community & Impact** — bootstrap transparency, path to apply
 - [x] **Get Involved** — public Telegram channel link, other social channels, newsletter CTA, apply CTA with vetted-contributor note
 - [x] Reduced-motion for 2D motion (`useReducedMotion` in reveal components); 3D fallbacks pending with R3F
 
 ### 1.3 Database & ORM
 
-- [ ] Neon project + pooled/direct connection URLs
-- [ ] Drizzle schema: `profiles`, `publications`, `insights`, `projects`, `resources`, `applications`, `invitations`, `media`, `audit_log`, misc (`newsletter_subscribers`, `contact_messages`)
-- [ ] Better Auth tables via Drizzle adapter (`user`, `session`, `account`, `verification` + `role`, `status` additional fields)
-- [ ] `drizzle.config.ts`, `db/index.ts`, `db/migrate.ts`
+- [x] Neon project + pooled/direct connection URLs
+- [x] Drizzle schema: `profiles`, `publications`, `insights`, `projects`, `resources`, `applications`, `invitations`, `media`, `audit_log`, misc (`newsletter_subscribers`, `contact_messages`)
+- [x] Better Auth tables via Drizzle adapter (`user`, `session`, `account`, `verification` + `role`, `status` additional fields)
+- [x] `drizzle.config.ts`, `db/index.ts`, `db/migrate.ts`
 - [ ] Migrations in CI before deploy (`drizzle-kit generate` + `drizzle-kit migrate`)
 
 ### 1.4 Authentication & Admin Access
 
-- [ ] Better Auth: GitHub OAuth + email magic link
-- [ ] `ADMIN_EMAILS` allowlist → `admin` role on sign-in
-- [ ] `lib/auth.ts`, `lib/auth-guard.ts` (`getSession`, `requireAdmin`, `requireContributor` stub for Phase 2)
-- [ ] `middleware.ts` — block `/admin/*` for non-admins
-- [ ] `/admin` layout — server-side `requireAdmin()` guard
-- [ ] `app/api/auth/[...all]/route.ts`
+- [x] Better Auth: GitHub OAuth + email magic link
+- [x] `ADMIN_EMAILS` allowlist → `admin` role on sign-in
+- [x] `lib/auth.ts`, `lib/auth-guard.ts` (`getSession`, `requireAdmin`, `requireContributor` stub for Phase 2)
+- [x] `middleware.ts` — block `/admin/*` for non-admins
+- [x] `/admin` layout — server-side `requireAdmin()` guard
+- [x] `app/api/auth/[...all]/route.ts`
 
 ### 1.5 Admin CMS
 
-- [ ] Admin shell: sidebar nav, dashboard
-- [ ] **Dashboard** — content counts, recent activity, pending application count
-- [ ] **Publications** — list / new / edit; draft, publish, unpublish, archive, feature; slug auto-gen + uniqueness
-- [ ] **Insights** — same CRUD pattern
-- [ ] **Projects** — same CRUD pattern (public visibility only in Phase 1)
-- [ ] **Resources** — same CRUD pattern
-- [ ] **MDX editor** — CodeMirror 6 source editor + live preview via same `next-mdx-remote` pipeline as production
-- [ ] **Media library** — upload to Vercel Blob (`app/api/upload/route.ts`), browse, insert into content
-- [ ] **Applications** — read-only review queue (view submissions; accept/reject deferred to Phase 2)
-- [ ] Server Actions in `actions/content.ts` — Zod validation, `requireAdmin()`, `revalidateTag` + `revalidatePath` on publish
-- [ ] `@tanstack/react-query` in admin for client mutations/lists
+- [x] Admin shell: sidebar nav, dashboard
+- [x] **Dashboard** — content counts, recent activity, pending application count
+- [x] **Publications** — list / new / edit; draft, publish, unpublish, archive, feature; slug auto-gen + uniqueness
+- [x] **Insights** — same CRUD pattern
+- [x] **Projects** — same CRUD pattern (public visibility only in Phase 1)
+- [x] **Resources** — same CRUD pattern
+- [x] **MDX editor** — CodeMirror 6 source editor + live preview via same `next-mdx-remote` pipeline as production
+- [x] **Media library** — upload to Vercel Blob (`app/api/upload/route.ts`), browse, insert into content
+- [x] **Applications** — read-only review queue (view submissions; accept/reject deferred to Phase 2)
+- [x] Server Actions in `actions/content.ts` — Zod validation, `requireAdmin()`, `revalidateTag` + `revalidatePath` on publish
+- [x] `@tanstack/react-query` in admin for client mutations/lists
 
 ### 1.6 Public Content Pages (DB-backed MDX)
 
-- [ ] `lib/mdx.ts` — `next-mdx-remote/rsc` with `remark-math`, `rehype-katex`, `rehype-pretty-code` + shiki; custom MDX components
-- [ ] Import `katex/dist/katex.min.css` in root layout
-- [ ] `lib/queries/` — typed read functions; always filter `status = 'published'`
-- [ ] ISR + `unstable_cache` with collection tags (`publications`, `insights`, `projects`, `resources`)
-- [ ] Routes:
-  - [ ] `/publications` — list with domain/type/date filters
-  - [ ] `/publications/[slug]` — entry page
-  - [ ] `/insights` — list with category/domain filters
-  - [ ] `/insights/[slug]` — entry page
-  - [ ] `/projects` — list (public projects)
-  - [ ] `/projects/[slug]` — entry page
-  - [ ] `/resources` — list
-- [ ] Content components: `PublicationCard`, `InsightCard`, `ProjectCard`, `DomainBadge`, `Filters`
+- [x] `lib/mdx.ts` — `next-mdx-remote/rsc` with `remark-math`, `rehype-katex`, `rehype-pretty-code` + shiki; custom MDX components
+- [x] Import `katex/dist/katex.min.css` in root layout
+- [x] `lib/queries/` — typed read functions; always filter `status = 'published'`
+- [x] ISR + `unstable_cache` with collection tags (`publications`, `insights`, `projects`, `resources`)
+- [x] Routes:
+  - [x] `/publications` — list with domain/type/date filters
+  - [x] `/publications/[slug]` — entry page
+  - [x] `/insights` — list with category/domain filters
+  - [x] `/insights/[slug]` — entry page
+  - [x] `/projects` — list (public projects)
+  - [x] `/projects/[slug]` — entry page
+  - [x] `/resources` — list
+- [x] Content components: `PublicationCard`, `InsightCard`, `ProjectCard`, `DomainBadge`, `Filters`
 
 ### 1.7 Static Marketing Pages
 
-- [ ] `/about` — founding principles, cross-domain vision, roadmap
-- [ ] `/research` — pillar detail, methodology, how standalone + correlated research works
-- [ ] `/join` — entry into apply flow + public Telegram channel + other social channels
-- [ ] `/contact` — contact form (basic; full hardening in Phase 2)
+- [x] `/about` — founding principles, cross-domain vision, roadmap
+- [x] `/research` — pillar detail, methodology, how standalone + correlated research works
+- [x] `/join` — entry into apply flow + public Telegram channel + other social channels
+- [x] `/contact` — contact form (basic; full hardening in Phase 2)
 
 ### 1.8 Contributor Application (Collect Only)
 
-- [ ] `/contribute/apply` — public form: domains, background, links, optional CV upload, motivation, evidence field
-- [ ] `actions/applications.ts` — submit → `applications` row (`pending`)
-- [ ] Zod validation on all fields
-- [ ] Admin can view submissions in `/admin/applications` (no accept/reject/invite yet)
+- [x] `/contribute/apply` — public form: domains, background, links, optional CV upload, motivation, evidence field
+- [x] `actions/applications.ts` — submit → `applications` row (`pending`)
+- [x] Zod validation on all fields
+- [x] Admin can view submissions in `/admin/applications` (no accept/reject/invite yet)
 
 ### 1.9 Email (Transactional)
 
-- [ ] Resend + React Email templates
-- [ ] Application received (to applicant)
-- [ ] New application notification (to admin)
+- [x] Resend + React Email templates
+- [x] Application received (to applicant)
+- [x] New application notification (to admin)
 
 ### 1.10 SEO & Infra Basics
 
 - [x] Root metadata (lab name, description, OG defaults)
-- [ ] `app/sitemap.ts`, `app/robots.ts` (static + published slugs from DB)
+- [x] `app/sitemap.ts`, `app/robots.ts` (static + published slugs from DB)
 - [x] `app/not-found.tsx`
-- [ ] Env var template documented; Vercel deploy target
-- [ ] `@vercel/analytics` + `@vercel/speed-insights` (optional in Phase 1, recommended)
+- [x] Env var template documented; Vercel deploy target
+- [x] `@vercel/analytics` + `@vercel/speed-insights` (optional in Phase 1, recommended)
 
 ### Phase 1 Exit Criteria
 
@@ -134,54 +134,54 @@
 
 ### 2.1 Application Review, Contributor Provisioning & Telegram Tokens
 
-- [ ] Admin actions: accept, reject, waitlist + private reviewer notes
-- [ ] On accept: mint expiring platform `invitation` token **and** unique `telegramAccessToken` on the `invitations` row
-- [ ] Invite email includes platform redemption link + Telegram access token (and instructions for private channels)
-- [ ] Invitation redemption flow → Better Auth sign-in → `contributor` role + `profiles` row
-- [ ] Post-redemption onboarding screen: show Telegram access token once, link to public channel, steps for joining private channels
-- [ ] **Telegram bot token redemption** (chosen — safest): webhook Route Handler validates token server-side, binds to Telegram user ID, adds user to private channels via Bot API
-- [ ] Bot hardening: single-use tokens, per-user binding, rate limiting, constant-time compare, no public private-channel invite links
-- [ ] `app/api/telegram/webhook/route.ts` + env (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_BOT_WEBHOOK_SECRET`, `TELEGRAM_PRIVATE_CHANNEL_IDS`)
-- [ ] Store redeemer Telegram user ID for revocation; record `telegramTokenRedeemedAt`; audit-log issuance and redemption
-- [ ] Rejection / waitlist optional templated emails
-- [ ] Audit log entries for all review actions
+- [x] Admin actions: accept, reject, waitlist + private reviewer notes
+- [x] On accept: mint expiring platform `invitation` token **and** unique `telegramAccessToken` on the `invitations` row
+- [x] Invite email includes platform redemption link + Telegram access token (and instructions for private channels)
+- [x] Invitation redemption flow → Better Auth sign-in → `contributor` role + `profiles` row
+- [x] Post-redemption onboarding screen: show Telegram access token once, link to public channel, steps for joining private channels
+- [x] **Telegram bot token redemption** (chosen — safest): webhook Route Handler validates token server-side, binds to Telegram user ID, adds user to private channels via Bot API
+- [x] Bot hardening: single-use tokens, per-user binding, rate limiting, constant-time compare, no public private-channel invite links
+- [x] `app/api/telegram/webhook/route.ts` + env (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_BOT_WEBHOOK_SECRET`, `TELEGRAM_PRIVATE_CHANNEL_IDS`)
+- [x] Store redeemer Telegram user ID for revocation; record `telegramTokenRedeemedAt`; audit-log issuance and redemption
+- [x] Rejection / waitlist optional templated emails
+- [x] Audit log entries for all review actions
 
 ### 2.2 Contributor Role, Telegram Access & Platform Gating
 
-- [ ] `requireContributor()` enforced on contributor-only platform routes and queries
-- [ ] Contributor-only project visibility (`visibility = 'contributor'`) on the website
-- [ ] Contributor profile pages (handle, bio, domains, links)
-- [ ] `/admin/members` — list contributors, suspend/restore, role management, **revoke/rotate Telegram access tokens** (bot removes user from private channels on revoke)
-- [ ] Env: `TELEGRAM_PUBLIC_CHANNEL_URL`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_BOT_WEBHOOK_SECRET`, `TELEGRAM_PRIVATE_CHANNEL_IDS`
+- [x] `requireContributor()` enforced on contributor-only platform routes and queries
+- [x] Contributor-only project visibility (`visibility = 'contributor'`) on the website
+- [x] Contributor profile pages (handle, bio, domains, links)
+- [x] `/admin/members` — list contributors, suspend/restore, role management, **revoke/rotate Telegram access tokens** (bot removes user from private channels on revoke)
+- [x] Env: `TELEGRAM_PUBLIC_CHANNEL_URL`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_BOT_WEBHOOK_SECRET`, `TELEGRAM_PRIVATE_CHANNEL_IDS`
 - [ ] Private working groups and day-to-day collaboration live in **private Telegram channels**, not on-site chat
 
 ### 2.3 Full-Text Search
 
-- [ ] Raw SQL migration: `tsvector` generated columns + GIN indexes on publications, insights, projects
-- [ ] `pg_trgm` for fuzzy title matching
-- [ ] `lib/search.ts` — `websearch_to_tsquery` + `ts_rank`
-- [ ] Search UI on `/publications` and `/insights` (compose with existing filters)
-- [ ] Header search entry point (if scoped for this phase)
+- [x] Raw SQL migration: `tsvector` generated columns + GIN indexes on publications, insights, projects
+- [x] `pg_trgm` for fuzzy title matching
+- [x] `lib/search.ts` — `websearch_to_tsquery` + `ts_rank`
+- [x] Search UI on `/publications` and `/insights` (compose with existing filters)
+- [x] Header search entry point (if scoped for this phase)
 
 ### 2.4 Remaining Public Pages
 
-- [ ] `/community` — guidelines, contribution process, **public Telegram channel CTA**, how private channel access works (apply → accept → token), member spotlights, events, code of conduct
-- [ ] `/projects` — status indicators (Active, Open for Contributors, Completed, Exploratory), contribute CTAs, repo links
+- [x] `/community` — guidelines, contribution process, **public Telegram channel CTA**, how private channel access works (apply → accept → token), member spotlights, events, code of conduct
+- [x] `/projects` — status indicators (Active, Open for Contributors, Completed, Exploratory), contribute CTAs, repo links
 - [ ] `/about` and `/research` polish pass with live DB content cross-links
 
 ### 2.5 SEO, Metadata & Feeds
 
-- [ ] `generateMetadata` on all dynamic slug pages
-- [ ] JSON-LD in `lib/seo.ts` — `ScholarlyArticle`, `Article`, `Organization`
-- [ ] `app/api/feed.xml/route.ts` — DB-backed RSS (insights + publications)
-- [ ] `app/api/og/route.tsx` — dynamic OG images per publication/insight (palette-themed)
+- [x] `generateMetadata` on all dynamic slug pages
+- [x] JSON-LD in `lib/seo.ts` — `ScholarlyArticle`, `Article`, `Organization`
+- [x] `app/api/feed.xml/route.ts` — DB-backed RSS (insights + publications)
+- [x] `app/api/og/route.tsx` — dynamic OG images per publication/insight (palette-themed)
 
 ### 2.6 Security Hardening
 
-- [ ] `@upstash/ratelimit` on application, contact, newsletter, auth endpoints (`lib/ratelimit.ts`)
-- [ ] Cloudflare Turnstile + honeypot on all public forms
-- [ ] Audit log: write on every privileged action; read-only view in `/admin`
-- [ ] Confirm Zod + data-layer auth checks on every Server Action and Route Handler
+- [x] `@upstash/ratelimit` on application, contact, newsletter, auth endpoints (`lib/ratelimit.ts`)
+- [x] Cloudflare Turnstile + honeypot on all public forms
+- [x] Audit log: write on every privileged action; read-only view in `/admin`
+- [x] Confirm Zod + data-layer auth checks on every Server Action and Route Handler
 
 ### 2.7 Advanced 3D
 
@@ -192,7 +192,7 @@
 ### 2.8 Newsletter & Contact (Complete)
 
 - [ ] Newsletter signup with double opt-in (optional email)
-- [ ] Contact form → `contact_messages` table; admin inbox in `/admin`
+- [x] Contact form → `contact_messages` table; admin inbox in `/admin`
 - [ ] `/admin` settings stub for site config
 
 ### Phase 2 Exit Criteria
