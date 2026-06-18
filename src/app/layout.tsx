@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { Footer } from "@/components/layout/footer";
 import { SiteGrid } from "@/components/layout/site-grid";
@@ -7,9 +9,11 @@ import { SiteNavbar } from "@/components/layout/site-navbar";
 import { SkipLink } from "@/components/layout/skip-link";
 import { Toaster } from "@/components/ui/sonner";
 import { spaceGrotesk } from "@/lib/fonts";
+import { jsonLdScript, organizationJsonLd } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 import "./globals.css";
+import "katex/dist/katex.min.css";
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
@@ -57,6 +61,10 @@ export default function RootLayout({
       className={`dark ${jetbrainsMono.variable} ${spaceGrotesk.variable} h-full`}
     >
       <body className="flex min-h-full flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={jsonLdScript(organizationJsonLd())}
+        />
         <SiteGrid />
         <SkipLink />
         <SiteNavbar />
@@ -65,6 +73,8 @@ export default function RootLayout({
         </main>
         <Footer />
         <Toaster richColors position="bottom-right" />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
