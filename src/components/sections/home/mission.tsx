@@ -11,16 +11,20 @@ export function Mission() {
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
         {/* Left: only text */}
         <div className="lg:col-span-5 flex flex-col">
-          <RevealBlur className="flex-shrink-0">
+          <RevealBlur className="shrink-0">
             <SectionHeading
               eyebrow="Mission, Vision & Pillars"
               title="Frontier research, explained clearly"
-              description="GIKSN pursues AGI and deeptech as top priorities while building hardware and distributed systems that make the work real. We research domains standalone and in correlation — because the intersections are where breakthroughs compound. These four pillars form the foundation of our work."
+              description="GIKSN Research is a frontier tech research lab. We work across AGI, Deeptech, Hardware and Distributed Systems, both as distinct fields and at the points where they overlap, because the hardest and most useful problems usually live in between.
+              
+              We do two things in parallel. We pursue open research that we build and publish in full. We also write clear explanations of the tools, systems and ideas that already exist, so the frontier is legible to the people building on it.
+              
+              We are community-first execution based lab. We grow as the work earns it and stay transparent about being early."
               gradient
             />
           </RevealBlur>
 
-          <RevealBlur className="mt-24 flex-1 rounded-xl border border-border bg-black p-6 sm:p-8">
+          <RevealBlur className="mt-27 flex-1 rounded-xl border border-border bg-black p-6 sm:p-8">
             <p className="text-md leading-relaxed text-muted-foreground">
               We are transparent about our bootstrap stage: the lab grows through a
               community of people who can actually understand and continue the
@@ -58,7 +62,7 @@ export function Mission() {
                   >
                     <div
                       className={`relative flex items-center justify-center overflow-hidden border-b border-border text-foreground bg-black ${
-                        isLarge ? "h-48 min-h-70" : "h-36"
+                        isLarge ? "h-44 min-h-70" : "h-36"
                       }`}
                     >
                       <div className="relative">
