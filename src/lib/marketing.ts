@@ -29,7 +29,7 @@ export const roadmapPhases = [
     title: "Publish & explain",
     items: [
       "DB-backed publications, insights and resources",
-      "Public Telegram channel and open social presence",
+      "Public Discord server and open social presence",
       "Contributor application intake",
     ],
   },
@@ -38,7 +38,7 @@ export const roadmapPhases = [
     title: "Gated community",
     items: [
       "Application review and contributor provisioning",
-      "Private Telegram channels via access tokens",
+      "Private Discord channels via OAuth and access tokens",
       "Full-text search, RSS and security hardening",
     ],
   },
@@ -46,7 +46,7 @@ export const roadmapPhases = [
     phase: "Later",
     title: "Depth & tooling",
     items: [
-      "Working-group coordination in Telegram",
+      "Working-group coordination in Discord",
       "Hosted research tools and protocol demos",
       "Expanded benchmarks and resources landscape",
     ],
@@ -101,7 +101,7 @@ export const contributionProcess = [
     step: "01",
     title: "Follow in public",
     description:
-      "Join the public Telegram channel, read publications and insights, and participate in open discussion.",
+      "Join the public Discord server, read publications and insights, and participate in open discussion.",
   },
   {
     step: "02",
@@ -117,9 +117,9 @@ export const contributionProcess = [
   },
   {
     step: "04",
-    title: "Onboard with tokens",
+    title: "Onboard with Discord",
     description:
-      "Accepted contributors receive a platform invitation and a Telegram access token — redeemed via the lab bot, not shareable invite links.",
+      "Accepted contributors receive a platform invitation and connect Discord for the contributor role.",
   },
 ] as const;
 
@@ -143,13 +143,13 @@ export const communityEvents = [
     title: "Open research drops",
     cadence: "Ongoing",
     description:
-      "Publications, insights, and explainers publish to the site and are announced in the public Telegram channel.",
+      "Publications, insights, and explainers publish to the site and are announced in the public Discord server.",
   },
   {
     title: "Working groups",
     cadence: "Contributor-only",
     description:
-      "Domain and project working groups coordinate in private Telegram channels after vetting. Details shared on acceptance.",
+      "Domain and project working groups coordinate in private Discord channels after vetting. Details shared on acceptance.",
   },
 ] as const;
 
