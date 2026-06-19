@@ -21,7 +21,7 @@ export default async function AdminApplicationsPage() {
         Applications ({apps.length})
       </h1>
       <p className="mb-6 text-sm text-muted-foreground">
-        Accept to mint platform + Telegram tokens and email the applicant. Reject
+        Accept to mint platform + Discord tokens and email the applicant. Reject
         and waitlist send templated updates.
       </p>
 
