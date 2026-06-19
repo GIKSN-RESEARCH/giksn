@@ -4,16 +4,19 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Reveal, RevealBlur, RevealItem, RevealStagger } from "@/components/motion/reveal";
 import { Section, SectionHeading } from "@/components/sections/section";
-import { socialLinks } from "@/lib/site";
+import { getPublicCommunityLabel, getPublicCommunityUrl } from "@/lib/community";
+
+const communityUrl = getPublicCommunityUrl() ?? "/community";
+const communityLabel = getPublicCommunityLabel();
 
 const paths = [
   {
     icon: Send,
-    title: "Join public Telegram",
+    title: `Join public ${communityLabel}`,
     description:
       "Open discussion, announcements and links back to publications. No token required.",
-    href: socialLinks[0].href,
-    external: true,
+    href: communityUrl,
+    external: communityUrl.startsWith("http"),
   },
   {
     icon: Mail,
