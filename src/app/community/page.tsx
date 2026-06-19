@@ -18,11 +18,11 @@ import { socialLinks, site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Community",
   description:
-    "Community guidelines, contribution process, public Telegram channel, and how private contributor access works.",
+    "Community guidelines, contribution process, public Discord server, and how private contributor access works.",
 };
 
 export default function CommunityPage() {
-  const telegram = socialLinks.find((l) => l.label === "Telegram");
+  const discord = socialLinks.find((l) => l.label === "Discord");
 
   return (
     <>
@@ -38,11 +38,11 @@ export default function CommunityPage() {
         </RevealBlur>
 
         <Reveal className="mt-10 flex flex-wrap justify-center gap-3">
-          {telegram ? (
+          {discord && discord.href !== "#" ? (
             <Button
               render={
                 <a
-                  href={telegram.href}
+                  href={discord.href}
                   target="_blank"
                   rel="noopener noreferrer"
                 />
@@ -50,7 +50,7 @@ export default function CommunityPage() {
               size="lg"
             >
               <Send className="size-4" aria-hidden />
-              Join public Telegram
+              Join public Discord
             </Button>
           ) : null}
           <Button render={<Link href="/contribute/apply" />} variant="outline" size="lg">
@@ -85,7 +85,7 @@ export default function CommunityPage() {
           <SectionHeading
             eyebrow="Contribution"
             title="How to become a vetted contributor"
-            description="Private Telegram channels and contributor-only platform content are not open signup. The path is apply → review → invitation → token redemption."
+            description="Private Discord channels and contributor-only platform content are not open signup. The path is apply → review → invitation → Discord connect (or token redemption)."
           />
         </RevealBlur>
 
@@ -110,8 +110,8 @@ export default function CommunityPage() {
             <div className="flex items-start gap-3">
               <Shield className="mt-0.5 size-5 shrink-0 text-muted-foreground" aria-hidden />
               <p className="text-sm leading-relaxed text-muted-foreground">
-                Telegram private-channel access uses single-use tokens redeemed through the lab
-                bot — not public invite links. Full provisioning ships in Phase 2.
+                Private channel access uses Discord OAuth or <code>/redeem</code> — not
+                shareable invite links.
               </p>
             </div>
             <Button render={<Link href="/join" />} variant="outline" size="sm" className="shrink-0">
