@@ -14,14 +14,16 @@ import { site } from "@/lib/site";
 export function ContributorInvitationEmail({
   name,
   inviteUrl,
-  telegramToken,
-  botUsername,
+  discordToken,
+  discordUrl,
+  guildName,
   expiresAt,
 }: {
   name: string;
   inviteUrl: string;
-  telegramToken: string;
-  botUsername?: string;
+  discordToken: string;
+  discordUrl?: string;
+  guildName: string;
   expiresAt: string;
 }) {
   return (
@@ -40,12 +42,18 @@ export function ContributorInvitationEmail({
             Redeem invitation
           </Button>
           <Text style={text}>
-            After signing in, you will see your Telegram access token once on the
-            onboarding screen. Send it to{" "}
-            {botUsername ? `@${botUsername}` : "the lab Telegram bot"} to join private
-            channels — not shareable invite links.
+            After signing in, connect Discord on the onboarding screen to join{" "}
+            {guildName}
+            {discordUrl ? " and unlock private channels" : ""}. One-click OAuth is
+            preferred; you can also run <code>/redeem</code> in Discord with your access
+            token.
           </Text>
-          <Text style={mono}>Telegram token: {telegramToken}</Text>
+          <Text style={mono}>Discord token: {discordToken}</Text>
+          {discordUrl ? (
+            <Button href={discordUrl} style={buttonOutline}>
+              Join public Discord
+            </Button>
+          ) : null}
           <Text style={muted}>Invitation expires {expiresAt}.</Text>
         </Container>
       </Body>
@@ -90,6 +98,18 @@ const button = {
   margin: "8px 0 20px",
 };
 
+const buttonOutline = {
+  backgroundColor: "transparent",
+  color: "#22d3ee",
+  border: "1px solid #22d3ee",
+  borderRadius: "8px",
+  fontSize: "14px",
+  padding: "10px 16px",
+  textDecoration: "none",
+  display: "inline-block",
+  margin: "0 0 16px",
+};
+
 const mono = {
   color: "#22d3ee",
   fontFamily: "monospace",
@@ -103,5 +123,5 @@ const muted = {
   color: "#737373",
   fontSize: "13px",
   lineHeight: "1.5",
-  margin: "24px 0 0",
+  margin: "12px 0 0",
 };
