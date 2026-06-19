@@ -99,7 +99,7 @@ export function CommunityImpact() {
                 <SectionHeading
                   eyebrow="Community"
                   title="Built by researchers and builders, for the frontier"
-                  description="GIKSN grows through a vetted community — not open signup. We look for people who can understand the research and continue it. The public Telegram channel is open to everyone; private channels unlock after acceptance."
+                  description="GIKSN grows through a vetted community — not open signup. We look for people who can understand the research and continue it. The public Discord server is open to everyone; private channels unlock after acceptance."
                   gradient
                 />
               </RevealBlur>
