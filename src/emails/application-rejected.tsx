@@ -25,7 +25,7 @@ export function ApplicationRejectedEmail({ name }: { name: string }) {
             cohort.
           </Text>
           <Text style={muted}>
-            You can still follow public research and join the open Telegram channel.
+            You can still follow public research and join the open Discord server.
           </Text>
         </Container>
       </Body>
