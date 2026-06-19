@@ -17,11 +17,11 @@ export const metadata: Metadata = {
 const contributorSteps = [
   "Submit the application with background, domains, and evidence of deep work",
   "Manual review by the lab — we optimize for people who can continue the research",
-  "On acceptance: platform account + Telegram access token for private channels",
+  "On acceptance: platform account + Discord connect for private channels",
 ] as const;
 
 export default function JoinPage() {
-  const telegram = socialLinks.find((l) => l.label === "Telegram");
+  const discord = socialLinks.find((l) => l.label === "Discord");
 
   return (
     <>
@@ -30,7 +30,7 @@ export default function JoinPage() {
           <SectionHeading
             eyebrow="Join"
             title="Multiple paths, one standard"
-            description="Public channels are open to everyone. Vetted contributor access — private Telegram channels, internal projects — happens only through the application process."
+            description="Public Discord is open to everyone. Vetted contributor access — private channels, internal projects — happens only through the application process."
             align="center"
             gradient
           />
@@ -50,11 +50,11 @@ export default function JoinPage() {
                 required — start here if you want to follow the work and join the conversation.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                {telegram ? (
+                {discord && discord.href !== "#" ? (
                   <Button
                     render={
                       <a
-                        href={telegram.href}
+                        href={discord.href}
                         target="_blank"
                         rel="noopener noreferrer"
                       />
@@ -62,7 +62,7 @@ export default function JoinPage() {
                     size="sm"
                   >
                     <Send className="size-4" aria-hidden />
-                    Join Telegram
+                    Join Discord
                   </Button>
                 ) : null}
                 <Button
@@ -90,8 +90,8 @@ export default function JoinPage() {
               <h2 className="mt-5 text-xl font-semibold">Vetted contributor path</h2>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 Propose a project, co-author an explainer, or join a working group after
-                review. Approved contributors receive platform accounts and Telegram private
-                channel access tokens.
+                review. Approved contributors receive platform accounts and Discord private
+                channel access.
               </p>
               <ol className="mt-6 space-y-3 text-sm text-muted-foreground">
                 {contributorSteps.map((step, i) => (
@@ -103,17 +103,10 @@ export default function JoinPage() {
                   </li>
                 ))}
               </ol>
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-8">
                 <Button render={<Link href="/contribute/apply" />} size="sm">
                   Apply to contribute
                   <ArrowRight className="size-4" aria-hidden />
-                </Button>
-                <Button
-                  render={<Link href="/sign-in" />}
-                  variant="ghost"
-                  size="sm"
-                >
-                  Sign in
                 </Button>
               </div>
             </div>
