@@ -8,6 +8,7 @@ import { invitations, profiles, user } from "@/db/schema";
 import { actionError, type ActionResult } from "@/lib/admin/utils";
 import { logAdminAction } from "@/lib/audit";
 import { requireAdmin } from "@/lib/auth-guard";
+import { removeContributorRole } from "@/lib/discord";
 import { removeUserFromPrivateChannels } from "@/lib/telegram";
 import { generateSecureToken } from "@/lib/tokens";
 
@@ -74,6 +75,52 @@ export async function revokeTelegramAccess(
       entityType: "invitation",
       entityId: invitationId,
       metadata: { previousTelegramUserId: invite.telegramUserId },
+    });
+
+    revalidatePath("/admin/members");
+    return { success: true, data: undefined };
+  } catch (error) {
+    return actionError(error);
+  }
+}
+
+export async function revokeDiscordAccess(
+  invitationId: string
+): Promise<ActionResult> {
+  try {
+    const session = await requireAdmin();
+
+    const [invite] = await db
+      .select()
+      .from(invitations)
+      .where(eq(invitations.id, invitationId))
+      .limit(1);
+
+    if (!invite) {
+      return { success: false, error: "Invitation not found." };
+    }
+
+    if (invite.discordUserId) {
+      await removeContributorRole(invite.discordUserId);
+    }
+
+    const newToken = generateSecureToken(24);
+
+    await db
+      .update(invitations)
+      .set({
+        discordAccessToken: newToken,
+        discordUserId: null,
+        discordTokenRedeemedAt: null,
+      })
+      .where(eq(invitations.id, invitationId));
+
+    await logAdminAction({
+      actorId: session.user.id,
+      action: "discord.revoke",
+      entityType: "invitation",
+      entityId: invitationId,
+      metadata: { previousDiscordUserId: invite.discordUserId },
     });
 
     revalidatePath("/admin/members");
