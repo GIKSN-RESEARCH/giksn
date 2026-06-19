@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 import { toast } from "sonner";
 
-import { revokeTelegramAccess, setMemberStatus } from "@/actions/members";
+import { revokeDiscordAccess, setMemberStatus } from "@/actions/members";
 import { Button } from "@/components/ui/button";
 
 type MemberRow = {
@@ -15,8 +15,8 @@ type MemberRow = {
   displayName: string | null;
   invitation?: {
     id: string;
-    telegramUserId: string | null;
-    telegramTokenRedeemedAt: Date | null;
+    discordUserId: string | null;
+    discordTokenRedeemedAt: Date | null;
   } | null;
 };
 
@@ -32,12 +32,12 @@ export function MembersTable({ members }: { members: MemberRow[] }) {
     });
   }
 
-  function revoke(invitationId: string) {
-    if (!window.confirm("Revoke Telegram access and rotate token?")) return;
+  function revokeDiscord(invitationId: string) {
+    if (!window.confirm("Revoke Discord role and rotate token?")) return;
     startTransition(async () => {
-      const result = await revokeTelegramAccess(invitationId);
+      const result = await revokeDiscordAccess(invitationId);
       if (!result.success) toast.error(result.error);
-      else toast.success("Telegram access revoked.");
+      else toast.success("Discord access revoked.");
     });
   }
 
@@ -68,10 +68,10 @@ export function MembersTable({ members }: { members: MemberRow[] }) {
 
           {member.invitation ? (
             <p className="mt-3 text-xs text-muted-foreground">
-              Telegram:{" "}
-              {member.invitation.telegramTokenRedeemedAt
-                ? `bound (${member.invitation.telegramUserId})`
-                : "token not redeemed"}
+              Discord:{" "}
+              {member.invitation.discordTokenRedeemedAt
+                ? `connected (${member.invitation.discordUserId})`
+                : "not connected"}
             </p>
           ) : null}
 
@@ -89,9 +89,9 @@ export function MembersTable({ members }: { members: MemberRow[] }) {
                 size="sm"
                 variant="destructive"
                 disabled={isPending}
-                onClick={() => revoke(member.invitation!.id)}
+                onClick={() => revokeDiscord(member.invitation!.id)}
               >
-                Revoke Telegram
+                Revoke Discord
               </Button>
             ) : null}
           </div>
