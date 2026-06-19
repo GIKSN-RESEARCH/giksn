@@ -56,9 +56,9 @@ export const values = [
 
 export const socialLinks = [
   {
-    label: "Telegram",
-    href: process.env.NEXT_PUBLIC_TELEGRAM_URL ?? "#",
-    icon: "telegram" as const,
+    label: "Discord",
+    href: process.env.NEXT_PUBLIC_DISCORD_URL ?? "#",
+    icon: "discord" as const,
   },
   {
     label: "X",
