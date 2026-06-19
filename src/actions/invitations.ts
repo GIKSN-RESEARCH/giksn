@@ -153,11 +153,13 @@ export async function getOnboardingDetails() {
     .orderBy(desc(invitations.acceptedAt))
     .limit(1);
 
+  const { isDiscordConfigured, getPublicDiscordUrl } = await import("@/lib/discord");
+
   return {
-    telegramAccessToken: invite?.telegramAccessToken ?? null,
-    telegramRedeemed: Boolean(invite?.telegramTokenRedeemedAt),
-    botUsername: process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME ?? null,
-    publicChannelUrl: process.env.NEXT_PUBLIC_TELEGRAM_URL ?? null,
+    discordAccessToken: invite?.discordAccessToken ?? null,
+    discordRedeemed: Boolean(invite?.discordTokenRedeemedAt),
+    discordConfigured: isDiscordConfigured(),
+    publicDiscordUrl: getPublicDiscordUrl(),
   };
 }
 
