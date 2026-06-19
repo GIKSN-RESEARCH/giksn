@@ -29,7 +29,7 @@ export function ApplicationReceivedEmail({
             a time.
           </Text>
           <Text style={muted}>
-            If accepted, you will receive a platform invitation and Telegram access
+            If accepted, you will receive a platform invitation and Discord connect
             instructions in a follow-up email.
           </Text>
         </Container>
