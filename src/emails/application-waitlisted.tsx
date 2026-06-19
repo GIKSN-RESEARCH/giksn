@@ -24,7 +24,7 @@ export function ApplicationWaitlistedEmail({ name }: { name: string }) {
             in a future cohort. No action is needed right now.
           </Text>
           <Text style={muted}>
-            Public publications, insights, and the open Telegram channel remain available.
+            Public publications, insights, and the open Discord server remain available.
           </Text>
         </Container>
       </Body>
