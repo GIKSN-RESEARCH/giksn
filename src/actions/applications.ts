@@ -18,7 +18,8 @@ import { logAdminAction } from "@/lib/audit";
 import { requireAdmin } from "@/lib/auth-guard";
 import { getAdminEmails, sendTransactionalEmail } from "@/lib/email";
 import { generateSecureToken } from "@/lib/tokens";
-import { getTelegramBotUsername } from "@/lib/telegram";
+import { community } from "@/lib/community";
+
 import { guardPublicForm } from "@/lib/form-guard";
 import { applicationLimiter } from "@/lib/ratelimit";
 import { researchDomains, site } from "@/lib/site";
@@ -229,6 +230,7 @@ export async function reviewApplication({
     if (decision === "accept") {
       const platformToken = generateSecureToken();
       const telegramToken = generateSecureToken(24);
+      const discordToken = generateSecureToken(24);
       const expiresAt = new Date(now.getTime() + INVITE_TTL_DAYS * 24 * 60 * 60 * 1000);
       const inviteUrl = `${site.url}/invite/${platformToken}`;
 
@@ -236,6 +238,7 @@ export async function reviewApplication({
         email: app.email,
         token: platformToken,
         telegramAccessToken: telegramToken,
+        discordAccessToken: discordToken,
         role: "contributor",
         applicationId: app.id,
         expiresAt,
@@ -258,8 +261,9 @@ export async function reviewApplication({
         react: ContributorInvitationEmail({
           name: app.name,
           inviteUrl,
-          telegramToken,
-          botUsername: getTelegramBotUsername() ?? undefined,
+          discordToken,
+          discordUrl: community.discordUrl ?? undefined,
+          guildName: community.discordGuildName,
           expiresAt: expiresAt.toLocaleDateString(),
         }),
       });
