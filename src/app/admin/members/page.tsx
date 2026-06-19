@@ -10,8 +10,8 @@ export default async function AdminMembersPage() {
     <div>
       <h1 className="mb-2 text-2xl font-bold">Members ({members.length})</h1>
       <p className="mb-6 text-sm text-muted-foreground">
-        Vetted contributors with platform accounts. Suspend access or revoke Telegram
-        channel membership.
+        Vetted contributors with platform accounts. Suspend access or revoke Discord
+        community access.
       </p>
       <MembersTable members={members} />
     </div>
