@@ -9,6 +9,10 @@ import { Section, SectionHeading } from "@/components/sections/section";
 import type { HomepageContentItem } from "@/lib/queries/featured";
 
 function itemHref(item: HomepageContentItem) {
+  if (item.isPreview) {
+    return item.kind === "publication" ? "/publications" : "/insights";
+  }
+
   return item.kind === "publication"
     ? `/publications/${item.slug}`
     : `/insights/${item.slug}`;
@@ -18,8 +22,66 @@ function itemLabel(item: HomepageContentItem) {
   return item.kind === "publication" ? "Publication" : "Insight";
 }
 
-export function LatestContentView({ items }: { items: HomepageContentItem[] }) {
+function BentoCard({
+  item,
+  size,
+}: {
+  item: HomepageContentItem;
+  size: "featured" | "compact";
+}) {
+  const isFeatured = size === "featured";
+
+  return (
+    <Link
+      href={itemHref(item)}
+      className="group card-elevated relative flex h-full flex-col overflow-hidden rounded-xl transition-all"
+    >
+      <div className="h-px w-full bg-border" aria-hidden />
+
+      <div
+        className={`relative flex flex-1 flex-col ${isFeatured ? "p-8" : "p-6"}`}
+      >
+        <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+          {itemLabel(item)}
+          {item.isPreview ? (
+            <span className="ml-2 text-foreground/40">· Preview</span>
+          ) : null}
+        </p>
+        <h3
+          className={`font-semibold text-foreground transition-colors duration-300 group-hover:text-foreground/80 ${
+            isFeatured ? "mt-3 text-2xl" : "mt-2 text-lg"
+          }`}
+        >
+          {item.title}
+        </h3>
+        <p
+          className={`mt-2 flex-1 leading-relaxed text-muted-foreground ${
+            isFeatured ? "text-sm sm:text-base" : "text-sm"
+          }`}
+        >
+          {item.excerpt}
+        </p>
+        <DomainList
+          domains={item.domains}
+          className={isFeatured ? "mt-5" : "mt-4"}
+        />
+      </div>
+    </Link>
+  );
+}
+
+export function LatestContentView({
+  items,
+  usingPreview = false,
+}: {
+  items: HomepageContentItem[];
+  usingPreview?: boolean;
+}) {
   const [featured, ...rest] = items;
+
+  if (!featured) {
+    return null;
+  }
 
   return (
     <Section id="latest" className="pt-0">
@@ -49,51 +111,24 @@ export function LatestContentView({ items }: { items: HomepageContentItem[] }) {
         </Reveal>
       </div>
 
-      <RevealStagger className="mt-4 grid gap-6 md:grid-cols-3">
-        <RevealItem className="md:col-span-2">
-          <Link
-            href={itemHref(featured)}
-            className="group card-elevated relative flex h-full flex-col overflow-hidden rounded-xl transition-all"
-          >
-            <div className="h-px w-full bg-border" aria-hidden />
+      {usingPreview ? (
+        <Reveal className="mt-4">
+          <p className="text-sm text-muted-foreground">
+            Publish from the admin panel to replace these preview cards with live
+            research.
+          </p>
+        </Reveal>
+      ) : null}
 
-            <div className="relative flex flex-1 flex-col p-8">
-              <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                {itemLabel(featured)}
-              </p>
-              <h3 className="mt-3 text-2xl font-semibold text-foreground transition-colors duration-300 group-hover:text-foreground/80">
-                {featured.title}
-              </h3>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground sm:text-base">
-                {featured.excerpt}
-              </p>
-              <DomainList domains={featured.domains} className="mt-5" />
-            </div>
-          </Link>
+      <RevealStagger className="mt-10 grid gap-6 md:grid-cols-3">
+        <RevealItem className="md:col-span-2 md:row-span-2">
+          <BentoCard item={featured} size="featured" />
         </RevealItem>
 
         <div className="flex flex-col gap-6">
           {rest.map((item) => (
-            <RevealItem key={`${item.kind}-${item.slug}`}>
-              <Link
-                href={itemHref(item)}
-                className="group card-elevated relative flex h-full flex-col overflow-hidden rounded-xl transition-all"
-              >
-                <div className="h-px w-full bg-border" aria-hidden />
-
-                <div className="relative flex flex-1 flex-col p-6">
-                  <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-                    {itemLabel(item)}
-                  </p>
-                  <h3 className="mt-2 text-lg font-semibold text-foreground transition-colors duration-300 group-hover:text-foreground/80">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
-                    {item.excerpt}
-                  </p>
-                  <DomainList domains={item.domains} className="mt-4" />
-                </div>
-              </Link>
+            <RevealItem key={`${item.kind}-${item.slug || item.title}`}>
+              <BentoCard item={item} size="compact" />
             </RevealItem>
           ))}
         </div>
