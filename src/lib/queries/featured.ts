@@ -3,25 +3,62 @@ import { publications, insights } from '@/db/schema';
 import { desc, eq } from 'drizzle-orm';
 import { unstable_cache } from 'next/cache';
 
+type HomepageContentBase = {
+  title: string;
+  excerpt: string;
+  domains: string[];
+  featured: boolean;
+  publishedAt: Date | null;
+  /** Seed cards shown when nothing is published yet — link to list pages. */
+  isPreview?: boolean;
+};
+
 export type HomepageContentItem =
-  | {
+  | (HomepageContentBase & {
       kind: 'publication';
       slug: string;
-      title: string;
-      excerpt: string;
-      domains: string[];
-      featured: boolean;
-      publishedAt: Date | null;
-    }
-  | {
+    })
+  | (HomepageContentBase & {
       kind: 'insight';
       slug: string;
-      title: string;
-      excerpt: string;
-      domains: string[];
-      featured: boolean;
-      publishedAt: Date | null;
-    };
+    });
+
+/** Bento placeholders — always shown when the DB has no published content yet. */
+export const homepageContentFallback: HomepageContentItem[] = [
+  {
+    kind: 'insight',
+    slug: '',
+    title: 'Mapping the AGI tooling landscape',
+    excerpt:
+      "A practitioner's guide to what exists today, what is hype, and what actually ships.",
+    domains: ['AGI', 'Tooling'],
+    featured: true,
+    publishedAt: null,
+    isPreview: true,
+  },
+  {
+    kind: 'publication',
+    slug: '',
+    title: 'Hardware–software co-design for edge inference',
+    excerpt:
+      'How substrate choices reshape what models can run where — and why it matters for AGI paths.',
+    domains: ['Hardware', 'AGI'],
+    featured: false,
+    publishedAt: null,
+    isPreview: true,
+  },
+  {
+    kind: 'insight',
+    slug: '',
+    title: 'Distributed systems as research infrastructure',
+    excerpt:
+      'Why open, fault-tolerant coordination layers are prerequisites for community-scale research.',
+    domains: ['Distributed Systems'],
+    featured: false,
+    publishedAt: null,
+    isPreview: true,
+  },
+];
 
 export const getHomepageContent = unstable_cache(
   async (): Promise<HomepageContentItem[]> => {
