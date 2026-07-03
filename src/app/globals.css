@@ -246,3 +246,45 @@ input, textarea, select, button {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* Spinning arc around the GIKSN mark, used by the PageLoader while a route
+   streams in. */
+@keyframes giksn-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-giksn-spin {
+  animation: giksn-spin 1.2s linear infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
+/* Subtle breathing on the mark itself so it feels alive. */
+@keyframes giksn-breathe {
+  0%, 100% {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-giksn-breathe {
+  animation: giksn-breathe 1.8s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Reduced-motion: freeze both animations. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-giksn-spin,
+  .animate-giksn-breathe {
+    animation: none;
+  }
+}
