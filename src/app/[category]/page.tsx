@@ -7,7 +7,7 @@ import { FilteredPapersList } from "@/components/FilteredPapersList";
 import { categoryByCode, STATUSES } from "@/lib/papers";
 import { listPapersPublic } from "@/db/queries";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 export default async function CategoryPage({
   params,
@@ -28,7 +28,7 @@ export default async function CategoryPage({
     <>
       <Masthead />
       <CategoryNav active={cat.code} />
-      <main className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 pt-8 sm:pt-12 pb-10 sm:pb-12">
+      <main className="w-full mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 pt-8 sm:pt-12 pb-10 sm:pb-12">
         <section className="grid grid-cols-12 gap-6 md:gap-10 pb-8 sm:pb-10 border-b border-rule">
           <div className="col-span-12 md:col-span-9">
             <div className="flex items-baseline gap-3 mb-3">

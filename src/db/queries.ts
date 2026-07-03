@@ -396,27 +396,53 @@ export async function getPaperIdBySlug(
 // ---------------------------------------------------------------------------
 
 export const PAPERS_TAG = "papers";
-const CACHE_TTL_SECONDS = 3600;
+// TTL kept short so pages self-heal within a minute even when DB rows are
+// inserted or updated outside the app (seed scripts, direct SQL, etc.).
+// Mutations through the API still fire revalidateTag('papers', 'default')
+// for instant invalidation.
+const CACHE_TTL_SECONDS = 60;
 
-export const listPapersPublic = unstable_cache(
-  async (category?: Category) =>
-    listPapers({ category, includeHidden: false }),
-  ["listPapersPublic"],
-  { tags: [PAPERS_TAG], revalidate: CACHE_TTL_SECONDS }
-);
+// In development, skip the cache entirely so every save/refresh reads live
+// data. unstable_cache persists to .next/cache/fetch-cache/ on disk and
+// survives HMR and server restarts, which makes iterating with direct DB
+// scripts painful. Production keeps the caching for latency.
+const IS_DEV = process.env.NODE_ENV !== "production";
 
-export const listPapersSortedByUpdatedPublic = unstable_cache(
-  async (
-    opts: { onlyPapers?: boolean; onlyUpdates?: boolean } = {}
-  ) =>
-    listPapersSortedByUpdated({ ...opts, includeHidden: false }),
-  ["listPapersSortedByUpdatedPublic"],
-  { tags: [PAPERS_TAG], revalidate: CACHE_TTL_SECONDS }
-);
+async function listPapersPublicUncached(category?: Category) {
+  return listPapers({ category, includeHidden: false });
+}
 
-export const getPaperBySlugPublic = unstable_cache(
-  async (category: string, slug: string) =>
-    getPaperBySlug(category, slug, { includeHidden: false }),
-  ["getPaperBySlugPublic"],
-  { tags: [PAPERS_TAG], revalidate: CACHE_TTL_SECONDS }
-);
+async function listPapersSortedByUpdatedPublicUncached(
+  opts: { onlyPapers?: boolean; onlyUpdates?: boolean } = {}
+) {
+  return listPapersSortedByUpdated({ ...opts, includeHidden: false });
+}
+
+async function getPaperBySlugPublicUncached(
+  category: string,
+  slug: string
+) {
+  return getPaperBySlug(category, slug, { includeHidden: false });
+}
+
+export const listPapersPublic = IS_DEV
+  ? listPapersPublicUncached
+  : unstable_cache(listPapersPublicUncached, ["listPapersPublic"], {
+      tags: [PAPERS_TAG],
+      revalidate: CACHE_TTL_SECONDS,
+    });
+
+export const listPapersSortedByUpdatedPublic = IS_DEV
+  ? listPapersSortedByUpdatedPublicUncached
+  : unstable_cache(
+      listPapersSortedByUpdatedPublicUncached,
+      ["listPapersSortedByUpdatedPublic"],
+      { tags: [PAPERS_TAG], revalidate: CACHE_TTL_SECONDS }
+    );
+
+export const getPaperBySlugPublic = IS_DEV
+  ? getPaperBySlugPublicUncached
+  : unstable_cache(getPaperBySlugPublicUncached, ["getPaperBySlugPublic"], {
+      tags: [PAPERS_TAG],
+      revalidate: CACHE_TTL_SECONDS,
+    });

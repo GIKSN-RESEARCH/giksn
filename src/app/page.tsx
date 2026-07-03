@@ -19,7 +19,7 @@ import { listPapersSortedByUpdatedPublic } from "@/db/queries";
 
 // Rendered fresh at most every hour; admin mutations force revalidation
 // immediately via revalidateTag('papers').
-export const revalidate = 3600;
+export const revalidate = 60;
 
 const DESKTOP_PAGE_SIZE = 8;
 
@@ -50,7 +50,7 @@ export default async function HomePage() {
     <>
       <Masthead />
       <CategoryNav />
-      <main className="mx-auto max-w-360 px-4 sm:px-6 lg:px-10 pt-8 sm:pt-10 pb-10 sm:pb-12">
+      <main className="w-full mx-auto max-w-360 px-4 sm:px-6 lg:px-10 pt-8 sm:pt-10 pb-10 sm:pb-12">
         {/* MOBILE LAYOUT */}
         <div className="md:hidden">
           <FeaturedArticle p={featured} />
@@ -370,7 +370,7 @@ function EmptyState() {
     <>
       <Masthead />
       <CategoryNav />
-      <main className="mx-auto max-w-360 px-4 sm:px-6 lg:px-10 pt-20 pb-16 text-center">
+      <main className="w-full mx-auto max-w-360 px-4 sm:px-6 lg:px-10 pt-20 pb-16 text-center">
         <div className="kicker mb-3 justify-center">The lab is quiet</div>
         <h1
           className="font-display font-semibold text-ink leading-[0.98] tracking-[-0.035em] mx-auto max-w-[18ch]"

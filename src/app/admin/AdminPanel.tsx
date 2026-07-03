@@ -33,6 +33,7 @@ export function AdminPanel() {
   const [flash, setFlash] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Paper | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [purging, setPurging] = useState(false);
 
   const refreshSession = useCallback(async () => {
     try {
@@ -75,6 +76,29 @@ export function AdminPanel() {
   useEffect(() => {
     if (session?.authenticated) loadPapers();
   }, [session?.authenticated, loadPapers]);
+
+  async function purgeCache() {
+    setPurging(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/admin/revalidate", {
+        method: "POST",
+        cache: "no-store",
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error ?? `Purge failed (HTTP ${res.status}).`);
+        if (res.status === 401) await refreshSession();
+        return;
+      }
+      setFlash("Public cache purged");
+      setTimeout(() => setFlash(null), 2500);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Network error.");
+    } finally {
+      setPurging(false);
+    }
+  }
 
   async function logout() {
     await fetch("/api/admin/logout", { method: "POST" });
@@ -274,6 +298,15 @@ export function AdminPanel() {
           <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint hidden md:inline">
             Signed in as <span className="text-ink normal-case">{session.email}</span>
           </span>
+          <button
+            type="button"
+            onClick={purgeCache}
+            disabled={purging}
+            className="border border-rule px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] hover:bg-tint hover:border-accent hover:text-accent transition-colors disabled:opacity-50"
+            title="Force the public cache to rebuild. Use after direct DB scripts or if pages look stale."
+          >
+            {purging ? "Purging…" : "Purge cache"}
+          </button>
           <button
             type="button"
             onClick={loadPapers}

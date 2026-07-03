@@ -6,7 +6,7 @@ import { Footer } from "@/components/Footer";
 import { FilteredUpdatesList } from "@/components/FilteredUpdatesList";
 import { listPapersSortedByUpdatedPublic } from "@/db/queries";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 export default async function UpdatesPage() {
   const all = await listPapersSortedByUpdatedPublic({ onlyUpdates: true });
@@ -15,7 +15,7 @@ export default async function UpdatesPage() {
     <>
       <Masthead />
       <CategoryNav active="UPDATES" />
-      <main className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 pt-8 sm:pt-12 pb-12 sm:pb-16">
+      <main className="w-full mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 pt-8 sm:pt-12 pb-12 sm:pb-16">
         <header className="pb-8 sm:pb-10 border-b border-rule">
           <div className="flex items-center gap-3 mb-3">
             <div className="kicker">The wire</div>

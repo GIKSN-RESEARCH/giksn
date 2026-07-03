@@ -1,180 +1,74 @@
 # GIKSN Research
 
-A community-first research lab working at the frontier of **Artificial Intelligence**, **Deeptech**, **Hardware**, and **Distributed Systems**. This repo is the lab's front door: an editorial archive of papers, surveys, and lab updates, argued in the open, with a threaded discussion under every entry.
+A community-first research lab writing and building at the frontier of **Artificial Intelligence**, **Deeptech**, **Hardware**, and **Distributed Systems**.
 
 The site is the record. Telegram is the room.
 
+## What this is
+
+GIKSN Research is where the lab publishes what it is working on and why. Papers open for critique. Projects open for contribution. Reasoning published alongside the result.
+
+Most research either sits behind a paywall, behind a slide deck, or behind a private Discord. The reasoning that led to a result is almost never legible from the outside, so the alternatives never get argued in public. GIKSN exists to keep that record.
+
 ## The two corners
 
-The archive has one table and two front-of-house sections:
-
-- **Papers** — original research and surveys across the four sectors below. Each paper has an abstract, a body, a status, and a discussion thread.
-- **Updates** — lab announcements. Cohort openings, releases, program dates, collaborations. Factual, sourced from the org doing the announcing.
-
-Both are the same underlying content type (a "paper" in the DB), distinguished by category. `UP` is the update category; the rest are research sectors.
+- **Papers** — original research and surveys across the four sectors. Each paper has an abstract, a body, a status, and a discussion thread. Every entry is credited, every reasoning trail is preserved, and rejected directions stay in the archive because the argument matters more than the verdict.
+- **Products** — tools and protocols the lab has shipped. Each product page carries a status, a short description, install and reference links, and points back to the paper that argues for it.
 
 ## Sectors
 
-| Code | Full name              | Scope                                                                            |
-| ---- | ---------------------- | -------------------------------------------------------------------------------- |
-| `AI` | Artificial Intelligence | Foundational and applied work on models, agents, evaluation, alignment, AGI.     |
-| `DT` | Deeptech               | Bio, materials, energy, quantum, robotics. Research at the physical frontier.    |
-| `HW` | Hardware               | Silicon, accelerators, embedded systems, sensors. The compute substrate.         |
-| `DS` | Distributed Systems    | Consensus, storage, coordination, protocols. Plumbing that scales.               |
-| `UP` | Updates                | Announcements from the lab and the wider frontier.                               |
+| Code | Sector                  | What it covers                                                                          |
+| ---- | ----------------------- | --------------------------------------------------------------------------------------- |
+| `AI` | Artificial Intelligence | Models, agents, evaluation, alignment, interpretability, the road to AGI.               |
+| `DT` | Deeptech                | Bio, materials, energy, quantum, robotics. Research at the physical frontier.           |
+| `HW` | Hardware                | Silicon, accelerators, embedded systems, sensors. The substrate the rest runs on.       |
+| `DS` | Distributed Systems     | Consensus, storage, coordination, protocols. Plumbing that scales without breaking.     |
 
-## Lifecycle statuses
+Cross-sector work is the point. Compute means little without the models on top of it; the models mean little without the systems that let them run.
+
+## How a paper moves
 
 Status describes where the research is, not the editorial state of the document.
 
-| Status        | Meaning                                            |
-| ------------- | -------------------------------------------------- |
-| `Exploration` | Sketching. Open questions, no strong claims yet.   |
-| `Draft`       | Being written. The argument has a shape.           |
-| `Preprint`    | Public and open for critique.                      |
-| `Published`   | Final version. The lab stands by it.               |
-| `Landmark`    | Foundational. Cited widely, referenced by later work. |
+- **Exploration** — sketching, open questions.
+- **Draft** — being written.
+- **Preprint** — public, awaiting critique.
+- **Published** — final version.
+- **Landmark** — foundational, cited widely.
+- **Product** — shipped and available.
 
-Kinds: `Original` (new research) or `Survey` (synthesis of existing work).
+Papers can be `Original` (new research) or `Survey` (synthesis of an existing subfield). Status can move backward when reality demands it. That is the archive doing its job.
 
-## Stack
+## What you can do
 
-- **Next.js 16.2.4** (App Router, Turbopack, React 19)
-- **TypeScript** strict mode
-- **Tailwind v4** with `@theme inline` design tokens
-- **next/font** — Space Grotesk (display) + Ubuntu (body)
-- **Postgres** via **Drizzle ORM** + `postgres` driver (Neon-friendly)
-- HMAC-signed session cookie for admin auth (scrypt password hashes)
+- **Read** every paper without an account.
+- **Argue** with any paper's discussion thread.
+- **Submit** your own paper or a lab update through the public submission form. Everything lands as `Exploration` and is moved through the lifecycle by an editor.
+- **Follow** the products page for what the lab has actually shipped.
 
-The whole app is one Next.js deploy. No separate backend service.
+## What we're shipping
 
-## Design tokens
+The first product out of the lab is [**Rinne**](https://github.com/GIKSN-RESEARCH/Rinne) — a local, open-source, terminal-first AI orchestration harness that composes the coding-agent CLIs and model APIs you already have into a verifying generator–evaluator loop. Zero telemetry, zero hosted component, MIT/Apache-2.0.
 
-Defined in `src/app/globals.css` and consumed via Tailwind `@theme inline`:
-
-| Token                       | Value                    | Use                        |
-| --------------------------- | ------------------------ | -------------------------- |
-| `--paper`                   | `#ffffff`                | Background                 |
-| `--ink`                     | `#281e32`                | Body text                  |
-| `--accent`                  | `#35a29f`                | Headlines, accents         |
-| `--ink-soft` / `--ink-faint` | `#5b5263` / `#8b8390`   | Secondary text, metadata   |
-| `--rule`                    | `rgba(40,30,50,0.12)`    | Hairline borders           |
-| `--tint`                    | `#faf7f2`                | Hover backgrounds          |
-
-## Routes
-
-```
-/                       masthead, featured, sectors, latest activity, hero search
-/[sector]               listing for one sector (/ai, /dt, /hw, /ds)
-/[sector]/[slug]        paper detail with metadata, discussion, reply form
-/updates                the wire — lab and partner announcements
-/archive                every paper, filterable
-/about                  the lab, its principles, how statuses move
-/submit                 paper + update submission form
-/admin                  private CMS (email + password login)
-/api/papers/...         REST endpoints backing the client
-```
-
-`[sector]` accepts the lowercase code (`ai`, `dt`, `hw`, `ds`, `up`). 404 otherwise.
-
-## Project layout
-
-```
-src/
-├── app/
-│   ├── layout.tsx              root layout, fonts, metadata
-│   ├── globals.css             design tokens + typographic base
-│   ├── page.tsx                homepage
-│   ├── about/page.tsx
-│   ├── archive/page.tsx
-│   ├── updates/page.tsx
-│   ├── submit/{page,SubmitForm}.tsx
-│   ├── admin/{page,AdminPanel}.tsx
-│   ├── [category]/page.tsx
-│   ├── [category]/[slug]/page.tsx
-│   └── api/
-│       ├── admin/
-│       └── papers/
-├── components/
-│   ├── Masthead.tsx            top nameplate
-│   ├── CategoryNav.tsx         sticky sector nav (Papers / Updates)
-│   ├── PaperRow.tsx            paper list row
-│   ├── UpdateRow.tsx           update list row
-│   ├── FilteredPapersList.tsx  search + filter for papers
-│   ├── FilteredUpdatesList.tsx search + filter for updates
-│   ├── HeroSearchBar.tsx       prominent home-page search + filter
-│   ├── StatusPill.tsx          lifecycle badge
-│   ├── KindBadge.tsx           Original / Survey
-│   ├── CommentThread.tsx       threaded discussion (1 level)
-│   ├── CapitalCard.tsx         (legacy filename) Community/Telegram card
-│   └── Footer.tsx              colophon + sector links
-├── db/
-│   ├── schema.ts               Drizzle table + enum definitions
-│   ├── queries.ts              typed query functions
-│   └── index.ts                Drizzle client
-└── lib/
-    ├── papers.ts               types, category/status/kind data, helpers
-    ├── validators.ts           Zod schemas for API + form input
-    ├── session.ts              HMAC-signed session cookie
-    ├── api.ts                  Route handler helpers (json, error, requireAdmin)
-    ├── contact.ts              social-handle parsing / URL building
-    ├── parseBody.ts            plain-text → PaperSection[] parser
-    ├── inlineMarkdown.tsx      inline **bold** / *italic* / [links]
-    └── password.ts             scrypt hashing
-```
-
-## Local development
-
-```bash
-bun install                    # or npm/pnpm
-bun dev                        # http://localhost:3000
-```
-
-Other scripts:
-
-```bash
-bun run build                  # production build
-bun run start                  # serve the production build
-bun run lint                   # eslint
-bun run db:generate            # regenerate drizzle migrations from schema
-bun run db:migrate             # apply pending migrations
-bun run db:push                # push schema straight to DB (dev only)
-bun run db:studio              # inspect the DB
-bun run db:seed                # load a sample paper
-bun run admin -- create <email> <password>   # create an admin
-```
-
-## Environment variables
-
-Copy `.env.example` to `.env` and fill in:
-
-```
-DATABASE_URL=                   # Postgres connection string (Neon-style URL is fine)
-DATABASE_SSL=                   # "1" to force sslmode=require, blank otherwise
-SESSION_SECRET=                 # openssl rand -base64 32
-NEXT_PUBLIC_GA_MEASUREMENT_ID=  # optional; enables Google Analytics behind the on-site consent banner
-```
-
-## Submitting content
-
-The submit form (`/submit`) is the primary entry point. It handles both types:
-
-- **Papers** — pick a sector, pick `Original` or `Survey`, write an abstract and a body, add a contact handle.
-- **Updates** — the same form with `?kind=update`. Instead of a sector picker, you name the source organization; the sector locks to `UP`.
-
-Every submission lands as `Exploration`. Editors move it through `Draft` → `Preprint` → `Published` from the admin panel.
-
-## Editorial conventions
-
-- Titles use specific verbs and specific nouns. No slogans.
-- Abstracts state the question and the approach. They do not sell.
-- Rejected directions stay in the archive. The reasoning matters more than the verdict.
-- Editors copy-edit for clarity. They do not rewrite voice.
-- Discussion is threaded one level deep on purpose.
-- No em dashes, no Oxford commas, sparing semicolons.
+More products are on the bench. The design decisions behind each one live under its companion paper in the archive.
 
 ## Community
 
-GIKSN is community-first. The public Telegram channel is open to anyone; the private channels are gated behind a contributor application. See `GIKSN_CONTEXT.md` for the full platform vision, including the Phase 2 Telegram-bot architecture, contributor application flow, and the eventual admin CMS rebuild.
+The public Telegram channel is open to anyone. Day-to-day discussion, working groups, and research in progress happen there. Private channels are gated behind a contributor application so the work stays with people who can continue it.
+
+- [Join the public channel →](https://t.me/+xBmnL8ng85cyMDY1)
+- Apply to contribute through the About page.
+
+## Principles
+
+1. **Openness** — research, tools, and reasoning published where anyone can read them.
+2. **Rigor** — cite specifics, name failure modes, argue with substance not vibes.
+3. **Collaboration** — contribution is vetted, not because the door is closed but because the work is real.
+
+## Get in touch
+
+For questions, feedback, or takedown requests: `research@giksn.com`.
+
+For everything else, join Telegram or open a discussion under the relevant paper.
 
 Independent. Open. Ambitious.

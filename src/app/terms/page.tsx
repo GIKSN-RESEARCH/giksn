@@ -33,7 +33,7 @@ export default function TermsOfUsePage() {
     <>
       <Masthead />
       <CategoryNav />
-      <main className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 pt-8 sm:pt-12 pb-12 sm:pb-16">
+      <main className="w-full mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 pt-8 sm:pt-12 pb-12 sm:pb-16">
         <article className="grid grid-cols-12 gap-6 md:gap-10">
           <header className="col-span-12 pb-8 sm:pb-10 border-b border-rule">
             <div className="kicker mb-3">Terms &amp; policies</div>

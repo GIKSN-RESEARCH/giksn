@@ -19,6 +19,13 @@ export default function AboutPage() {
             >
               A research lab, <span className="text-accent">built in public</span>.
             </h1>
+            <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] sm:text-[12px] uppercase tracking-[0.16em] text-ink-soft">
+              <span className="text-accent">GIKSN</span>
+              <span aria-hidden className="text-ink-faint">
+                ·
+              </span>
+              <span>General Intelligence Kinetic Systems Node</span>
+            </div>
             <p className="mt-5 sm:mt-7 max-w-[60ch] text-[16px] sm:text-[19px] leading-[1.55] text-ink-soft font-display italic">
               GIKSN Research is a community-first lab working on AI, Deeptech,
               Hardware, and Distributed Systems. We write, we build, and we

@@ -13,7 +13,7 @@ import { renderInline } from "@/lib/inlineMarkdown";
 import { parseContact } from "@/lib/contact";
 import { CommentForm } from "./CommentForm";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 export default async function PaperPage({
   params,
@@ -45,7 +45,7 @@ export default async function PaperPage({
     <>
       <Masthead />
       <CategoryNav active={upMode ? "UPDATES" : cat.code} />
-      <main className="mx-auto max-w-360 px-4 sm:px-6 lg:px-10 pt-8 sm:pt-10 pb-12 sm:pb-16">
+      <main className="w-full mx-auto max-w-360 px-4 sm:px-6 lg:px-10 pt-8 sm:pt-10 pb-12 sm:pb-16">
         {/* Breadcrumb */}
         <nav className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint mb-6 sm:mb-8 flex items-center gap-2 flex-wrap">
           <Link

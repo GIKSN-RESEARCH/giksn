@@ -17,7 +17,7 @@ function FooterInner() {
     <footer className="border-t border-rule">
       <div className="border-t-[3px] border-accent" />
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 py-10 sm:py-12">
-        <div className="grid grid-cols-12 gap-6 sm:gap-8">
+        <div className="grid grid-cols-12 gap-8 sm:gap-8">
           <div className="col-span-12 md:col-span-4">
             <Link
               href="/"
@@ -41,7 +41,7 @@ function FooterInner() {
               contribution, decisions made in public.
             </p>
           </div>
-          <div className="col-span-6 md:col-span-3">
+          <div className="col-span-12 md:col-span-3">
             <div className="kicker mb-3">Sectors</div>
             <ul className="space-y-1.5">
               {CATEGORIES.map((c) => (
@@ -56,7 +56,7 @@ function FooterInner() {
               ))}
             </ul>
           </div>
-          <div className="col-span-6 md:col-span-3">
+          <div className="col-span-12 md:col-span-3">
             <div className="kicker mb-3">Index</div>
             <ul className="space-y-1.5">
               <li>
@@ -102,10 +102,18 @@ function FooterInner() {
             </ul>
           </div>
         </div>
-        <div className="mt-10 sm:mt-12 pt-6 border-t border-rule flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint">
+        <div className="mt-10 sm:mt-12 pt-6 border-t border-rule flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint text-center sm:text-left">
           <span>© {new Date().getFullYear()} GIKSN Research</span>
-          <span>
-            Community First · Frontier Research · Builder Approach
+          <span className="tracking-[0.16em]">
+            Community First{" "}
+            <span className="text-accent" aria-hidden>
+              ·
+            </span>{" "}
+            Frontier Research{" "}
+            <span className="text-accent" aria-hidden>
+              ·
+            </span>{" "}
+            Builder Approach
           </span>
         </div>
       </div>

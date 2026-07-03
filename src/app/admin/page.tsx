@@ -10,7 +10,7 @@ export default function AdminPage() {
     <>
       <Masthead />
       <CategoryNav />
-      <main className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 pt-8 sm:pt-12 pb-12 sm:pb-16">
+      <main className="w-full mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 pt-8 sm:pt-12 pb-12 sm:pb-16">
         <header className="pb-8 sm:pb-10 border-b border-rule">
           <div className="kicker mb-3">Editorial desk</div>
           <h1

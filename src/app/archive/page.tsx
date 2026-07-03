@@ -15,7 +15,7 @@ import { listPapersSortedByUpdatedPublic } from "@/db/queries";
 
 // searchParams keeps this route dynamic; the underlying DB read is cached
 // via Next.js data cache and invalidated by revalidateTag('papers').
-export const revalidate = 3600;
+export const revalidate = 60;
 
 type SortKey = "recent" | "oldest" | "most-replies" | "reference";
 const VALID_SORTS: readonly SortKey[] = [
@@ -69,7 +69,7 @@ export default async function ArchivePage({
     <>
       <Masthead />
       <CategoryNav active="ARCHIVE" />
-      <main className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 pt-8 sm:pt-12 pb-12 sm:pb-16">
+      <main className="w-full mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10 pt-8 sm:pt-12 pb-12 sm:pb-16">
         <header className="pb-8 sm:pb-10 border-b border-rule">
           <div className="kicker mb-3">The archive</div>
           <h1
