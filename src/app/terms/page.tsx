@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 const EFFECTIVE_DATE = "2026-07-03";
-const CONTACT_EMAIL = "manjulsiddharth09@gmail.com";
+const CONTACT_EMAIL = "research@giksn.com";
 
 export default function TermsOfUsePage() {
   return (
