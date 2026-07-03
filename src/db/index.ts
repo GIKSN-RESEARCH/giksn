@@ -3,6 +3,10 @@ import postgres, { type Sql } from "postgres";
 
 import * as schema from "./schema";
 
+// Cache the Postgres client and the Drizzle instance on globalThis so warm
+// serverless invocations reuse the same TCP connection pool instead of
+// negotiating a new TLS handshake on every request. This matters a lot on
+// Vercel: a fresh connection to Neon adds ~150–300ms per request.
 const globalForDb = globalThis as unknown as {
   __pg?: Sql;
   __drizzle?: ReturnType<typeof drizzle<typeof schema>>;
@@ -21,20 +25,18 @@ function getClient(): Sql {
     ssl,
     max: 10,
     idle_timeout: 30,
+    // Neon's pooler does not support prepared statement caching across
+    // pooled connections, so keep prepare off.
     prepare: false,
   });
-  if (process.env.NODE_ENV !== "production") {
-    globalForDb.__pg = client;
-  }
+  globalForDb.__pg = client;
   return client;
 }
 
 function getDb() {
   if (globalForDb.__drizzle) return globalForDb.__drizzle;
   const instance = drizzle(getClient(), { schema });
-  if (process.env.NODE_ENV !== "production") {
-    globalForDb.__drizzle = instance;
-  }
+  globalForDb.__drizzle = instance;
   return instance;
 }
 

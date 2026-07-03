@@ -8,12 +8,12 @@ import { CommentThread } from "@/components/CommentThread";
 import { StatusPill } from "@/components/StatusPill";
 import { KindBadge } from "@/components/KindBadge";
 import { categoryByCode, formatDate, isUpdate, paperRef } from "@/lib/papers";
-import { getPaperBySlug, listPapers } from "@/db/queries";
+import { getPaperBySlugPublic, listPapersPublic } from "@/db/queries";
 import { renderInline } from "@/lib/inlineMarkdown";
 import { parseContact } from "@/lib/contact";
 import { CommentForm } from "./CommentForm";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function PaperPage({
   params,
@@ -24,15 +24,17 @@ export default async function PaperPage({
   const cat = categoryByCode(category);
   if (!cat) return notFound();
 
-  const paper = await getPaperBySlug(cat.code, slug);
+  // Fire both public reads in parallel; both come from the tagged cache.
+  const [paper, sameCategory] = await Promise.all([
+    getPaperBySlugPublic(cat.code, slug),
+    listPapersPublic(cat.code),
+  ]);
   if (!paper) return notFound();
 
   const replyCount = paper.discussion.reduce(
     (n, c) => n + 1 + (c.replies?.length ?? 0),
     0
   );
-
-  const sameCategory = await listPapers({ category: cat.code });
   const related = sameCategory
     .filter((p) => p.slug !== paper.slug)
     .slice(0, 4);

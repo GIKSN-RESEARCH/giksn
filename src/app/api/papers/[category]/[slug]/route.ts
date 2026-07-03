@@ -1,9 +1,12 @@
+import { revalidateTag } from "next/cache";
+
 import { categoryByCode } from "@/lib/papers";
 import { error, json, parseJson, requireAdmin } from "@/lib/api";
 import { updatePaperSchema } from "@/lib/validators";
 import {
   deletePaper,
   getPaperBySlug,
+  PAPERS_TAG,
   setPaperFeatured,
   setPaperHidden,
   updatePaperStatus,
@@ -61,6 +64,9 @@ export async function PATCH(
     }
 
     if (!updated) return error("No changes.", 400);
+    // Every mutation invalidates the public read cache so admin edits show
+    // up on all list and detail pages immediately.
+    revalidateTag(PAPERS_TAG, "default");
     return json({ paper: updated });
   } catch (e) {
     console.error("[PATCH /api/papers/.../...] failed:", e);
@@ -100,6 +106,7 @@ export async function DELETE(
 
     const ok = await deletePaper(cat.code, slug);
     if (!ok) return error("Paper not found.", 404);
+    revalidateTag(PAPERS_TAG, "default");
     return json({ ok: true });
   } catch (e) {
     console.error("[DELETE /api/papers/.../...] failed:", e);

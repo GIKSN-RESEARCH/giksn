@@ -1,4 +1,5 @@
 import { and, asc, desc, eq, max, ne, sql } from "drizzle-orm";
+import { unstable_cache } from "next/cache";
 
 import { db } from "./index";
 import { admins, comments, papers } from "./schema";
@@ -375,3 +376,47 @@ export async function getPaperIdBySlug(
     .limit(1);
   return row?.id ?? null;
 }
+
+// ---------------------------------------------------------------------------
+// Cached public reads
+//
+// Every public-facing page (home, archive, updates, category, paper detail)
+// used to force-dynamic and hit Postgres on every request. That is the
+// single biggest source of latency in the app.
+//
+// These wrappers use Next.js data cache with a shared tag `papers`. First
+// request populates the cache; subsequent requests are served instantly
+// from Next.js's cache without touching Postgres. Every mutation endpoint
+// calls revalidateTag('papers') so admin edits appear within milliseconds
+// rather than waiting for the TTL. The `revalidate` value is a safety net
+// in case a tag call is missed.
+//
+// includeHidden: true reads (admin panel) must NOT use these helpers —
+// they bypass hidden filtering and would leak drafts to the public cache.
+// ---------------------------------------------------------------------------
+
+export const PAPERS_TAG = "papers";
+const CACHE_TTL_SECONDS = 3600;
+
+export const listPapersPublic = unstable_cache(
+  async (category?: Category) =>
+    listPapers({ category, includeHidden: false }),
+  ["listPapersPublic"],
+  { tags: [PAPERS_TAG], revalidate: CACHE_TTL_SECONDS }
+);
+
+export const listPapersSortedByUpdatedPublic = unstable_cache(
+  async (
+    opts: { onlyPapers?: boolean; onlyUpdates?: boolean } = {}
+  ) =>
+    listPapersSortedByUpdated({ ...opts, includeHidden: false }),
+  ["listPapersSortedByUpdatedPublic"],
+  { tags: [PAPERS_TAG], revalidate: CACHE_TTL_SECONDS }
+);
+
+export const getPaperBySlugPublic = unstable_cache(
+  async (category: string, slug: string) =>
+    getPaperBySlug(category, slug, { includeHidden: false }),
+  ["getPaperBySlugPublic"],
+  { tags: [PAPERS_TAG], revalidate: CACHE_TTL_SECONDS }
+);

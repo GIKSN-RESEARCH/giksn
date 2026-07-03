@@ -5,9 +5,9 @@ import { CategoryNav } from "@/components/CategoryNav";
 import { Footer } from "@/components/Footer";
 import { FilteredPapersList } from "@/components/FilteredPapersList";
 import { categoryByCode, STATUSES } from "@/lib/papers";
-import { listPapers } from "@/db/queries";
+import { listPapersPublic } from "@/db/queries";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function CategoryPage({
   params,
@@ -18,7 +18,7 @@ export default async function CategoryPage({
   const cat = categoryByCode(category);
   if (!cat) return notFound();
 
-  const list = await listPapers({ category: cat.code });
+  const list = await listPapersPublic(cat.code);
   const counts = STATUSES.map((s) => ({
     status: s,
     n: list.filter((p) => p.status === s).length,

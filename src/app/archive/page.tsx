@@ -11,9 +11,11 @@ import {
   type Kind,
   type Status,
 } from "@/lib/papers";
-import { listPapersSortedByUpdated } from "@/db/queries";
+import { listPapersSortedByUpdatedPublic } from "@/db/queries";
 
-export const dynamic = "force-dynamic";
+// searchParams keeps this route dynamic; the underlying DB read is cached
+// via Next.js data cache and invalidated by revalidateTag('papers').
+export const revalidate = 3600;
 
 type SortKey = "recent" | "oldest" | "most-replies" | "reference";
 const VALID_SORTS: readonly SortKey[] = [
@@ -45,7 +47,7 @@ export default async function ArchivePage({
     sort?: string;
   }>;
 }) {
-  const all = await listPapersSortedByUpdated({ onlyPapers: true });
+  const all = await listPapersSortedByUpdatedPublic({ onlyPapers: true });
   const params = await searchParams;
   const initialQuery = (params.q ?? "").trim();
   const initialCategories = parseList<Category>(

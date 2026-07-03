@@ -15,14 +15,16 @@ import {
   type Status,
 } from "@/lib/papers";
 import { PRODUCTS } from "@/lib/products";
-import { listPapersSortedByUpdated } from "@/db/queries";
+import { listPapersSortedByUpdatedPublic } from "@/db/queries";
 
-export const dynamic = "force-dynamic";
+// Rendered fresh at most every hour; admin mutations force revalidation
+// immediately via revalidateTag('papers').
+export const revalidate = 3600;
 
 const DESKTOP_PAGE_SIZE = 8;
 
 export default async function HomePage() {
-  const sorted = await listPapersSortedByUpdated({ onlyPapers: true });
+  const sorted = await listPapersSortedByUpdatedPublic({ onlyPapers: true });
 
   if (sorted.length === 0) {
     return <EmptyState />;

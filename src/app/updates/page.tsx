@@ -4,12 +4,12 @@ import { Masthead } from "@/components/Masthead";
 import { CategoryNav } from "@/components/CategoryNav";
 import { Footer } from "@/components/Footer";
 import { FilteredUpdatesList } from "@/components/FilteredUpdatesList";
-import { listPapersSortedByUpdated } from "@/db/queries";
+import { listPapersSortedByUpdatedPublic } from "@/db/queries";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function UpdatesPage() {
-  const all = await listPapersSortedByUpdated({ onlyUpdates: true });
+  const all = await listPapersSortedByUpdatedPublic({ onlyUpdates: true });
 
   return (
     <>

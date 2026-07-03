@@ -1,7 +1,9 @@
+import { revalidateTag } from "next/cache";
+
 import { categoryByCode } from "@/lib/papers";
 import { error, json, parseJson } from "@/lib/api";
 import { createCommentSchema } from "@/lib/validators";
-import { addComment, getPaperIdBySlug } from "@/db/queries";
+import { addComment, getPaperIdBySlug, PAPERS_TAG } from "@/db/queries";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +23,9 @@ export async function POST(
 
   try {
     const comment = await addComment(paperId, parsed.data);
+    // A new reply changes the paper's updated timestamp and the sort order
+    // on list pages, so the public cache has to be dropped.
+    revalidateTag(PAPERS_TAG, "default");
     return json({ comment }, 201);
   } catch (e) {
     const msg =

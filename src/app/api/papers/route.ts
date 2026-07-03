@@ -1,3 +1,5 @@
+import { revalidateTag } from "next/cache";
+
 import { categoryByCode } from "@/lib/papers";
 import { error, json, parseJson } from "@/lib/api";
 import { createPaperSchema } from "@/lib/validators";
@@ -5,6 +7,7 @@ import {
   createPaper,
   listPapers,
   listPapersSortedByUpdated,
+  PAPERS_TAG,
 } from "@/db/queries";
 import { ADMIN_COOKIE, readCookie, verifySession } from "@/lib/session";
 
@@ -42,6 +45,9 @@ export async function POST(req: Request) {
 
   try {
     const paper = await createPaper(parsed.data);
+    // New paper published — bust the public read cache so it appears on
+    // list pages and the featured slot without waiting for the TTL.
+    revalidateTag(PAPERS_TAG, "default");
     return json({ paper }, 201);
   } catch (e) {
     const msg =
