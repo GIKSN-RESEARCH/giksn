@@ -1,0 +1,248 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Blanka";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local("Blanka"),
+    url("https://fonts.cdnfonts.com/s/18915/Blanka-Regular.woff") format("woff");
+}
+
+.font-blanka {
+  font-family: "Blanka", var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+:root {
+  --paper: #ffffff;
+  --ink: #281e32;
+  --ink-soft: #5b5263;
+  --ink-faint: #8b8390;
+  --rule: rgba(40, 30, 50, 0.12);
+  --rule-soft: rgba(40, 30, 50, 0.06);
+  --tint: #faf7f2;
+  /* Original orange palette (kept for reference):
+     --accent: #fe6601;
+     --accent-deep: #c84e00;
+     --accent-wash: #fff3e9;
+  */
+  --accent: #35a29f;
+  --accent-deep: #237775;
+  --accent-wash: #ecf6f5;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-rule: var(--rule);
+  --color-rule-soft: var(--rule-soft);
+  --color-tint: var(--tint);
+  --color-accent: var(--accent);
+  --color-accent-deep: var(--accent-deep);
+  --color-accent-wash: var(--accent-wash);
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-ubuntu), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-body);
+  font-feature-settings: "kern", "liga", "calt";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+a {
+  color: inherit;
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.headline {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.04;
+  color: var(--ink);
+}
+
+.serif-italic {
+  font-style: italic;
+}
+
+.rule {
+  border-color: var(--rule);
+}
+
+.dropcap::first-letter {
+  font-family: var(--font-display);
+  float: left;
+  font-size: 3.6em;
+  line-height: 0.85;
+  padding: 0.08em 0.12em 0 0;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+@media (min-width: 640px) {
+  .dropcap::first-letter {
+    font-size: 4.6em;
+  }
+}
+
+.prose-body p {
+  margin-bottom: 1.1em;
+  font-size: 1rem;
+  line-height: 1.72;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 640px) {
+  .prose-body p {
+    font-size: 1.0625rem;
+  }
+}
+
+.prose-body h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: -0.015em;
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+}
+
+@media (min-width: 640px) {
+  .prose-body h2 {
+    font-size: 1.45rem;
+    margin-top: 2.4em;
+    margin-bottom: 0.6em;
+  }
+}
+
+.prose-body h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-top: 2em;
+  margin-bottom: 0.4em;
+}
+
+.prose-body ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0.6em 0 1.2em 0;
+}
+
+.prose-body ul li {
+  position: relative;
+  padding-left: 1.2em;
+  margin-bottom: 0.55em;
+  font-size: 1rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 640px) {
+  .prose-body ul li {
+    padding-left: 1.4em;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+}
+
+.prose-body ul li::before {
+  content: "—";
+  color: var(--accent);
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.prose-body blockquote {
+  border-left: 2px solid var(--accent);
+  padding: 0.4em 0 0.4em 1em;
+  margin: 1.4em 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+@media (min-width: 640px) {
+  .prose-body blockquote {
+    padding: 0.4em 0 0.4em 1.2em;
+    margin: 1.6em 0;
+    font-size: 1.18rem;
+  }
+}
+
+.prose-body code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  background: var(--tint);
+  padding: 0.12em 0.35em;
+  border-radius: 2px;
+}
+
+.link-underline {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--rule);
+  transition: text-decoration-color 120ms ease, color 120ms ease;
+}
+
+.link-underline:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+.divider-dashed {
+  background-image: linear-gradient(
+    to right,
+    var(--rule) 0,
+    var(--rule) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  background-size: 8px 1px;
+  background-repeat: repeat-x;
+  background-position: center;
+  height: 1px;
+}
+
+input, textarea, select, button {
+  font-family: inherit;
+  color: inherit;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
