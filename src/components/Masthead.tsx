@@ -16,7 +16,7 @@ export function Masthead() {
             className="inline-flex items-center justify-self-center col-start-2"
           >
             <Image
-              src="/1.png"
+              src="/logo.png"
               alt=""
               aria-hidden
               width={28}

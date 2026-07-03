@@ -46,7 +46,7 @@ export function PageLoader() {
             />
           </svg>
           <Image
-            src="/1.png"
+            src="/logo.png"
             alt=""
             aria-hidden
             width={96}

@@ -158,6 +158,8 @@ export function FilteredPapersList({
         <div className="flex items-stretch border-b border-rule">
           <div className="flex-1 flex items-center gap-3 px-4 py-3">
             <svg
+              width="16"
+              height="16"
               className="w-4 h-4 text-ink-faint flex-shrink-0"
               fill="none"
               viewBox="0 0 24 24"

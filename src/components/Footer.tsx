@@ -25,7 +25,7 @@ function FooterInner() {
               aria-label="GIKSN Research home"
             >
               <Image
-                src="/1.png"
+                src="/logo.png"
                 alt="GIKSN"
                 width={80}
                 height={80}

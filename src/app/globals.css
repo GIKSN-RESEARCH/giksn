@@ -6,7 +6,7 @@
   font-weight: 400;
   font-display: swap;
   src: local("Blanka"),
-    url("https://fonts.cdnfonts.com/s/18915/Blanka-Regular.woff") format("woff");
+    url("/fonts/Blanka-Regular.woff") format("woff");
 }
 
 .font-blanka {

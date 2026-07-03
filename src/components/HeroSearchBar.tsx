@@ -86,11 +86,14 @@ export function HeroSearchBar({ paperCount }: Props) {
           aria-hidden
         >
           <svg
+            width="20"
+            height="20"
             className="w-5 h-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
             strokeWidth={1.5}
+            aria-hidden
           >
             <circle cx="11" cy="11" r="7" />
             <path d="m20 20-3.5-3.5" strokeLinecap="round" />
@@ -119,6 +122,8 @@ export function HeroSearchBar({ paperCount }: Props) {
             </span>
           )}
           <svg
+            width="12"
+            height="12"
             className={`w-3 h-3 transition-transform ${expanded ? "rotate-180" : ""}`}
             fill="none"
             viewBox="0 0 24 24"
