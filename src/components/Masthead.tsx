@@ -46,9 +46,11 @@ export function Masthead() {
             </h1>
           </Link>
           <p className="mt-3 max-w-2xl font-display italic text-[14px] sm:text-[15px] md:text-base text-ink-soft px-2">
-            A community-first research lab at the frontier of AI, Deeptech,
-            Hardware, and Distributed Systems. We write, we build, we argue in
-            the open.
+            An independent research lab working on AI and memory. Two
+            things we&apos;re building at once. Memory that surfaces the
+            right context to a model at agent speed. The model side of
+            the problem where retrieval alone stops helping. A community
+            of researchers and builders forms alongside.
           </p>
         </div>
       </div>

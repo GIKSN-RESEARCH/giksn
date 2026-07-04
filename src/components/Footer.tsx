@@ -36,9 +36,9 @@ function FooterInner() {
               </h3>
             </Link>
             <p className="mt-3 text-[14px] text-ink-soft max-w-[40ch] leading-relaxed">
-              A community-first research lab writing and building at the
-              frontier. Papers open for critique, projects open for
-              contribution, decisions made in public.
+              An independent research lab working on AI and memory. Papers,
+              tools and reasoning shipped in the open. A community of
+              researchers and builders takes shape alongside.
             </p>
           </div>
           <div className="col-span-12 md:col-span-3">
@@ -105,15 +105,15 @@ function FooterInner() {
         <div className="mt-10 sm:mt-12 pt-6 border-t border-rule flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint text-center sm:text-left">
           <span>© {new Date().getFullYear()} GIKSN Research</span>
           <span className="tracking-[0.16em]">
-            Community First{" "}
-            <span className="text-accent" aria-hidden>
-              ·
-            </span>{" "}
             Frontier Research{" "}
             <span className="text-accent" aria-hidden>
               ·
             </span>{" "}
-            Builder Approach
+            Built in Public{" "}
+            <span className="text-accent" aria-hidden>
+              ·
+            </span>{" "}
+            Open Community
           </span>
         </div>
       </div>

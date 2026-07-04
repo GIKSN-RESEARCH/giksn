@@ -158,7 +158,7 @@ export function CommentForm({ category, slug, parentId, onPosted, compact }: Pro
           <button
             type="submit"
             disabled={posting}
-            className="bg-accent text-paper px-6 py-3 font-mono text-[12px] uppercase tracking-[0.16em] hover:bg-accent-deep transition-colors disabled:opacity-50"
+            className="bg-accent !text-white px-6 py-3 font-mono text-[12px] uppercase tracking-[0.16em] hover:bg-accent-deep transition-colors disabled:opacity-50"
           >
             {posting ? "Posting…" : parentId ? "Post reply →" : "Post reply →"}
           </button>

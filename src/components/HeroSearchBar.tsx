@@ -117,7 +117,7 @@ export function HeroSearchBar({ paperCount }: Props) {
         >
           Filters
           {activeFilterCount > 0 && (
-            <span className="bg-accent text-paper px-1.5 py-0.5 text-[10px] tabular-nums">
+            <span className="bg-accent !text-white px-1.5 py-0.5 text-[10px] tabular-nums">
               {activeFilterCount}
             </span>
           )}
@@ -259,7 +259,7 @@ function FilterChip({
       className={[
         "px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.12em] border transition-colors",
         active
-          ? "bg-accent text-paper border-accent"
+          ? "bg-accent !text-white border-accent"
           : "border-rule text-ink-soft hover:border-accent hover:text-accent",
       ].join(" ")}
       aria-pressed={active}

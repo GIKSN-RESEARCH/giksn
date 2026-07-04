@@ -107,7 +107,7 @@ export function ConfirmDialog({
             className={
               destructive
                 ? "border border-accent-deep bg-accent-deep text-paper px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] hover:bg-accent hover:border-accent transition-colors disabled:opacity-50"
-                : "border border-accent bg-accent text-paper px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] hover:bg-accent-deep hover:border-accent-deep transition-colors disabled:opacity-50"
+                : "border border-accent bg-accent !text-white px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] hover:bg-accent-deep hover:border-accent-deep transition-colors disabled:opacity-50"
             }
           >
             {loading ? "Working…" : confirmLabel}

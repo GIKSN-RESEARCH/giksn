@@ -72,9 +72,12 @@ export default async function HomePage() {
             <div>
               <div className="kicker mb-3">From the lab</div>
               <p className="font-display italic text-ink leading-normal text-[17px]">
-                A community-first research lab. Frontier work in AI, Deeptech,
-                Hardware, and Distributed Systems. Written down, argued in
-                public, then built.
+                An independent research lab working on AI and memory. Two
+                things we&apos;re building at once. Memory that surfaces
+                the right context to a model at agent speed. The model
+                side of the problem where retrieval alone stops helping.
+                A community of researchers and builders takes shape
+                alongside.
               </p>
               <Link
                 href="/about"
@@ -144,9 +147,11 @@ export default async function HomePage() {
           <aside className="col-span-12 md:col-span-3 min-w-0">
             <div className="kicker mb-3">From the lab</div>
             <p className="font-display italic text-ink leading-normal text-[18px]">
-              A community-first research lab. Frontier work in AI, Deeptech,
-              Hardware, and Distributed Systems. Written down, argued in
-              public, then built.
+              An independent research lab working on AI and memory. Two
+              things we&apos;re building at once. Memory that surfaces the
+              right context to a model at agent speed. The model side of
+              the problem where retrieval alone stops helping. A community
+              of researchers and builders takes shape alongside.
             </p>
             <Link
               href="/about"
@@ -333,7 +338,7 @@ function SectionsBlock({ papers }: { papers: Paper[] }) {
         Four sectors. One lab.
       </h3>
       <p className="font-display italic text-ink-soft text-[14px] leading-[1.55] mb-5">
-        Each sector runs its own research, and often correlates with the others.
+        Each sector runs its own research. The threads often overlap.
         AI and Deeptech get the most cycles.
       </p>
       <ul className="border-t border-rule">
@@ -384,7 +389,7 @@ function EmptyState() {
         <div className="mt-10 flex items-center justify-center gap-3 flex-wrap">
           <Link
             href="/submit"
-            className="bg-accent text-paper px-6 py-3 font-mono text-[12px] uppercase tracking-[0.16em] hover:bg-accent-deep transition-colors"
+            className="bg-accent !text-white px-6 py-3 font-mono text-[12px] uppercase tracking-[0.16em] hover:bg-accent-deep transition-colors"
           >
             Submit a paper →
           </Link>

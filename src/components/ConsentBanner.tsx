@@ -89,7 +89,7 @@ export function ConsentBanner() {
             <button
               type="button"
               onClick={accept}
-              className="bg-accent text-paper px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] hover:bg-accent-deep transition-colors"
+              className="bg-accent !text-white px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] hover:bg-accent-deep transition-colors"
             >
               Accept
             </button>

@@ -26,9 +26,9 @@ const ubuntu = Ubuntu({
 });
 
 export const metadata: Metadata = {
-  title: "GIKSN Research — A community-first research lab at the frontier",
+  title: "GIKSN Research. An independent research lab at the frontier.",
   description:
-    "Open research and building across AI, Deeptech, Hardware, and Distributed Systems. Papers, surveys, projects, and lab updates from the GIKSN community.",
+    "An independent research lab working on AI and memory. Papers, tools and reasoning shipped in the open across AI, Deeptech, Hardware and Distributed Systems.",
   // Favicon is auto-picked up from src/app/icon.png and apple-icon.png
   // (Next.js App Router convention). No manual `icons` field needed.
 };

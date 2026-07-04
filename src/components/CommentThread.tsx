@@ -20,7 +20,7 @@ export function CommentThread({ comments, category, slug }: Props) {
     return (
       <div className="py-12 text-center">
         <p className="font-display italic text-ink-soft text-lg">
-          No replies yet — be the first to weigh in.
+          No replies yet. Be the first to weigh in.
         </p>
       </div>
     );

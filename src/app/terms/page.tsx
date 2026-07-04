@@ -20,7 +20,7 @@ import { Footer } from "@/components/Footer";
 // ---------------------------------------------------------------------------
 
 export const metadata: Metadata = {
-  title: "Terms of Use — GIKSN Research",
+  title: "Terms of Use. GIKSN Research",
   description:
     "The terms on which readers, contributors, and administrators use GIKSN Research. Covers submissions, third-party citation, copyright notices under India's IT Rules 2021 and the US DMCA, and dispute resolution.",
 };
@@ -82,7 +82,7 @@ export default function TermsOfUsePage() {
 
             <h2>3. What the service is</h2>
             <p>
-              GIKSN Research is a community-first research lab and editorial
+              GIKSN Research is an independent research lab and editorial
               archive. Readers may view published papers, updates and product
               pages without an account. Contributors may submit papers,
               updates and comments subject to editorial review. Admins may
@@ -186,7 +186,7 @@ export default function TermsOfUsePage() {
 
             <h2>7. Copyright notices and takedown</h2>
 
-            <h3>7.1 India — IT Rules 2021 grievance mechanism</h3>
+            <h3>7.1 India. IT Rules 2021 grievance mechanism</h3>
             <p>
               Under Rule 3(2) of the IT Rules 2021 we operate a grievance
               mechanism. Notices should be sent to{" "}
@@ -216,7 +216,7 @@ export default function TermsOfUsePage() {
               </li>
             </ul>
 
-            <h3>7.2 United States — DMCA §512 takedown</h3>
+            <h3>7.2 United States. DMCA §512 takedown</h3>
             <p>
               For copyrighted work under US law, notices should be sent to
               our copyright agent at{" "}

@@ -38,7 +38,7 @@ export const PRODUCTS: Product[] = [
     license: "MIT OR Apache-2.0",
     category: "AI",
     description:
-      "A CLI harness that plans work into a JSON DAG, distributes it across the AI coding tools and model APIs already on your machine, and drives it to completion through a generator–evaluator loop. You never open Claude Code, Codex, Grok, or OpenCode yourself. You live in Rinne, and it reaches down to those tools as workers.",
+      "A CLI harness that plans work into a JSON DAG, distributes it across the AI coding tools and model APIs already on your machine, then drives it to completion through a generator-evaluator loop. You never open Claude Code, Codex, Grok or OpenCode yourself. You live in Rinne. It reaches down to those tools as workers.",
     highlights: [
       "Conductor planning turns a prompt into a JSON DAG of tasks with roles and evaluators.",
       "Two worker families, one contract: autonomous harness CLIs and raw OpenAI-compatible APIs.",

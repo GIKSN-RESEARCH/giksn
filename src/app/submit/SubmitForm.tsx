@@ -176,9 +176,9 @@ export function SubmitForm({
 
   return (
     <form className="space-y-8" onSubmit={handleSubmit}>
-      {/* Step 00 — Type */}
+      {/* Step 00: Type */}
       <div>
-        <div className="kicker mb-3">Step 00 — What are you submitting?</div>
+        <div className="kicker mb-3">Step 00: What are you submitting?</div>
         <div className="grid grid-cols-1 sm:grid-cols-2 border border-rule">
           {[
             {
@@ -238,7 +238,7 @@ export function SubmitForm({
       {submissionType === "paper" ? (
         <>
           <div>
-            <div className="kicker mb-3">Step 01 — Sector</div>
+            <div className="kicker mb-3">Step 01: Sector</div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border border-rule">
               {paperCategoryList.map((c, i) => (
                 <label
@@ -274,7 +274,7 @@ export function SubmitForm({
 
           <div>
             <div className="flex items-baseline justify-between gap-3 mb-3 flex-wrap">
-              <div className="kicker">Step 02 — Kind</div>
+              <div className="kicker">Step 02: Kind</div>
               <span className="font-display italic text-ink-soft text-[13px] max-w-[42ch]">
                 Original research or a survey of the existing landscape? Both
                 are valid in any sector.
@@ -294,7 +294,7 @@ export function SubmitForm({
         </>
       ) : (
         <div>
-          <div className="kicker mb-3">Step 01 — Source organization</div>
+          <div className="kicker mb-3">Step 01: Source organization</div>
           <input
             type="text"
             required
@@ -312,7 +312,7 @@ export function SubmitForm({
       )}
 
       <div>
-        <div className="kicker mb-3">Step 03 — Title</div>
+        <div className="kicker mb-3">Step 03: Title</div>
         <input
           type="text"
           required
@@ -329,7 +329,7 @@ export function SubmitForm({
       </div>
 
       <div>
-        <div className="kicker mb-3">Step 04 — Abstract</div>
+        <div className="kicker mb-3">Step 04: Abstract</div>
         <textarea
           rows={4}
           required
@@ -343,7 +343,7 @@ export function SubmitForm({
       </div>
 
       <div>
-        <div className="kicker mb-3">Step 05 — Body</div>
+        <div className="kicker mb-3">Step 05: Body</div>
         <PreviewTabs mode={bodyMode} onChange={setBodyMode} />
         {bodyMode === "write" ? (
           <textarea
@@ -469,7 +469,7 @@ export function SubmitForm({
           <button
             type="submit"
             disabled={submitting}
-            className="bg-accent text-paper px-6 py-3 font-mono text-[12px] uppercase tracking-[0.16em] hover:bg-accent-deep transition-colors disabled:opacity-50"
+            className="bg-accent !text-white px-6 py-3 font-mono text-[12px] uppercase tracking-[0.16em] hover:bg-accent-deep transition-colors disabled:opacity-50"
           >
             {submitting ? "Submitting…" : "Submit for review →"}
           </button>

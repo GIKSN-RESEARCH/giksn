@@ -234,8 +234,8 @@ export default async function PaperPage({
               </h2>
             </div>
             <p className="font-display italic text-ink-soft text-[14px] sm:text-[15px] max-w-[42ch]">
-              Read first, then reply. Disagreement is welcome — performance
-              isn&apos;t.
+              Read first, then reply. Disagreement is welcome.
+              Performance isn&apos;t.
             </p>
           </div>
 

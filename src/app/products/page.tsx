@@ -144,7 +144,7 @@ function ProductBlock({ product, index }: { product: Product; index: number }) {
               rel={link.href.startsWith("http") ? "noreferrer" : undefined}
               className={
                 link.primary
-                  ? "inline-flex items-center gap-2 bg-accent text-paper px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] hover:bg-accent-deep transition-colors"
+                  ? "inline-flex items-center gap-2 bg-accent !text-white px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] hover:bg-accent-deep transition-colors"
                   : "inline-flex items-center gap-2 border border-rule px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-soft hover:text-accent hover:border-accent transition-colors"
               }
             >

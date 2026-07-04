@@ -127,7 +127,7 @@ export function FilteredUpdatesList({ updates, pageSize = 12 }: Props) {
           >
             Filters
             {activeFilterCount > 0 && (
-              <span className="bg-accent text-paper px-1.5 py-0.5 text-[10px] tabular-nums">
+              <span className="bg-accent !text-white px-1.5 py-0.5 text-[10px] tabular-nums">
                 {activeFilterCount}
               </span>
             )}

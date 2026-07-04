@@ -21,7 +21,7 @@ export function CapitalCard() {
               The site is the record. Telegram is the room.
             </p>
             <p className="mt-3 sm:mt-4 text-[14px] sm:text-[15px] leading-[1.7] text-ink-soft max-w-[60ch]">
-              Day-to-day discussion, working groups, and research in progress
+              Day-to-day discussion, working groups and research in progress
               happen on Telegram. Public channels are open to anyone. Private
               channels are gated behind an application, so contributors are
               vetted before they get the keys.

@@ -485,7 +485,7 @@ export function AdminPanel() {
         onCancel={cancelDelete}
         title={
           deleteTarget
-            ? `Delete ${paperRef(deleteTarget)} — "${deleteTarget.title}"?`
+            ? `Delete ${paperRef(deleteTarget)}: "${deleteTarget.title}"?`
             : ""
         }
         body={
@@ -522,7 +522,7 @@ function FilterButton({
       onClick={onClick}
       className={`px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] border transition-colors ${
         active
-          ? "border-accent bg-accent text-paper"
+          ? "border-accent bg-accent !text-white"
           : "border-rule text-ink hover:bg-tint"
       }`}
     >
@@ -569,7 +569,7 @@ function LoginForm({ onLoggedIn }: { onLoggedIn: () => Promise<SessionInfo> }) {
         </h2>
         <p className="font-display italic text-ink-soft text-[15px] leading-[1.55] mb-6 max-w-[60ch]">
           Sign in once and stay signed in for 30 days. The session is held in
-          an HttpOnly cookie — no token to copy, no token to leak.
+          an HttpOnly cookie. No token to copy, no token to leak.
         </p>
         <form onSubmit={handleSubmit} className="space-y-4 max-w-[480px]">
           <label className="block">
@@ -605,7 +605,7 @@ function LoginForm({ onLoggedIn }: { onLoggedIn: () => Promise<SessionInfo> }) {
           <button
             type="submit"
             disabled={submitting}
-            className="bg-accent text-paper px-6 py-3 font-mono text-[12px] uppercase tracking-[0.16em] hover:bg-accent-deep transition-colors disabled:opacity-50"
+            className="bg-accent !text-white px-6 py-3 font-mono text-[12px] uppercase tracking-[0.16em] hover:bg-accent-deep transition-colors disabled:opacity-50"
           >
             {submitting ? "Signing in…" : "Continue →"}
           </button>

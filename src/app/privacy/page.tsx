@@ -18,7 +18,7 @@ import { AnalyticsControls } from "@/components/AnalyticsControls";
 // ---------------------------------------------------------------------------
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — GIKSN Research",
+  title: "Privacy Policy. GIKSN Research",
   description:
     "How GIKSN Research collects, uses, and protects personal data. Written to comply with India's Digital Personal Data Protection Act 2023, the IT Rules 2021, California's CCPA/CPRA, and equivalent obligations.",
 };
