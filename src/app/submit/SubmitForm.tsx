@@ -360,15 +360,18 @@ export function SubmitForm({
         <p className="mt-2 text-[12px] text-ink-faint italic leading-[1.55]">
           <span className="block">
             Sections: <code className="font-mono not-italic">## Heading</code> ·
+            Subheads: <code className="font-mono not-italic">### Title</code> ·
             Lists: <code className="font-mono not-italic">- item</code> ·
-            Pullquote: <code className="font-mono not-italic">&gt; line</code> ·
-            Paragraphs split on blank lines.
+            Code: fenced <code className="font-mono not-italic">```lang</code> ·
+            Tables: GFM pipe syntax ·
+            Pullquote: <code className="font-mono not-italic">&gt; line</code>.
           </span>
           <span className="block mt-1">
             Inline: <code className="font-mono not-italic">**bold**</code>,{" "}
             <code className="font-mono not-italic">*italic*</code>,{" "}
             <code className="font-mono not-italic">`code`</code>,{" "}
             <code className="font-mono not-italic">[label](https://url)</code>.
+            Use the Preview tab to check formatting before you submit.
           </span>
         </p>
       </div>
