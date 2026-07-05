@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Paper, paperRef, shortDate } from "@/lib/papers";
+import { Paper, isUpdate, paperRef, shortDate } from "@/lib/papers";
 import { StatusPill } from "./StatusPill";
 import { KindBadge } from "./KindBadge";
 
@@ -12,12 +12,15 @@ type Props = {
 export function PaperRow({ paper, index, showCategory = true }: Props) {
   const href = `/${paper.category.toLowerCase()}/${paper.slug}`;
   const replyCount = countComments(paper.discussion);
+  const upMode = isUpdate(paper.category);
 
   return (
     <article className="group border-b border-rule last:border-b-0 -mx-3 sm:-mx-5">
       <Link
         href={href}
-        className="block py-5 sm:py-7 px-3 sm:px-5 grid grid-cols-12 gap-3 sm:gap-4 transition-colors hover:bg-tint/60"
+        className={`block py-5 sm:py-7 px-3 sm:px-5 grid grid-cols-12 gap-3 sm:gap-4 transition-colors ${
+          upMode ? "hover:bg-accent-wash/40" : "hover:bg-tint/60"
+        }`}
       >
         <div className="col-span-12 md:col-span-1 flex md:block items-center gap-3">
           <span className="font-mono text-[12px] text-ink-faint tabular-nums">
@@ -33,8 +36,23 @@ export function PaperRow({ paper, index, showCategory = true }: Props) {
                 {paperRef(paper)}
               </span>
             )}
-            <KindBadge kind={paper.kind} />
-            <StatusPill status={paper.status} />
+            {upMode ? (
+              <>
+                {paper.source && (
+                  <span className="inline-flex items-center font-mono uppercase tracking-[0.14em] text-[10px] px-1.5 py-px text-accent border border-accent/50">
+                    {paper.source}
+                  </span>
+                )}
+                <span className="inline-flex items-center font-mono uppercase tracking-[0.14em] text-[10px] px-1.5 py-px text-ink border border-rule">
+                  Update
+                </span>
+              </>
+            ) : (
+              <>
+                <KindBadge kind={paper.kind} />
+                <StatusPill status={paper.status} />
+              </>
+            )}
           </div>
           <h2 className="font-display font-semibold text-ink leading-[1.12] tracking-[-0.02em] text-[1.25rem] sm:text-[1.55rem] md:text-[1.7rem] group-hover:text-accent-deep transition-colors wrap-anywhere hyphens-auto">
             {paper.title}

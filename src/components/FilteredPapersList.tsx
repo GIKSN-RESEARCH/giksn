@@ -6,6 +6,7 @@ import {
   KINDS,
   PAPER_CATEGORIES,
   STATUSES,
+  isUpdate,
   type Category,
   type Kind,
   type Paper,
@@ -40,6 +41,13 @@ const SORT_OPTIONS: { value: SortKey; label: string }[] = [
 const paperCategoryList = CATEGORIES.filter((c) =>
   (PAPER_CATEGORIES as readonly string[]).includes(c.code)
 );
+
+function categoryFilterList(papers: Paper[]) {
+  const hasUpdates = papers.some((p) => isUpdate(p.category));
+  if (!hasUpdates) return paperCategoryList;
+  const updatesCat = CATEGORIES.find((c) => c.code === "UP");
+  return updatesCat ? [...paperCategoryList, updatesCat] : paperCategoryList;
+}
 
 function countReplies(p: Paper): number {
   return p.discussion.reduce(
@@ -78,6 +86,7 @@ export function FilteredPapersList({
   // When the page loads with filters already applied (from hero search),
   // open the filter panel so users can see what's active.
   const [mobileOpen, setMobileOpen] = useState(hasInitialFilters);
+  const categories = categoryFilterList(papers);
 
   const activeFilterCount =
     (query.trim() ? 1 : 0) +
@@ -177,7 +186,7 @@ export function FilteredPapersList({
               placeholder={
                 hideCategoryFilter
                   ? "Search this sector"
-                  : "Search papers by title, abstract, or author"
+                  : "Search papers and updates by title, abstract, or author"
               }
               className="flex-1 bg-transparent outline-none text-[14px] sm:text-[15px] placeholder:text-ink-faint"
               aria-label="Search"
@@ -216,7 +225,7 @@ export function FilteredPapersList({
         >
           {!hideCategoryFilter && (
             <FilterRow label="Sector">
-              {paperCategoryList.map((c) => (
+              {categories.map((c) => (
                 <FilterChip
                   key={c.code}
                   active={activeCategories.has(c.code as Category)}

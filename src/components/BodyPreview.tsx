@@ -2,6 +2,7 @@
 
 import { parseBody } from "@/lib/parseBody";
 import { renderInline } from "@/lib/inlineMarkdown";
+import { ProseBody } from "@/components/ProseBody";
 
 export function BodyPreview({ body }: { body: string }) {
   const sections = parseBody(body);
@@ -19,29 +20,7 @@ export function BodyPreview({ body }: { body: string }) {
   return (
     <div className="border border-rule p-6 md:p-8 bg-paper">
       <div className="prose-body">
-        {sections.map((section, i) => (
-          <section key={i} className="mb-2">
-            {section.heading && <h2>{section.heading}</h2>}
-            {section.paragraphs?.map((p, j) => {
-              const isFirst = i === 0 && j === 0;
-              return (
-                <p key={j} className={isFirst ? "dropcap" : undefined}>
-                  {renderInline(p)}
-                </p>
-              );
-            })}
-            {section.list && (
-              <ul>
-                {section.list.map((li, j) => (
-                  <li key={j}>{renderInline(li)}</li>
-                ))}
-              </ul>
-            )}
-            {section.pullquote && (
-              <blockquote>{renderInline(section.pullquote)}</blockquote>
-            )}
-          </section>
-        ))}
+        <ProseBody sections={sections} />
       </div>
     </div>
   );
