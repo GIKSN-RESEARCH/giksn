@@ -42,10 +42,27 @@ export type Paper = {
   discussion: Comment[];
 };
 
+export type BodyBlock =
+  | { type: "paragraph"; text: string }
+  | { type: "list"; items: string[] }
+  | { type: "pullquote"; text: string }
+  | { type: "heading"; level: 2 | 3 | 4; text: string }
+  | { type: "code"; lang?: string; code: string }
+  | {
+      type: "table";
+      headers: string[];
+      rows: string[][];
+      align?: ("left" | "center" | "right")[];
+    };
+
 export type PaperSection = {
   heading?: string;
+  blocks?: BodyBlock[];
+  /** @deprecated Parsed bodies use `blocks`; kept for older stored JSON. */
   paragraphs?: string[];
+  /** @deprecated Parsed bodies use `blocks`; kept for older stored JSON. */
   list?: string[];
+  /** @deprecated Parsed bodies use `blocks`; kept for older stored JSON. */
   pullquote?: string;
 };
 
