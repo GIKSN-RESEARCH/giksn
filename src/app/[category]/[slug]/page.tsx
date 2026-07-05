@@ -10,6 +10,7 @@ import { KindBadge } from "@/components/KindBadge";
 import { categoryByCode, formatDate, isUpdate, paperRef } from "@/lib/papers";
 import { getPaperBySlugPublic, listPapersPublic } from "@/db/queries";
 import { renderInline } from "@/lib/inlineMarkdown";
+import { ProseBody } from "@/components/ProseBody";
 import { parseContact } from "@/lib/contact";
 import { CommentForm } from "./CommentForm";
 
@@ -145,31 +146,7 @@ export default async function PaperPage({
           {/* Body + sidebar */}
           <div className="col-span-12 md:col-span-8 pt-8 md:pt-10">
             <div className="prose-body">
-              {paper.body.map((section, i) => (
-                <section key={i} className="mb-2">
-                  {section.heading ? (
-                    <h2>{section.heading}</h2>
-                  ) : i === 0 ? null : null}
-                  {section.paragraphs?.map((p, j) => {
-                    const isFirst = i === 0 && j === 0;
-                    return (
-                      <p key={j} className={isFirst ? "dropcap" : undefined}>
-                        {renderInline(p)}
-                      </p>
-                    );
-                  })}
-                  {section.list && (
-                    <ul>
-                      {section.list.map((li, j) => (
-                        <li key={j}>{renderInline(li)}</li>
-                      ))}
-                    </ul>
-                  )}
-                  {section.pullquote && (
-                    <blockquote>{renderInline(section.pullquote)}</blockquote>
-                  )}
-                </section>
-              ))}
+              <ProseBody sections={paper.body} />
             </div>
           </div>
 

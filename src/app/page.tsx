@@ -9,6 +9,7 @@ import { KindBadge } from "@/components/KindBadge";
 import {
   CATEGORIES,
   STATUSES,
+  isPaper,
   paperRef,
   shortDate,
   type Paper,
@@ -24,22 +25,22 @@ export const revalidate = 60;
 const DESKTOP_PAGE_SIZE = 8;
 
 export default async function HomePage() {
-  const sorted = await listPapersSortedByUpdatedPublic({ onlyPapers: true });
+  const all = await listPapersSortedByUpdatedPublic();
+  const papersOnly = all.filter((p) => isPaper(p.category));
 
-  if (sorted.length === 0) {
+  if (all.length === 0) {
     return <EmptyState />;
   }
 
-  // Featured paper is whichever the admin has flagged. If none, fall back to
-  // the most recently updated. Either way the featured entry stays in the
-  // Recent list below so single-post archives still show up in that list.
-  const featured = sorted.find((p) => p.featured) ?? sorted[0];
-  const recent = sorted;
+  // Featured entry is whichever the admin has flagged. If none, fall back to
+  // the most recently updated paper or update. It stays in Recent below.
+  const featured = all.find((p) => p.featured) ?? all[0];
+  const recent = all;
 
-  const liveCount = sorted.filter(
+  const liveCount = papersOnly.filter(
     (p) => p.status === "Draft" || p.status === "Preprint"
   ).length;
-  const totalReplies = sorted.reduce(
+  const totalReplies = papersOnly.reduce(
     (n, p) =>
       n +
       p.discussion.reduce((m, c) => m + 1 + (c.replies?.length ?? 0), 0),
@@ -89,7 +90,7 @@ export default async function HomePage() {
               <dl className="mt-5 space-y-3 font-mono text-[12px] uppercase tracking-[0.12em]">
                 <div className="flex justify-between">
                   <dt className="text-ink-faint">Open papers</dt>
-                  <dd className="text-ink tabular-nums">{sorted.length}</dd>
+                  <dd className="text-ink tabular-nums">{papersOnly.length}</dd>
                 </div>
                 <div className="flex justify-between">
                   <dt className="text-ink-faint">In discussion</dt>
@@ -102,7 +103,7 @@ export default async function HomePage() {
               </dl>
             </div>
 
-            <SectionsBlock papers={sorted} />
+            <SectionsBlock papers={papersOnly} />
 
             <div>
               <div className="kicker mb-3">Lifecycle</div>
@@ -138,7 +139,7 @@ export default async function HomePage() {
         {/* DESKTOP HERO SEARCH */}
         <section className="hidden md:block pb-8 sm:pb-10 border-b border-rule">
           <div className="kicker mb-3">Find a paper</div>
-          <HeroSearchBar paperCount={sorted.length} />
+          <HeroSearchBar paperCount={papersOnly.length} />
           <HeroSearchHints />
         </section>
 
@@ -163,7 +164,7 @@ export default async function HomePage() {
             <dl className="mt-6 space-y-3 font-mono text-[12px] uppercase tracking-[0.12em]">
               <div className="flex justify-between">
                 <dt className="text-ink-faint">Open papers</dt>
-                <dd className="text-ink tabular-nums">{sorted.length}</dd>
+                <dd className="text-ink tabular-nums">{papersOnly.length}</dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-ink-faint">In discussion</dt>
@@ -179,7 +180,7 @@ export default async function HomePage() {
             <FeaturedArticleInner p={featured} />
           </article>
           <aside className="col-span-12 md:col-span-4 min-w-0 md:border-l md:border-rule md:pl-8">
-            <SectionsBlock papers={sorted} />
+            <SectionsBlock papers={papersOnly} />
           </aside>
         </section>
 
@@ -283,14 +284,30 @@ function FeaturedArticle({ p }: { p: Paper }) {
 }
 
 function FeaturedArticleInner({ p }: { p: Paper }) {
+  const upMode = p.category === "UP";
   return (
     <>
       <div className="flex items-center gap-2 sm:gap-3 mb-3 flex-wrap">
         <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent">
           Featured · {paperRef(p)}
         </span>
-        <KindBadge kind={p.kind} />
-        <StatusPill status={p.status} />
+        {upMode ? (
+          <>
+            {p.source && (
+              <span className="inline-flex items-center font-mono uppercase tracking-[0.14em] text-[10px] px-1.5 py-px text-accent border border-accent/50">
+                {p.source}
+              </span>
+            )}
+            <span className="inline-flex items-center font-mono uppercase tracking-[0.14em] text-[10px] px-1.5 py-px text-ink border border-rule">
+              Update
+            </span>
+          </>
+        ) : (
+          <>
+            <KindBadge kind={p.kind} />
+            <StatusPill status={p.status} />
+          </>
+        )}
       </div>
       <h2
         className="font-display font-semibold text-ink leading-[1.04] tracking-[-0.03em] wrap-anywhere hyphens-auto"
