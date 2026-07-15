@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Masthead } from "@/components/Masthead";
 import { CategoryNav } from "@/components/CategoryNav";
 import { Footer } from "@/components/Footer";
+
 import { FilteredPapersList } from "@/components/FilteredPapersList";
 import { HeroSearchBar, HeroSearchHints } from "@/components/HeroSearchBar";
 import { StatusPill } from "@/components/StatusPill";
@@ -22,7 +23,7 @@ import { listPapersSortedByUpdatedPublic } from "@/db/queries";
 // immediately via revalidateTag('papers').
 export const revalidate = 60;
 
-const DESKTOP_PAGE_SIZE = 8;
+const DESKTOP_PAGE_SIZE = 5;
 
 export default async function HomePage() {
   const all = await listPapersSortedByUpdatedPublic();
@@ -61,7 +62,7 @@ export default async function HomePage() {
               <div className="kicker mb-2">The list</div>
               <h2 className="headline text-[1.6rem]">Recent</h2>
             </div>
-            <FilteredPapersList papers={recent} pageSize={6} />
+            <FilteredPapersList papers={recent} pageSize={DESKTOP_PAGE_SIZE} />
           </section>
 
           <div className="mt-12 mb-8">

@@ -1,3 +1,5 @@
+export const RINNE_SITE_URL = "https://rinne.giksn.com";
+
 export type ProductStatus = "Alpha" | "Beta" | "Stable";
 
 export type ProductLink = {
@@ -33,7 +35,7 @@ export const PRODUCTS: Product[] = [
     slug: "rinne",
     name: "Rinne",
     tagline: "Local, open-source, terminal-first AI orchestration.",
-    version: "0.1.6",
+    version: "0.1.8",
     status: "Alpha",
     license: "MIT OR Apache-2.0",
     category: "AI",
@@ -58,9 +60,12 @@ export const PRODUCTS: Product[] = [
     },
     links: [
       {
+        label: "rinne.giksn.com",
+        href: RINNE_SITE_URL,
+      },
+      {
         label: "GitHub repository",
         href: "https://github.com/GIKSN-RESEARCH/Rinne",
-        primary: true,
       },
       {
         label: "Latest release",

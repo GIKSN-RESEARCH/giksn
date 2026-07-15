@@ -60,6 +60,11 @@ export default function ProductsPage() {
 
 function ProductBlock({ product, index }: { product: Product; index: number }) {
   const sector = categoryByCode(product.category);
+  const primaryLink =
+    product.links.find((l) => l.primary) ?? product.links[0] ?? null;
+  const siteHost = primaryLink
+    ? primaryLink.href.replace(/^https?:\/\//, "").replace(/\/$/, "")
+    : null;
 
   return (
     <article className="grid grid-cols-12 gap-6 md:gap-10 border border-rule bg-paper p-5 sm:p-8">
@@ -81,13 +86,39 @@ function ProductBlock({ product, index }: { product: Product; index: number }) {
           className="font-display font-semibold text-ink leading-[1.02] tracking-[-0.03em]"
           style={{ fontSize: "clamp(1.8rem, 3.6vw, 2.8rem)" }}
         >
-          {product.name}
+          {primaryLink ? (
+            <a
+              href={primaryLink.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-accent transition-colors"
+            >
+              {product.name}
+            </a>
+          ) : (
+            product.name
+          )}
         </h2>
         <p className="mt-3 font-display italic text-ink-soft text-[15px] sm:text-[17px] leading-[1.5] max-w-[36ch]">
           {product.tagline}
         </p>
         <dl className="mt-6 space-y-2.5 font-mono text-[11px] uppercase tracking-[0.14em]">
           <MetaRow term="Sector" value={sector ? sector.full : product.category} />
+          {primaryLink && siteHost && (
+            <div className="flex justify-between gap-3 border-b border-rule-soft pb-2">
+              <dt className="text-ink-faint">Site</dt>
+              <dd className="text-ink text-right normal-case tracking-normal font-body text-[13px]">
+                <a
+                  href={primaryLink.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link-underline text-accent hover:text-accent-deep"
+                >
+                  {siteHost}
+                </a>
+              </dd>
+            </div>
+          )}
           <MetaRow term="License" value={product.license} />
           <MetaRow term="Status" value={product.status} />
           {product.version && (
