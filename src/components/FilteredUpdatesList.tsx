@@ -266,36 +266,69 @@ function UpdatesPager({
       aria-label="Updates pages"
       className="mt-8 pt-6 border-t border-rule flex items-center justify-between gap-4 flex-wrap"
     >
-      {hasPrev ? (
-        <button
-          type="button"
-          onClick={() => onPage(currentPage - 1)}
-          className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink hover:text-accent transition-colors"
-        >
-          ← Previous
-        </button>
-      ) : (
-        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink-faint cursor-default">
-          ← Previous
-        </span>
-      )}
+      <PagerIconButton
+        direction="prev"
+        disabled={!hasPrev}
+        onClick={() => onPage(currentPage - 1)}
+        label="Previous page"
+      />
       <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint tabular-nums">
         {firstItem}–{lastItem} of {totalItems} · Page {currentPage} of{" "}
         {totalPages}
       </span>
-      {hasNext ? (
-        <button
-          type="button"
-          onClick={() => onPage(currentPage + 1)}
-          className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink hover:text-accent transition-colors"
-        >
-          Next →
-        </button>
-      ) : (
-        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink-faint cursor-default">
-          Next →
-        </span>
-      )}
+      <PagerIconButton
+        direction="next"
+        disabled={!hasNext}
+        onClick={() => onPage(currentPage + 1)}
+        label="Next page"
+      />
     </nav>
+  );
+}
+
+function PagerIconButton({
+  direction,
+  disabled,
+  onClick,
+  label,
+}: {
+  direction: "prev" | "next";
+  disabled: boolean;
+  onClick: () => void;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={label}
+      title={label}
+      className={[
+        "inline-flex h-10 w-10 items-center justify-center border transition-colors",
+        disabled
+          ? "border-rule-soft text-ink-faint cursor-not-allowed"
+          : "border-rule text-ink cursor-pointer hover:border-accent hover:text-accent",
+      ].join(" ")}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.75}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden
+        className="block"
+      >
+        {direction === "prev" ? (
+          <path d="M15 6 9 12l6 6" />
+        ) : (
+          <path d="m9 6 6 6-6 6" />
+        )}
+      </svg>
+    </button>
   );
 }
