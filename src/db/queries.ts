@@ -211,7 +211,7 @@ export async function createPaper(input: {
         authorHandle: input.authorHandle,
         source: input.source ?? null,
         body: input.body,
-        status: input.status ?? "Exploration",
+        status: input.status ?? "Research",
         readingMinutes: input.readingMinutes ?? 3,
       })
       .returning();

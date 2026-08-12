@@ -349,7 +349,7 @@ export function AdminPanel() {
                 <th className="px-4 py-3">Title</th>
                 <th className="px-4 py-3">Author</th>
                 <th className="px-4 py-3">Updated</th>
-                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3">Category</th>
                 <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
@@ -615,8 +615,8 @@ function LoginForm({ onLoggedIn }: { onLoggedIn: () => Promise<SessionInfo> }) {
         <div className="kicker mb-3">What you can do here</div>
         <ul className="space-y-3 text-[14px] text-ink-soft leading-[1.6]">
           <li>
-            <span className="text-ink font-medium">Move statuses.</span>{" "}
-            Exploration → Draft → Preprint → Published → Landmark.
+            <span className="text-ink font-medium">Set category.</span>{" "}
+            Research, Writings, Products or Programs.
           </li>
           <li>
             <span className="text-ink font-medium">Filter by sector.</span>{" "}

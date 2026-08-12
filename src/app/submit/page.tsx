@@ -58,7 +58,7 @@ export default async function SubmitPage({
                 "Write the title last. Most first-draft titles are slogans.",
                 "Name the failure mode if your argument is wrong.",
                 "Don't pre-answer objections. Let the community raise them.",
-                "All submissions land as Exploration and are moved by an editor.",
+                "All submissions land as Research and are categorised by an editor.",
               ].map((tip, i) => (
                 <li key={i} className="flex gap-3">
                   <span className="font-mono text-[11px] text-accent tracking-[0.16em] mt-0.5">
@@ -73,10 +73,9 @@ export default async function SubmitPage({
             <div className="mt-10 divider-dashed" />
             <div className="kicker mt-8 mb-3">What happens next</div>
             <p className="text-[14px] text-ink-soft leading-[1.65]">
-              An editor reads it for clarity, not for content. Status moves
-              from Exploration → Draft → Preprint → Published as the research
-              matures. Landmark is reserved for work that later research keeps
-              coming back to.
+              An editor reads it for clarity, not for content. They place it
+              under Research, Writings, Products or Programs so readers can
+              find the right kind of work.
             </p>
           </aside>
         </div>

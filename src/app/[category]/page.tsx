@@ -50,7 +50,7 @@ export default async function CategoryPage({
             </p>
           </div>
           <aside className="col-span-12 md:col-span-3 pt-2 md:pt-0 md:border-l md:border-rule md:pl-8">
-            <div className="kicker mb-3">Status breakdown</div>
+            <div className="kicker mb-3">Category breakdown</div>
             <ul className="space-y-1.5">
               {counts.map(({ status, n }) => (
                 <li

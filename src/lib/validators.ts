@@ -3,12 +3,10 @@ import { z } from "zod";
 export const categorySchema = z.enum(["AI", "DT", "HW", "DS", "UP"]);
 export const kindSchema = z.enum(["Original", "Survey"]);
 export const statusSchema = z.enum([
-  "Exploration",
-  "Draft",
-  "Preprint",
-  "Published",
-  "Landmark",
-  "Product",
+  "Research",
+  "Writings",
+  "Products",
+  "Programs",
 ]);
 
 const bodyBlockSchema = z.discriminatedUnion("type", [

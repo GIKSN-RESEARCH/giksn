@@ -15,7 +15,7 @@ import type { PaperSection } from "@/lib/papers";
 
 const CATEGORY = "AI" as const;
 const KIND = "Original" as const;
-const STATUS = "Preprint" as const;
+const STATUS = "Research" as const;
 const SLUG = "rinne-local-terminal-first-ai-orchestration";
 
 const TITLE =
@@ -103,7 +103,7 @@ const BODY: PaperSection[] = [
     paragraphs: [
       "Rinne is open source under MIT OR Apache-2.0. Source, install script, and prebuilt binaries for macOS, Linux, and Windows are at [github.com/GIKSN-RESEARCH/Rinne](https://github.com/GIKSN-RESEARCH/Rinne). Install with:",
       "`curl -fsSL https://raw.githubusercontent.com/GIKSN-RESEARCH/Rinne/main/install.sh | sh`",
-      "Comments and disagreements are welcome under this paper. Bug reports and pull requests belong on the GitHub repo. This paper will move from Preprint to Published as the design settles.",
+      "Comments and disagreements are welcome under this paper. Bug reports and pull requests belong on the GitHub repo. This paper stays under Research as the design settles.",
     ],
   },
 ];

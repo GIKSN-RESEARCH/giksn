@@ -1,6 +1,6 @@
 /**
  * Insert four sector-side introductions to GIKSN Research (AI, DT, HW, DS).
- * Each is a Published Original paper. Idempotent: if a slug already exists
+ * Each is a Research Original paper. Idempotent: if a slug already exists
  * in its sector, we update in place; otherwise we insert with the next
  * category number.
  *
@@ -26,7 +26,7 @@ type Post = {
 };
 
 const KIND = "Original" as const;
-const STATUS = "Published" as const;
+const STATUS = "Research" as const;
 const AUTHOR = "GIKSN Research";
 const AUTHOR_HANDLE = "https://github.com/GIKSN-RESEARCH";
 
@@ -49,7 +49,7 @@ const POSTS: Post[] = [
       {
         heading: "What lands here",
         paragraphs: [
-          "An AI paper on GIKSN is not a compressed conference submission. It is the argument as we thought through it. The failure modes we considered. The prior work we leaned on and the prior work we did not. Original research goes up in Preprint status the moment it is ready to be argued with. Surveys of subfields sit alongside, because a good map is as valuable to us as a new experiment.",
+          "An AI paper on GIKSN is not a compressed conference submission. It is the argument as we thought through it. The failure modes we considered. The prior work we leaned on and the prior work we did not. Original research goes up under the Research category the moment it is ready to be argued with. Surveys of subfields sit alongside, because a good map is as valuable to us as a new experiment.",
         ],
       },
       {
@@ -115,7 +115,7 @@ const POSTS: Post[] = [
       {
         heading: "Reasoning stays visible",
         paragraphs: [
-          "Every paper carries an argument. Every argument carries the counter-arguments we chose against. When later research proves a direction wrong we do not delete the earlier post. We move its status and leave the reasoning intact. The archive gets more useful over time, not less.",
+          "Every paper carries an argument. Every argument carries the counter-arguments we chose against. When later research proves a direction wrong we do not delete the earlier post. We leave the reasoning intact. The archive gets more useful over time, not less.",
         ],
       },
       {

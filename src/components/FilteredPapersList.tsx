@@ -242,7 +242,7 @@ export function FilteredPapersList({
               ))}
             </FilterRow>
           )}
-          <FilterRow label="Status">
+          <FilterRow label="Category">
             {STATUSES.map((s) => (
               <FilterChip
                 key={s}

@@ -154,7 +154,7 @@ export default function AboutPage() {
 
             <h2>The archive</h2>
             <p>
-              Every paper has an abstract, a body, a status, an author
+              Every paper has an abstract, a body, a category, an author
               line and a discussion thread underneath. The format borrows
               from technical RFCs. The tone is closer to a working
               notebook than a journal submission.
@@ -169,45 +169,33 @@ export default function AboutPage() {
               about this, here is why we did not do it.&rdquo;
             </p>
 
-            <h2>How status works</h2>
+            <h2>How categories work</h2>
             <p>
-              Status describes where the research is, not the editorial
-              state of the document. Six stages.
+              Category marks what kind of work a post is. Four kinds.
             </p>
             <ul>
               <li>
-                <strong className="font-display">Exploration.</strong>{" "}
-                Sketching. Open questions. No strong claims yet.
+                <strong className="font-display">Research.</strong>{" "}
+                Papers and technical work from the lab and contributors.
               </li>
               <li>
-                <strong className="font-display">Draft.</strong> Being
-                written. The argument has a shape. The wording is still
-                being fought over.
+                <strong className="font-display">Writings.</strong> Essays,
+                notes and commentary that sit outside a formal paper.
               </li>
               <li>
-                <strong className="font-display">Preprint.</strong> Public
-                and open for critique. The lab is asking to be argued
-                with.
+                <strong className="font-display">Products.</strong> Shipped
+                tools and releases the lab has put into the world.
               </li>
               <li>
-                <strong className="font-display">Published.</strong> Final
-                version. The lab stands by it.
-              </li>
-              <li>
-                <strong className="font-display">Landmark.</strong>{" "}
-                Foundational. Later work keeps citing it.
-              </li>
-              <li>
-                <strong className="font-display">Product.</strong> Shipped
-                and available. Something the lab has actually released
-                into the world.
+                <strong className="font-display">Programs.</strong> Cohorts,
+                fellowships and community work.
               </li>
             </ul>
             <p>
-              Status can move backward. That is fine and expected. If we
-              publish something and it turns out to be wrong we move it
-              back to Preprint or Draft. Add a note explaining what
-              changed. Leave the original version visible.
+              Category can change if a post grows into something else. If a
+              writing turns into a research paper or a release graduates into
+              a product page, update the category and leave a note so the
+              trail is readable.
             </p>
 
             <h2>How the four sectors fit</h2>

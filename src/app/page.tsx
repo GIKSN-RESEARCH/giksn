@@ -10,11 +10,11 @@ import { KindBadge } from "@/components/KindBadge";
 import {
   CATEGORIES,
   STATUSES,
+  STATUS_LEGENDS,
   isPaper,
   paperRef,
   shortDate,
   type Paper,
-  type Status,
 } from "@/lib/papers";
 import { PRODUCTS } from "@/lib/products";
 import { listPapersSortedByUpdatedPublic } from "@/db/queries";
@@ -39,7 +39,7 @@ export default async function HomePage() {
   const recent = all;
 
   const liveCount = papersOnly.filter(
-    (p) => p.status === "Draft" || p.status === "Preprint"
+    (p) => p.status === "Research" || p.status === "Writings"
   ).length;
   const totalReplies = papersOnly.reduce(
     (n, p) =>
@@ -74,12 +74,11 @@ export default async function HomePage() {
             <div>
               <div className="kicker mb-3">From the lab</div>
               <p className="font-display italic text-ink leading-normal text-[17px]">
-                An independent research lab working on AI and memory. Two
-                things we&apos;re building at once. Memory that surfaces
-                the right context to a model at agent speed. The model
-                side of the problem where retrieval alone stops helping.
-                A community of researchers and builders takes shape
-                alongside.
+                GIKSN Research is an independent lab pursuing ambitious
+                ideas across artificial intelligence, deep tech, hardware
+                and distributed systems. We conduct research, build
+                experimental technology and create spaces for researchers,
+                engineers and founders to work on difficult problems.
               </p>
               <Link
                 href="/about"
@@ -107,7 +106,7 @@ export default async function HomePage() {
             <SectionsBlock papers={papersOnly} />
 
             <div>
-              <div className="kicker mb-3">Lifecycle</div>
+              <div className="kicker mb-3">Categories</div>
               <ul className="space-y-3">
                 {STATUSES.map((s) => (
                   <li
@@ -116,7 +115,7 @@ export default async function HomePage() {
                   >
                     <StatusPill status={s} />
                     <span className="text-[12px] text-ink-soft text-right max-w-[18ch]">
-                      {legendFor(s)}
+                      {STATUS_LEGENDS[s]}
                     </span>
                   </li>
                 ))}
@@ -124,8 +123,8 @@ export default async function HomePage() {
               <div className="mt-8 divider-dashed" />
               <div className="kicker mt-6 mb-3">Reading the archive</div>
               <p className="text-[14px] text-ink-soft leading-[1.65]">
-                Every paper lives at a stable URL. Status reflects where the
-                research is, not where the document is.
+                Every paper lives at a stable URL. Category marks what kind of
+                work it is: research, writing, a product or a program.
               </p>
               <Link
                 href="/about"
@@ -149,11 +148,11 @@ export default async function HomePage() {
           <aside className="col-span-12 md:col-span-3 min-w-0">
             <div className="kicker mb-3">From the lab</div>
             <p className="font-display italic text-ink leading-normal text-[18px]">
-              An independent research lab working on AI and memory. Two
-              things we&apos;re building at once. Memory that surfaces the
-              right context to a model at agent speed. The model side of
-              the problem where retrieval alone stops helping. A community
-              of researchers and builders takes shape alongside.
+              GIKSN Research is an independent lab pursuing ambitious ideas
+              across artificial intelligence, deep tech, hardware and
+              distributed systems. We conduct research, build experimental
+              technology and create spaces for researchers, engineers and
+              founders to work on difficult problems.
             </p>
             <Link
               href="/about"
@@ -242,7 +241,7 @@ export default async function HomePage() {
                 <div className="divider-dashed mb-8" />
               </>
             )}
-            <div className="kicker mb-3">Lifecycle</div>
+            <div className="kicker mb-3">Categories</div>
             <ul className="space-y-3">
               {STATUSES.map((s) => (
                 <li
@@ -251,7 +250,7 @@ export default async function HomePage() {
                 >
                   <StatusPill status={s} />
                   <span className="text-[12px] text-ink-soft text-right max-w-[16ch]">
-                    {legendFor(s)}
+                    {STATUS_LEGENDS[s]}
                   </span>
                 </li>
               ))}
@@ -259,8 +258,8 @@ export default async function HomePage() {
             <div className="mt-10 divider-dashed" />
             <div className="kicker mt-8 mb-3">Reading the archive</div>
             <p className="text-[14px] text-ink-soft leading-[1.65]">
-              Every paper lives at a stable URL. Status reflects where the
-              research is, not where the document is.
+              Every paper lives at a stable URL. Category marks what kind of
+              work it is: research, writing, a product or a program.
             </p>
             <Link
               href="/about"
@@ -407,7 +406,7 @@ function EmptyState() {
         <div className="mt-10 flex items-center justify-center gap-3 flex-wrap">
           <Link
             href="/submit"
-            className="bg-accent !text-white px-6 py-3 font-mono text-[12px] uppercase tracking-[0.16em] hover:bg-accent-deep transition-colors"
+            className="bg-accent text-white! px-6 py-3 font-mono text-[12px] uppercase tracking-[0.16em] hover:bg-accent-deep transition-colors"
           >
             Submit a paper →
           </Link>
@@ -424,19 +423,4 @@ function EmptyState() {
   );
 }
 
-function legendFor(s: Status): string {
-  switch (s) {
-    case "Exploration":
-      return "Sketching, open questions";
-    case "Draft":
-      return "Being written now";
-    case "Preprint":
-      return "Public, awaiting critique";
-    case "Published":
-      return "Final version";
-    case "Landmark":
-      return "Foundational, cited widely";
-    case "Product":
-      return "Shipped and available";
-  }
-}
+

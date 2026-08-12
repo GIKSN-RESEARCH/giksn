@@ -18,12 +18,9 @@ export function Masthead() {
               GIKSN <span className="text-accent">Research</span>
             </h1>
           </Link>
-          <p className="mt-3 max-w-2xl font-display italic text-[14px] sm:text-[15px] md:text-base text-ink-soft px-2">
-            An independent research lab working on AI and memory. Two
-            things we&apos;re building at once. Memory that surfaces the
-            right context to a model at agent speed. The model side of
-            the problem where retrieval alone stops helping. A community
-            of researchers and builders forms alongside.
+          <p className="mt-5 sm:mt-6 max-w-4xl sm:max-w-none font-display italic text-[15px] sm:text-[17px] md:text-[18px] text-ink-soft px-2 sm:whitespace-nowrap">
+            An independent research lab exploring what comes next in
+            intelligence, computing and systems.
           </p>
         </div>
       </div>

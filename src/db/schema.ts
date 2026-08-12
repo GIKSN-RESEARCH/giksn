@@ -25,12 +25,10 @@ export const categoryEnum = pgEnum("category", [
 ]);
 
 export const statusEnum = pgEnum("status", [
-  "Exploration",
-  "Draft",
-  "Preprint",
-  "Published",
-  "Landmark",
-  "Product",
+  "Research",
+  "Writings",
+  "Products",
+  "Programs",
 ]);
 
 export const kindEnum = pgEnum("kind", ["Original", "Survey"]);
@@ -45,7 +43,7 @@ export const papers = pgTable(
     slug: varchar("slug", { length: 200 }).notNull(),
     title: text("title").notNull(),
     abstract: text("abstract").notNull(),
-    status: statusEnum("status").notNull().default("Exploration"),
+    status: statusEnum("status").notNull().default("Research"),
     author: text("author").notNull(),
     authorHandle: text("author_handle").notNull(),
     posted: timestamp("posted", { withTimezone: true })

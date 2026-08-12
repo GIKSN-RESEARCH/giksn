@@ -17,7 +17,7 @@ const SAMPLE_PAPERS: Paper[] = [
     title: "The state of open agent frameworks in 2026",
     abstract:
       "A survey of the open agent frameworks that shipped in the last twelve months. What each one gets right, what each one leaves on the table, and where the lab thinks the leverage sits for building agents that hold up under real workloads.",
-    status: "Preprint",
+    status: "Research",
     author: "GIKSN Research",
     authorHandle: "giksn",
     posted: "2026-06-04",
@@ -28,7 +28,7 @@ const SAMPLE_PAPERS: Paper[] = [
     body: [
       {
         paragraphs: [
-          "This is a working survey. It will be edited as new frameworks ship and as the lab spends more time using each one in anger. Feedback in the discussion below is how the paper moves from Preprint to Published.",
+          "This is a working survey. It will be edited as new frameworks ship and as the lab spends more time using each one in anger. Feedback in the discussion below is how the paper stays useful as the field moves.",
           "Scope: open source, actively maintained, and used by at least one production team we could reach. Closed-source products are noted where relevant but are not the subject.",
         ],
       },

@@ -22,18 +22,16 @@ These threads are why the archive exists. Rinne, the lab's first shipped tool, c
 | `HW` | Hardware                | Where our AI work touches compute substrate. Honest numbers matter here.       |
 | `DS` | Distributed Systems     | Where our memory work touches indexing and coordination. Systems writing here. |
 
-## Lifecycle statuses
+## Categories
 
-Status describes where the research is, not the editorial state of the document.
+Category marks what kind of work a post is (stored in the `status` column).
 
-| Status        | Meaning                                            |
-| ------------- | -------------------------------------------------- |
-| `Exploration` | Sketching. Open questions, no strong claims yet.   |
-| `Draft`       | Being written. The argument has a shape.           |
-| `Preprint`    | Public and open for critique.                      |
-| `Published`   | Final version. The lab stands by it.               |
-| `Landmark`    | Foundational. Cited widely, referenced by later work. |
-| `Product`     | Shipped and available. Tool or protocol out of the lab. |
+| Category   | Meaning                                            |
+| ---------- | -------------------------------------------------- |
+| `Research` | Papers and technical work.                         |
+| `Writings` | Essays, notes and commentary.                      |
+| `Products` | Shipped tools and releases.                        |
+| `Programs` | Cohorts, fellowships and community work.           |
 
 Kinds: `Original` (new research) or `Survey` (synthesis of an existing subfield).
 
@@ -41,7 +39,7 @@ Kinds: `Original` (new research) or `Survey` (synthesis of an existing subfield)
 
 - **Read** every paper without an account.
 - **Comment** on any paper's discussion thread.
-- **Submit** your own paper or a lab update through the public submission form. Everything lands as `Exploration` and an editor moves it through the lifecycle.
+- **Submit** your own paper or a lab update through the public submission form. Everything lands as `Research` and an editor sets the category.
 - **Follow** the products page for what the lab has actually shipped.
 
 ## What has shipped

@@ -13,8 +13,8 @@ const dotByTone = {
 
 const POP_MIN_WIDTH = 176;
 const POP_GAP = 4;
-// Approximate height: 5 rows × 32px each + 2px borders.
-const POP_ESTIMATED_HEIGHT = 5 * 32 + 4;
+// Approximate height: 4 rows × 32px each + 2px borders.
+const POP_ESTIMATED_HEIGHT = 4 * 32 + 4;
 
 export function StatusSelect({
   value,

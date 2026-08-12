@@ -165,7 +165,7 @@ export function HeroSearchBar({ paperCount }: Props) {
               </FilterChip>
             ))}
           </FilterRow>
-          <FilterRow label="Status">
+          <FilterRow label="Category">
             {STATUSES.map((s) => (
               <FilterChip
                 key={s}

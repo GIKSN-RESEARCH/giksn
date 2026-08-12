@@ -464,9 +464,8 @@ export function SubmitForm({
 
       <div className="flex items-center justify-between flex-wrap gap-4 pt-4 border-t border-rule">
         <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint max-w-[42ch]">
-          Submitted as <em className="not-italic text-ink">Exploration</em>. An
-          editor moves it through Draft → Preprint → Published as the research
-          matures.
+          Submitted as <em className="not-italic text-ink">Research</em>. An
+          editor places it under Research, Writings, Products or Programs.
         </p>
         <div className="flex items-center gap-3">
           <button

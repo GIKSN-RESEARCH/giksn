@@ -162,7 +162,7 @@ export default async function PaperPage({
               ) : (
                 <>
                   <Meta term="Kind" value={paper.kind} />
-                  <Meta term="Status" value={paper.status} />
+                  <Meta term="Category" value={paper.status} />
                 </>
               )}
               <Meta term="Author" value={paper.author} />

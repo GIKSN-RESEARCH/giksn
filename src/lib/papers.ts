@@ -5,13 +5,12 @@ export type UpdateCategory = "UP";
 
 export type Kind = "Original" | "Survey";
 
+/** Content category (formerly lifecycle status). Not the same as sector (AI/DT/HW/DS). */
 export type Status =
-  | "Exploration"
-  | "Draft"
-  | "Preprint"
-  | "Published"
-  | "Landmark"
-  | "Product";
+  | "Research"
+  | "Writings"
+  | "Products"
+  | "Programs";
 
 export type Comment = {
   id: string;
@@ -121,13 +120,18 @@ export function isPaper(c: Category): c is PaperCategory {
 }
 
 export const STATUSES: Status[] = [
-  "Exploration",
-  "Draft",
-  "Preprint",
-  "Published",
-  "Landmark",
-  "Product",
+  "Research",
+  "Writings",
+  "Products",
+  "Programs",
 ];
+
+export const STATUS_LEGENDS: Record<Status, string> = {
+  Research: "Papers and technical work",
+  Writings: "Essays, notes and commentary",
+  Products: "Shipped tools and releases",
+  Programs: "Cohorts, fellowships and community",
+};
 
 export const KINDS: { code: Kind; label: string; blurb: string }[] = [
   {
@@ -158,14 +162,13 @@ export function statusTone(
   status: Status
 ): "neutral" | "live" | "settled" {
   switch (status) {
-    case "Exploration":
-    case "Draft":
-    case "Preprint":
-    case "Published":
-    case "Landmark":
+    case "Research":
+    case "Writings":
       return "settled";
-    case "Product":
+    case "Products":
       return "live";
+    case "Programs":
+      return "neutral";
   }
 }
 
