@@ -22,6 +22,34 @@
       "when": 1786512000000,
       "tag": "0002_status_to_categories",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1786580000000,
+      "tag": "0003_products_table",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1786583600000,
+      "tag": "0004_products_listed",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1786587200000,
+      "tag": "0005_products_website",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1786590800000,
+      "tag": "0006_programs_table",
+      "breakpoints": true
     }
   ]
 }
