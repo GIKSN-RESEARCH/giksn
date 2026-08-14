@@ -2,7 +2,7 @@ import { and, asc, desc, eq, max, ne, sql } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 
 import { db } from "./index";
-import { admins, comments, papers } from "./schema";
+import { admins, comments, papers, products, programs } from "./schema";
 import type {
   Category,
   Comment,
@@ -11,7 +11,15 @@ import type {
   PaperSection,
   Status,
 } from "@/lib/papers";
-import type { CommentRow, PaperRow } from "./schema";
+import type {
+  Product,
+  ProductInstall,
+  ProductLink,
+  ProductPaperRef,
+  ProductStatus,
+} from "@/lib/products";
+import type { Program, ProgramStatus } from "@/lib/programs";
+import type { CommentRow, PaperRow, ProductRow, ProgramRow } from "./schema";
 
 function toIso(d: Date | string): string {
   return d instanceof Date ? d.toISOString() : new Date(d).toISOString();
@@ -444,5 +452,287 @@ export const getPaperBySlugPublic = IS_DEV
   ? getPaperBySlugPublicUncached
   : unstable_cache(getPaperBySlugPublicUncached, ["getPaperBySlugPublic"], {
       tags: [PAPERS_TAG],
+      revalidate: CACHE_TTL_SECONDS,
+    });
+
+export const PRODUCTS_TAG = "products";
+
+function rowToProduct(row: ProductRow): Product {
+  return {
+    slug: row.slug,
+    name: row.name,
+    tagline: row.tagline,
+    version: row.version ?? undefined,
+    status: row.status as ProductStatus,
+    license: row.license,
+    website: row.website ?? null,
+    category: row.category as Product["category"],
+    description: row.description,
+    highlights: (row.highlights ?? []) as string[],
+    install: (row.install ?? null) as ProductInstall | null,
+    paperRef: (row.paperRef ?? null) as ProductPaperRef | null,
+    links: (row.links ?? []) as ProductLink[],
+    listed: row.listed,
+    updated: toIso(row.updated),
+  };
+}
+
+export async function listProducts(opts?: {
+  listedOnly?: boolean;
+}): Promise<Product[]> {
+  const rows = opts?.listedOnly
+    ? await db
+        .select()
+        .from(products)
+        .where(eq(products.listed, true))
+        .orderBy(asc(products.sortOrder), asc(products.name))
+    : await db
+        .select()
+        .from(products)
+        .orderBy(asc(products.sortOrder), asc(products.name));
+  return rows.map(rowToProduct);
+}
+
+export async function getProductBySlug(
+  slug: string,
+  opts?: { listedOnly?: boolean }
+): Promise<Product | null> {
+  const filters = [eq(products.slug, slug)];
+  if (opts?.listedOnly) filters.push(eq(products.listed, true));
+  const [row] = await db
+    .select()
+    .from(products)
+    .where(and(...filters))
+    .limit(1);
+  return row ? rowToProduct(row) : null;
+}
+
+export async function createProduct(input: {
+  slug: string;
+  name: string;
+  tagline: string;
+  version?: string | null;
+  status?: ProductStatus;
+  license: string;
+  website?: string | null;
+  category: Product["category"];
+  description: string;
+  highlights?: string[];
+  install?: ProductInstall | null;
+  paperRef?: ProductPaperRef | null;
+  links?: ProductLink[];
+  listed?: boolean;
+}): Promise<Product> {
+  const [maxRow] = await db
+    .select({ max: max(products.sortOrder) })
+    .from(products);
+  const nextOrder = (maxRow?.max ?? 0) + 1;
+
+  const [row] = await db
+    .insert(products)
+    .values({
+      slug: input.slug,
+      name: input.name,
+      tagline: input.tagline,
+      version: input.version || null,
+      status: input.status ?? "Alpha",
+      license: input.license,
+      website: input.website || null,
+      category: input.category,
+      description: input.description,
+      highlights: input.highlights ?? [],
+      install: input.install ?? null,
+      paperRef: input.paperRef ?? null,
+      links: input.links ?? [],
+      listed: input.listed ?? true,
+      sortOrder: nextOrder,
+    })
+    .returning();
+
+  return rowToProduct(row);
+}
+
+export async function deleteProduct(slug: string): Promise<boolean> {
+  const deleted = await db
+    .delete(products)
+    .where(eq(products.slug, slug))
+    .returning({ slug: products.slug });
+  return deleted.length > 0;
+}
+
+export async function updateProduct(
+  slug: string,
+  patch: {
+    name?: string;
+    tagline?: string;
+    version?: string | null;
+    status?: ProductStatus;
+    license?: string;
+    website?: string | null;
+    category?: Product["category"];
+    description?: string;
+    highlights?: string[];
+    install?: ProductInstall | null;
+    paperRef?: ProductPaperRef | null;
+    links?: ProductLink[];
+    listed?: boolean;
+  }
+): Promise<Product | null> {
+  const [row] = await db
+    .update(products)
+    .set({
+      ...patch,
+      updated: new Date(),
+    })
+    .where(eq(products.slug, slug))
+    .returning();
+  return row ? rowToProduct(row) : null;
+}
+
+async function listProductsPublicUncached() {
+  return listProducts({ listedOnly: true });
+}
+
+async function getProductBySlugPublicUncached(slug: string) {
+  return getProductBySlug(slug, { listedOnly: true });
+}
+
+export const listProductsPublic = IS_DEV
+  ? listProductsPublicUncached
+  : unstable_cache(listProductsPublicUncached, ["listProductsPublic"], {
+      tags: [PRODUCTS_TAG],
+      revalidate: CACHE_TTL_SECONDS,
+    });
+
+export const getProductBySlugPublic = IS_DEV
+  ? getProductBySlugPublicUncached
+  : unstable_cache(
+      getProductBySlugPublicUncached,
+      ["getProductBySlugPublic"],
+      { tags: [PRODUCTS_TAG], revalidate: CACHE_TTL_SECONDS }
+    );
+
+export const PROGRAMS_TAG = "programs";
+
+function rowToProgram(row: ProgramRow): Program {
+  return {
+    slug: row.slug,
+    name: row.name,
+    tagline: row.tagline,
+    status: row.status as ProgramStatus,
+    website: row.website ?? null,
+    category: row.category as Program["category"],
+    description: row.description,
+    highlights: (row.highlights ?? []) as string[],
+    listed: row.listed,
+    updated: toIso(row.updated),
+  };
+}
+
+export async function listPrograms(opts?: {
+  listedOnly?: boolean;
+}): Promise<Program[]> {
+  const rows = opts?.listedOnly
+    ? await db
+        .select()
+        .from(programs)
+        .where(eq(programs.listed, true))
+        .orderBy(asc(programs.sortOrder), asc(programs.name))
+    : await db
+        .select()
+        .from(programs)
+        .orderBy(asc(programs.sortOrder), asc(programs.name));
+  return rows.map(rowToProgram);
+}
+
+export async function getProgramBySlug(
+  slug: string,
+  opts?: { listedOnly?: boolean }
+): Promise<Program | null> {
+  const filters = [eq(programs.slug, slug)];
+  if (opts?.listedOnly) filters.push(eq(programs.listed, true));
+  const [row] = await db
+    .select()
+    .from(programs)
+    .where(and(...filters))
+    .limit(1);
+  return row ? rowToProgram(row) : null;
+}
+
+export async function createProgram(input: {
+  slug: string;
+  name: string;
+  tagline: string;
+  status?: ProgramStatus;
+  website?: string | null;
+  category: Program["category"];
+  description: string;
+  highlights?: string[];
+  listed?: boolean;
+}): Promise<Program> {
+  const [maxRow] = await db
+    .select({ max: max(programs.sortOrder) })
+    .from(programs);
+  const nextOrder = (maxRow?.max ?? 0) + 1;
+
+  const [row] = await db
+    .insert(programs)
+    .values({
+      slug: input.slug,
+      name: input.name,
+      tagline: input.tagline,
+      status: input.status ?? "Upcoming",
+      website: input.website || null,
+      category: input.category,
+      description: input.description,
+      highlights: input.highlights ?? [],
+      listed: input.listed ?? true,
+      sortOrder: nextOrder,
+    })
+    .returning();
+
+  return rowToProgram(row);
+}
+
+export async function updateProgram(
+  slug: string,
+  patch: {
+    name?: string;
+    tagline?: string;
+    status?: ProgramStatus;
+    website?: string | null;
+    category?: Program["category"];
+    description?: string;
+    highlights?: string[];
+    listed?: boolean;
+  }
+): Promise<Program | null> {
+  const [row] = await db
+    .update(programs)
+    .set({
+      ...patch,
+      updated: new Date(),
+    })
+    .where(eq(programs.slug, slug))
+    .returning();
+  return row ? rowToProgram(row) : null;
+}
+
+export async function deleteProgram(slug: string): Promise<boolean> {
+  const deleted = await db
+    .delete(programs)
+    .where(eq(programs.slug, slug))
+    .returning({ slug: programs.slug });
+  return deleted.length > 0;
+}
+
+async function listProgramsPublicUncached() {
+  return listPrograms({ listedOnly: true });
+}
+
+export const listProgramsPublic = IS_DEV
+  ? listProgramsPublicUncached
+  : unstable_cache(listProgramsPublicUncached, ["listProgramsPublic"], {
+      tags: [PROGRAMS_TAG],
       revalidate: CACHE_TTL_SECONDS,
     });
