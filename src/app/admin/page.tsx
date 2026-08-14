@@ -20,7 +20,7 @@ export default function AdminPage() {
             Admin <span className="text-accent">panel</span>.
           </h1>
           <p className="mt-5 sm:mt-7 max-w-[60ch] text-[15px] sm:text-[18px] leading-[1.55] text-ink-soft font-display italic">
-            Set paper categories and visibility. Sign in with your email and
+            Set paper categories and edit shipped products. Sign in with your email and
             stay signed in for 30 days. No bearer token to keep pasting.
           </p>
         </header>

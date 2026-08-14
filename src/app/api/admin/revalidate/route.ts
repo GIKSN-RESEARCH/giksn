@@ -1,7 +1,7 @@
 import { revalidateTag } from "next/cache";
 
 import { error, json, requireAdmin } from "@/lib/api";
-import { PAPERS_TAG } from "@/db/queries";
+import { PAPERS_TAG, PRODUCTS_TAG, PROGRAMS_TAG } from "@/db/queries";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +21,9 @@ export async function POST(req: Request) {
 
   try {
     revalidateTag(PAPERS_TAG, "default");
-    return json({ ok: true, tag: PAPERS_TAG });
+    revalidateTag(PRODUCTS_TAG, "default");
+    revalidateTag(PROGRAMS_TAG, "default");
+    return json({ ok: true, tags: [PAPERS_TAG, PRODUCTS_TAG, PROGRAMS_TAG] });
   } catch (e) {
     console.error("[POST /api/admin/revalidate] failed:", e);
     const msg = e instanceof Error ? e.message : "Failed to revalidate.";
