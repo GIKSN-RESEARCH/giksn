@@ -74,6 +74,11 @@ function FooterInner() {
                 </Link>
               </li>
               <li>
+                <Link href="/programs" className="text-[14px] link-underline">
+                  Programs
+                </Link>
+              </li>
+              <li>
                 <Link href="/" className="text-[14px] link-underline">
                   Latest activity
                 </Link>
