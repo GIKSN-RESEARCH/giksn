@@ -16,8 +16,7 @@ import {
   shortDate,
   type Paper,
 } from "@/lib/papers";
-import { PRODUCTS } from "@/lib/products";
-import { listPapersSortedByUpdatedPublic } from "@/db/queries";
+import { listPapersSortedByUpdatedPublic, listProductsPublic } from "@/db/queries";
 
 // Rendered fresh at most every hour; admin mutations force revalidation
 // immediately via revalidateTag('papers').
@@ -26,7 +25,10 @@ export const revalidate = 60;
 const DESKTOP_PAGE_SIZE = 5;
 
 export default async function HomePage() {
-  const all = await listPapersSortedByUpdatedPublic();
+  const [all, PRODUCTS] = await Promise.all([
+    listPapersSortedByUpdatedPublic(),
+    listProductsPublic(),
+  ]);
   const papersOnly = all.filter((p) => isPaper(p.category));
 
   if (all.length === 0) {

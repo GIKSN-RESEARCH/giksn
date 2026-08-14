@@ -25,12 +25,32 @@ const ubuntu = Ubuntu({
   adjustFontFallback: true,
 });
 
+const siteTitle =
+  "GIKSN Research. An independent research lab at the frontier.";
+const siteDescription =
+  "An independent research lab exploring what comes next in intelligence, computing and systems.";
+
 export const metadata: Metadata = {
-  title: "GIKSN Research. An independent research lab at the frontier.",
-  description:
-    "An independent research lab working on AI and memory. Papers, tools and reasoning shipped in the open across AI, Deeptech, Hardware and Distributed Systems.",
+  metadataBase: new URL("https://giksn.com"),
+  title: siteTitle,
+  description: siteDescription,
   // Favicon is auto-picked up from src/app/icon.png and apple-icon.png
   // (Next.js App Router convention). No manual `icons` field needed.
+  // OG + Twitter images come from app/opengraph-image.tsx and
+  // app/twitter-image.tsx (Next.js file convention).
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://giksn.com",
+    siteName: "GIKSN Research",
+    title: siteTitle,
+    description: siteDescription,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+  },
 };
 
 export const viewport: Viewport = {
