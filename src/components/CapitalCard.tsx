@@ -1,11 +1,12 @@
 import Link from "next/link";
 
-import { RINNE_SITE_URL, productBySlug } from "@/lib/products";
+import { RINNE_SITE_URL } from "@/lib/products";
+import { getProductBySlugPublic } from "@/db/queries";
 
 const TELEGRAM_URL = "https://t.me/+xBmnL8ng85cyMDY1";
 
-export function CapitalCard() {
-  const rinne = productBySlug("rinne");
+export async function CapitalCard() {
+  const rinne = await getProductBySlugPublic("rinne");
 
   return (
     <section className="mt-16 sm:mt-20 border-t border-rule">
@@ -40,14 +41,20 @@ export function CapitalCard() {
                 generator-evaluator loop until the job is done.
               </p>
               <div className="mt-5 sm:mt-6 flex flex-col items-center gap-3">
-                <a
-                  href={RINNE_SITE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block link-underline font-mono text-[11px] uppercase tracking-[0.14em] text-accent hover:text-accent-deep transition-colors"
-                >
-                  Open rinne.giksn.com →
-                </a>
+                {(rinne.website || RINNE_SITE_URL) && (
+                  <a
+                    href={rinne.website || RINNE_SITE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block link-underline font-mono text-[11px] uppercase tracking-[0.14em] text-accent hover:text-accent-deep transition-colors"
+                  >
+                    Open{" "}
+                    {(rinne.website || RINNE_SITE_URL)
+                      .replace(/^https?:\/\//, "")
+                      .replace(/\/$/, "")}{" "}
+                    →
+                  </a>
+                )}
                 <Link
                   href="/products"
                   className="inline-block link-underline font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint hover:text-accent transition-colors"
