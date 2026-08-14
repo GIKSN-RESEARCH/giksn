@@ -3,12 +3,14 @@ import Link from "next/link";
 import { Masthead } from "@/components/Masthead";
 import { CategoryNav } from "@/components/CategoryNav";
 import { Footer } from "@/components/Footer";
-import { PRODUCTS, type Product } from "@/lib/products";
+import { type Product } from "@/lib/products";
 import { categoryByCode } from "@/lib/papers";
+import { listProductsPublic } from "@/db/queries";
 
-export const dynamic = "force-static";
+export const revalidate = 60;
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  const PRODUCTS = await listProductsPublic();
   return (
     <>
       <Masthead />
@@ -35,22 +37,30 @@ export default function ProductsPage() {
         </header>
 
         <section className="pt-8 sm:pt-12">
-          <div className="flex items-baseline justify-between gap-3 flex-wrap mb-6 sm:mb-8">
-            <div className="kicker">
-              {String(PRODUCTS.length).padStart(2, "0")} on the bench
-            </div>
-            <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint">
-              Sorted by first release
-            </div>
-          </div>
+          {PRODUCTS.length === 0 ? (
+            <p className="font-display italic text-ink-soft text-[16px] sm:text-[18px] max-w-[48ch]">
+              Nothing on the bench right now.
+            </p>
+          ) : (
+            <>
+              <div className="flex items-baseline justify-between gap-3 flex-wrap mb-6 sm:mb-8">
+                <div className="kicker">
+                  {String(PRODUCTS.length).padStart(2, "0")} on the bench
+                </div>
+                <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint">
+                  Sorted by first release
+                </div>
+              </div>
 
-          <ul className="space-y-10 sm:space-y-14">
-            {PRODUCTS.map((p, i) => (
-              <li key={p.slug}>
-                <ProductBlock product={p} index={i} />
-              </li>
-            ))}
-          </ul>
+              <ul className="space-y-10 sm:space-y-14">
+                {PRODUCTS.map((p, i) => (
+                  <li key={p.slug}>
+                    <ProductBlock product={p} index={i} />
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </section>
       </main>
       <Footer />
@@ -60,10 +70,13 @@ export default function ProductsPage() {
 
 function ProductBlock({ product, index }: { product: Product; index: number }) {
   const sector = categoryByCode(product.category);
-  const primaryLink =
-    product.links.find((l) => l.primary) ?? product.links[0] ?? null;
-  const siteHost = primaryLink
-    ? primaryLink.href.replace(/^https?:\/\//, "").replace(/\/$/, "")
+  const siteHref =
+    product.website ||
+    product.links.find((l) => l.primary)?.href ||
+    product.links[0]?.href ||
+    null;
+  const siteHost = siteHref
+    ? siteHref.replace(/^https?:\/\//, "").replace(/\/$/, "")
     : null;
 
   return (
@@ -86,9 +99,9 @@ function ProductBlock({ product, index }: { product: Product; index: number }) {
           className="font-display font-semibold text-ink leading-[1.02] tracking-[-0.03em]"
           style={{ fontSize: "clamp(1.8rem, 3.6vw, 2.8rem)" }}
         >
-          {primaryLink ? (
+          {siteHref ? (
             <a
-              href={primaryLink.href}
+              href={siteHref}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-accent transition-colors"
@@ -104,12 +117,12 @@ function ProductBlock({ product, index }: { product: Product; index: number }) {
         </p>
         <dl className="mt-6 space-y-2.5 font-mono text-[11px] uppercase tracking-[0.14em]">
           <MetaRow term="Sector" value={sector ? sector.full : product.category} />
-          {primaryLink && siteHost && (
+          {siteHref && siteHost && (
             <div className="flex justify-between gap-3 border-b border-rule-soft pb-2">
               <dt className="text-ink-faint">Site</dt>
               <dd className="text-ink text-right normal-case tracking-normal font-body text-[13px]">
                 <a
-                  href={primaryLink.href}
+                  href={siteHref}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="link-underline text-accent hover:text-accent-deep"
@@ -159,6 +172,16 @@ function ProductBlock({ product, index }: { product: Product; index: number }) {
         )}
 
         <div className="mt-6 flex flex-wrap items-center gap-2 sm:gap-3">
+          {siteHref && (
+            <a
+              href={siteHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border border-rule px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-soft hover:text-accent hover:border-accent transition-colors"
+            >
+              {siteHost} →
+            </a>
+          )}
           {product.paperRef && (
             <Link
               href={`/${product.paperRef.category.toLowerCase()}/${product.paperRef.slug}`}
@@ -167,7 +190,9 @@ function ProductBlock({ product, index }: { product: Product; index: number }) {
               {product.paperRef.label} →
             </Link>
           )}
-          {product.links.map((link) => (
+          {product.links
+            .filter((link) => !siteHref || link.href.replace(/\/$/, "") !== siteHref.replace(/\/$/, ""))
+            .map((link) => (
             <a
               key={link.href}
               href={link.href}
