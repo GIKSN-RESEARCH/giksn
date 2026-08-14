@@ -112,3 +112,153 @@ export const createCommentSchema = z.object({
 export type CreatePaperInput = z.infer<typeof createPaperSchema>;
 export type UpdateStatusInput = z.infer<typeof updateStatusSchema>;
 export type CreateCommentInput = z.infer<typeof createCommentSchema>;
+
+export const productStatusSchema = z.enum(["Alpha", "Beta", "Stable"]);
+export const productSectorSchema = z.enum(["AI", "DT", "HW", "DS"]);
+
+const productLinkSchema = z.object({
+  label: z.string().min(1).max(80),
+  href: z.string().min(1).max(400),
+  primary: z.boolean().optional(),
+});
+
+const productInstallSchema = z.object({
+  label: z.string().min(1).max(80),
+  command: z.string().min(1).max(400),
+});
+
+const productPaperRefSchema = z.object({
+  category: productSectorSchema,
+  slug: z.string().min(3).max(160).regex(slugRe),
+  label: z.string().min(1).max(80),
+});
+
+export const updateProductSchema = z
+  .object({
+    name: z.string().min(2).max(80).optional(),
+    tagline: z.string().min(8).max(200).optional(),
+    version: z
+      .string()
+      .max(40)
+      .regex(/^[0-9A-Za-z._-]*$/, "Use a version like 0.1.8")
+      .nullable()
+      .optional(),
+    status: productStatusSchema.optional(),
+    license: z.string().min(2).max(80).optional(),
+    website: z
+      .string()
+      .max(400)
+      .nullable()
+      .optional()
+      .refine(
+        (v) => !v || /^https?:\/\/.+/i.test(v),
+        "Use a full URL starting with http:// or https://"
+      ),
+    category: productSectorSchema.optional(),
+    description: z.string().min(20).max(2000).optional(),
+    highlights: z.array(z.string().min(1).max(400)).max(12).optional(),
+    install: productInstallSchema.nullable().optional(),
+    paperRef: productPaperRefSchema.nullable().optional(),
+    links: z.array(productLinkSchema).max(12).optional(),
+    listed: z.boolean().optional(),
+  })
+  .refine((d) => Object.values(d).some((v) => v !== undefined), {
+    message: "Provide at least one field to update.",
+  });
+
+export type UpdateProductInput = z.infer<typeof updateProductSchema>;
+
+export const createProductSchema = z.object({
+  slug: z
+    .string()
+    .min(3)
+    .max(80)
+    .regex(slugRe, "Use kebab-case (lowercase letters, digits, hyphens)."),
+  name: z.string().min(2).max(80),
+  tagline: z.string().min(8).max(200),
+  version: z
+    .string()
+    .max(40)
+    .regex(/^[0-9A-Za-z._-]*$/, "Use a version like 0.1.8")
+    .optional()
+    .or(z.literal("")),
+  status: productStatusSchema.optional(),
+  license: z.string().min(2).max(80),
+  website: z
+    .string()
+    .max(400)
+    .optional()
+    .or(z.literal(""))
+    .refine(
+      (v) => !v || /^https?:\/\/.+/i.test(v),
+      "Use a full URL starting with http:// or https://"
+    ),
+  category: productSectorSchema,
+  description: z.string().min(20).max(2000),
+  highlights: z.array(z.string().min(1).max(400)).max(12).optional(),
+  install: productInstallSchema.nullable().optional(),
+  paperRef: productPaperRefSchema.nullable().optional(),
+  links: z.array(productLinkSchema).max(12).optional(),
+  listed: z.boolean().optional(),
+});
+
+export type CreateProductInput = z.infer<typeof createProductSchema>;
+
+export const programStatusSchema = z.enum([
+  "Open",
+  "Upcoming",
+  "Rolling",
+  "Closed",
+]);
+
+const programWebsiteSchema = z
+  .string()
+  .max(400)
+  .optional()
+  .or(z.literal(""))
+  .refine(
+    (v) => !v || /^https?:\/\/.+/i.test(v),
+    "Use a full URL starting with http:// or https://"
+  );
+
+export const createProgramSchema = z.object({
+  slug: z
+    .string()
+    .min(3)
+    .max(80)
+    .regex(slugRe, "Use kebab-case (lowercase letters, digits, hyphens)."),
+  name: z.string().min(2).max(80),
+  tagline: z.string().min(8).max(200),
+  status: programStatusSchema.optional(),
+  website: programWebsiteSchema,
+  category: productSectorSchema,
+  description: z.string().min(20).max(2000),
+  highlights: z.array(z.string().min(1).max(400)).max(12).optional(),
+  listed: z.boolean().optional(),
+});
+
+export const updateProgramSchema = z
+  .object({
+    name: z.string().min(2).max(80).optional(),
+    tagline: z.string().min(8).max(200).optional(),
+    status: programStatusSchema.optional(),
+    website: z
+      .string()
+      .max(400)
+      .nullable()
+      .optional()
+      .refine(
+        (v) => !v || /^https?:\/\/.+/i.test(v),
+        "Use a full URL starting with http:// or https://"
+      ),
+    category: productSectorSchema.optional(),
+    description: z.string().min(20).max(2000).optional(),
+    highlights: z.array(z.string().min(1).max(400)).max(12).optional(),
+    listed: z.boolean().optional(),
+  })
+  .refine((d) => Object.values(d).some((v) => v !== undefined), {
+    message: "Provide at least one field to update.",
+  });
+
+export type CreateProgramInput = z.infer<typeof createProgramSchema>;
+export type UpdateProgramInput = z.infer<typeof updateProgramSchema>;
