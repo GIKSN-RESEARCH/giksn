@@ -16,6 +16,8 @@ import { StatusSelect } from "@/components/StatusSelect";
 import { KindBadge } from "@/components/KindBadge";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { parseContact } from "@/lib/contact";
+import { ProductsAdmin } from "./ProductsAdmin";
+import { ProgramsAdmin } from "./ProgramsAdmin";
 
 type SessionInfo = {
   authenticated: boolean;
@@ -474,6 +476,32 @@ export function AdminPanel() {
         </div>
       )}
 
+      <div className="divider-dashed" />
+
+      <ProductsAdmin
+        onFlash={(message) => {
+          setFlash(message);
+          setTimeout(() => setFlash(null), 2500);
+        }}
+        onError={setError}
+        onUnauthorized={() => {
+          refreshSession();
+        }}
+      />
+
+      <div className="divider-dashed" />
+
+      <ProgramsAdmin
+        onFlash={(message) => {
+          setFlash(message);
+          setTimeout(() => setFlash(null), 2500);
+        }}
+        onError={setError}
+        onUnauthorized={() => {
+          refreshSession();
+        }}
+      />
+
       <ConfirmDialog
         open={deleteTarget !== null}
         kicker="Delete paper"
@@ -615,8 +643,8 @@ function LoginForm({ onLoggedIn }: { onLoggedIn: () => Promise<SessionInfo> }) {
         <div className="kicker mb-3">What you can do here</div>
         <ul className="space-y-3 text-[14px] text-ink-soft leading-[1.6]">
           <li>
-            <span className="text-ink font-medium">Set category.</span>{" "}
-            Research, Writings, Products or Programs.
+            <span className="text-ink font-medium">Edit products.</span>{" "}
+            Version, license, status and the rest of the product card.
           </li>
           <li>
             <span className="text-ink font-medium">Filter by sector.</span>{" "}
