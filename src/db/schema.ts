@@ -15,6 +15,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import type { PaperSection } from "@/lib/papers";
+import type { ProductInstall, ProductLink, ProductPaperRef } from "@/lib/products";
 
 export const categoryEnum = pgEnum("category", [
   "AI",
@@ -32,6 +33,19 @@ export const statusEnum = pgEnum("status", [
 ]);
 
 export const kindEnum = pgEnum("kind", ["Original", "Survey"]);
+
+export const productStatusEnum = pgEnum("product_status", [
+  "Alpha",
+  "Beta",
+  "Stable",
+]);
+
+export const programStatusEnum = pgEnum("program_status", [
+  "Open",
+  "Upcoming",
+  "Rolling",
+  "Closed",
+]);
 
 export const papers = pgTable(
   "papers",
@@ -109,9 +123,72 @@ export const comments = pgTable(
   })
 );
 
+export const products = pgTable(
+  "products",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    slug: varchar("slug", { length: 80 }).notNull(),
+    name: text("name").notNull(),
+    tagline: text("tagline").notNull(),
+    version: varchar("version", { length: 40 }),
+    status: productStatusEnum("status").notNull().default("Alpha"),
+    license: text("license").notNull(),
+    website: text("website"),
+    category: categoryEnum("category").notNull(),
+    description: text("description").notNull(),
+    highlights: jsonb("highlights").$type<string[]>().notNull(),
+    install: jsonb("install").$type<ProductInstall | null>(),
+    paperRef: jsonb("paper_ref").$type<ProductPaperRef | null>(),
+    links: jsonb("links").$type<ProductLink[]>().notNull(),
+    listed: boolean("listed").notNull().default(true),
+    sortOrder: integer("sort_order").notNull().default(0),
+    updated: timestamp("updated", { withTimezone: true })
+      .notNull()
+      .default(sql`now()`),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .default(sql`now()`),
+  },
+  (t) => ({
+    slugUniq: uniqueIndex("products_slug_uniq").on(t.slug),
+    bySort: index("products_sort_idx").on(t.sortOrder),
+  })
+);
+
 export type PaperRow = typeof papers.$inferSelect;
 export type PaperInsert = typeof papers.$inferInsert;
 export type CommentRow = typeof comments.$inferSelect;
 export type CommentInsert = typeof comments.$inferInsert;
 export type AdminRow = typeof admins.$inferSelect;
 export type AdminInsert = typeof admins.$inferInsert;
+export const programs = pgTable(
+  "programs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    slug: varchar("slug", { length: 80 }).notNull(),
+    name: text("name").notNull(),
+    tagline: text("tagline").notNull(),
+    status: programStatusEnum("status").notNull().default("Upcoming"),
+    website: text("website"),
+    category: categoryEnum("category").notNull(),
+    description: text("description").notNull(),
+    highlights: jsonb("highlights").$type<string[]>().notNull(),
+    listed: boolean("listed").notNull().default(true),
+    sortOrder: integer("sort_order").notNull().default(0),
+    updated: timestamp("updated", { withTimezone: true })
+      .notNull()
+      .default(sql`now()`),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .default(sql`now()`),
+  },
+  (t) => ({
+    slugUniq: uniqueIndex("programs_slug_uniq").on(t.slug),
+    bySort: index("programs_sort_idx").on(t.sortOrder),
+  })
+);
+
+export type ProductRow = typeof products.$inferSelect;
+export type ProductInsert = typeof products.$inferInsert;
+export type ProgramRow = typeof programs.$inferSelect;
+export type ProgramInsert = typeof programs.$inferInsert;
