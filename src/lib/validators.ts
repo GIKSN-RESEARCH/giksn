@@ -230,8 +230,20 @@ export const createProgramSchema = z.object({
   name: z.string().min(2).max(80),
   tagline: z.string().min(8).max(200),
   status: programStatusSchema.optional(),
+  startsOn: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD")
+    .nullable()
+    .optional(),
+  endsOn: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD")
+    .nullable()
+    .optional(),
+  tentativeStart: z.string().max(80).nullable().optional(),
   website: programWebsiteSchema,
-  category: productSectorSchema,
+  category: productSectorSchema.optional(),
+  sectors: z.array(z.string().min(1).max(40)).min(1).max(12),
   description: z.string().min(20).max(2000),
   highlights: z.array(z.string().min(1).max(400)).max(12).optional(),
   listed: z.boolean().optional(),
@@ -242,6 +254,17 @@ export const updateProgramSchema = z
     name: z.string().min(2).max(80).optional(),
     tagline: z.string().min(8).max(200).optional(),
     status: programStatusSchema.optional(),
+    startsOn: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD")
+      .nullable()
+      .optional(),
+    endsOn: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD")
+      .nullable()
+      .optional(),
+    tentativeStart: z.string().max(80).nullable().optional(),
     website: z
       .string()
       .max(400)
@@ -252,6 +275,7 @@ export const updateProgramSchema = z
         "Use a full URL starting with http:// or https://"
       ),
     category: productSectorSchema.optional(),
+    sectors: z.array(z.string().min(1).max(40)).min(1).max(12).optional(),
     description: z.string().min(20).max(2000).optional(),
     highlights: z.array(z.string().min(1).max(400)).max(12).optional(),
     listed: z.boolean().optional(),
@@ -262,3 +286,45 @@ export const updateProgramSchema = z
 
 export type CreateProgramInput = z.infer<typeof createProgramSchema>;
 export type UpdateProgramInput = z.infer<typeof updateProgramSchema>;
+
+const newsHrefSchema = z
+  .string()
+  .max(400)
+  .optional()
+  .or(z.literal(""))
+  .refine(
+    (v) => !v || /^https?:\/\/.+/i.test(v),
+    "Paste a full URL starting with http:// or https://"
+  );
+
+export const createNewsSchema = z.object({
+  slug: z
+    .string()
+    .min(3)
+    .max(80)
+    .regex(slugRe, "Use kebab-case (lowercase letters, digits, hyphens)."),
+  title: z.string().min(4).max(200),
+  href: newsHrefSchema,
+  listed: z.boolean().optional(),
+});
+
+export const updateNewsSchema = z
+  .object({
+    title: z.string().min(4).max(200).optional(),
+    href: z
+      .string()
+      .max(400)
+      .nullable()
+      .optional()
+      .refine(
+        (v) => !v || /^https?:\/\/.+/i.test(v),
+        "Paste a full URL starting with http:// or https://"
+      ),
+    listed: z.boolean().optional(),
+  })
+  .refine((d) => Object.values(d).some((v) => v !== undefined), {
+    message: "Provide at least one field to update.",
+  });
+
+export type CreateNewsInput = z.infer<typeof createNewsSchema>;
+export type UpdateNewsInput = z.infer<typeof updateNewsSchema>;

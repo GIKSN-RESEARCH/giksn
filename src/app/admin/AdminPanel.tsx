@@ -18,6 +18,7 @@ import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { parseContact } from "@/lib/contact";
 import { ProductsAdmin } from "./ProductsAdmin";
 import { ProgramsAdmin } from "./ProgramsAdmin";
+import { NewsAdmin } from "./NewsAdmin";
 
 type SessionInfo = {
   authenticated: boolean;
@@ -30,6 +31,9 @@ export function AdminPanel() {
   const [papers, setPapers] = useState<Paper[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [desk, setDesk] = useState<
+    "writings" | "products" | "programs" | "news"
+  >("writings");
   const [filter, setFilter] = useState<Category | "all">("all");
   const [pendingSlug, setPendingSlug] = useState<string | null>(null);
   const [flash, setFlash] = useState<string | null>(null);
@@ -271,6 +275,72 @@ export function AdminPanel() {
     <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-rule">
         <div className="flex items-center gap-2 flex-wrap">
+          {(
+            [
+              ["writings", "Writings"],
+              ["products", "Products"],
+              ["programs", "Programs"],
+              ["news", "News"],
+            ] as const
+          ).map(([id, label]) => (
+            <FilterButton
+              key={id}
+              active={desk === id}
+              onClick={() => setDesk(id)}
+            >
+              {label}
+            </FilterButton>
+          ))}
+        </div>
+        <div className="flex items-center gap-3">
+          {flash && (
+            <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
+              ✓ {flash}
+            </span>
+          )}
+          <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint hidden md:inline">
+            Signed in as <span className="text-ink normal-case">{session.email}</span>
+          </span>
+          <button
+            type="button"
+            onClick={purgeCache}
+            disabled={purging}
+            className="border border-rule px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] hover:bg-tint hover:border-accent hover:text-accent transition-colors disabled:opacity-50"
+            title="Force the public cache to rebuild. Use after direct DB scripts or if pages look stale."
+          >
+            {purging ? "Purging…" : "Purge cache"}
+          </button>
+          {desk === "writings" && (
+            <button
+              type="button"
+              onClick={loadPapers}
+              disabled={loading}
+              className="border border-rule px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] hover:bg-tint transition-colors disabled:opacity-50"
+            >
+              {loading ? "Loading…" : "Refresh"}
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={logout}
+            className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint hover:text-accent transition-colors"
+          >
+            Sign out
+          </button>
+        </div>
+      </div>
+
+      {error && (
+        <div className="border border-accent/60 bg-accent-wash p-4 text-[13px] text-ink">
+          <span className="font-mono uppercase tracking-[0.14em] text-[11px] text-accent-deep mr-2">
+            Error
+          </span>
+          {error}
+        </div>
+      )}
+
+      {desk === "writings" && (
+        <div className="flex items-center gap-2 flex-wrap">
           <FilterButton active={filter === "all"} onClick={() => setFilter("all")}>
             All
             <span className="ml-2 text-ink-faint tabular-nums">
@@ -291,58 +361,15 @@ export function AdminPanel() {
             );
           })}
         </div>
-        <div className="flex items-center gap-3">
-          {flash && (
-            <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
-              ✓ {flash}
-            </span>
-          )}
-          <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint hidden md:inline">
-            Signed in as <span className="text-ink normal-case">{session.email}</span>
-          </span>
-          <button
-            type="button"
-            onClick={purgeCache}
-            disabled={purging}
-            className="border border-rule px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] hover:bg-tint hover:border-accent hover:text-accent transition-colors disabled:opacity-50"
-            title="Force the public cache to rebuild. Use after direct DB scripts or if pages look stale."
-          >
-            {purging ? "Purging…" : "Purge cache"}
-          </button>
-          <button
-            type="button"
-            onClick={loadPapers}
-            disabled={loading}
-            className="border border-rule px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] hover:bg-tint transition-colors disabled:opacity-50"
-          >
-            {loading ? "Loading…" : "Refresh"}
-          </button>
-          <button
-            type="button"
-            onClick={logout}
-            className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint hover:text-accent transition-colors"
-          >
-            Sign out
-          </button>
-        </div>
-      </div>
-
-      {error && (
-        <div className="border border-accent/60 bg-accent-wash p-4 text-[13px] text-ink">
-          <span className="font-mono uppercase tracking-[0.14em] text-[11px] text-accent-deep mr-2">
-            Error
-          </span>
-          {error}
-        </div>
       )}
 
-      {!papers ? (
+      {desk === "writings" && !papers ? (
         <p className="font-display italic text-ink-soft py-10">Loading…</p>
-      ) : filtered && filtered.length === 0 ? (
+      ) : desk === "writings" && filtered && filtered.length === 0 ? (
         <p className="font-display italic text-ink-soft py-10">
           No papers yet. {filter !== "all" ? `Filter: ${filter}.` : null}
         </p>
-      ) : (
+      ) : desk === "writings" ? (
         <div className="border border-rule overflow-x-auto">
           <table className="w-full text-[13px]">
             <thead className="bg-tint border-b border-rule">
@@ -474,33 +501,46 @@ export function AdminPanel() {
             </tbody>
           </table>
         </div>
+      ) : null}
+
+      {desk === "products" && (
+        <ProductsAdmin
+          onFlash={(message) => {
+            setFlash(message);
+            setTimeout(() => setFlash(null), 2500);
+          }}
+          onError={setError}
+          onUnauthorized={() => {
+            refreshSession();
+          }}
+        />
       )}
 
-      <div className="divider-dashed" />
+      {desk === "programs" && (
+        <ProgramsAdmin
+          onFlash={(message) => {
+            setFlash(message);
+            setTimeout(() => setFlash(null), 2500);
+          }}
+          onError={setError}
+          onUnauthorized={() => {
+            refreshSession();
+          }}
+        />
+      )}
 
-      <ProductsAdmin
-        onFlash={(message) => {
-          setFlash(message);
-          setTimeout(() => setFlash(null), 2500);
-        }}
-        onError={setError}
-        onUnauthorized={() => {
-          refreshSession();
-        }}
-      />
-
-      <div className="divider-dashed" />
-
-      <ProgramsAdmin
-        onFlash={(message) => {
-          setFlash(message);
-          setTimeout(() => setFlash(null), 2500);
-        }}
-        onError={setError}
-        onUnauthorized={() => {
-          refreshSession();
-        }}
-      />
+      {desk === "news" && (
+        <NewsAdmin
+          onFlash={(message) => {
+            setFlash(message);
+            setTimeout(() => setFlash(null), 2500);
+          }}
+          onError={setError}
+          onUnauthorized={() => {
+            refreshSession();
+          }}
+        />
+      )}
 
       <ConfirmDialog
         open={deleteTarget !== null}

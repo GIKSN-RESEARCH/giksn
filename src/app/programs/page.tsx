@@ -1,7 +1,7 @@
 import { Masthead } from "@/components/Masthead";
 import { CategoryNav } from "@/components/CategoryNav";
 import { Footer } from "@/components/Footer";
-import { categoryByCode } from "@/lib/papers";
+import { categoryByCode, formatDate } from "@/lib/papers";
 import { type Program } from "@/lib/programs";
 import { listProgramsPublic } from "@/db/queries";
 
@@ -73,7 +73,10 @@ function ProgramBlock({
   program: Program;
   index: number;
 }) {
-  const sector = categoryByCode(program.category);
+  const sectorLabels = (program.sectors?.length
+    ? program.sectors
+    : [program.category]
+  ).map((code) => categoryByCode(code)?.full ?? code);
   const siteHref = program.website || null;
   const siteHost = siteHref
     ? siteHref.replace(/^https?:\/\//, "").replace(/\/$/, "")
@@ -87,7 +90,13 @@ function ProgramBlock({
             Program {String(index + 1).padStart(2, "0")}
           </span>
           <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink-faint border border-rule px-2 py-0.5">
-            {program.status}
+            {program.startsOn
+              ? program.endsOn
+                ? `${formatDate(program.startsOn)} to ${formatDate(program.endsOn)}`
+                : formatDate(program.startsOn)
+              : program.tentativeStart
+                ? program.tentativeStart
+                : "Upcoming"}
           </span>
         </div>
         <h2
@@ -112,8 +121,8 @@ function ProgramBlock({
         </p>
         <dl className="mt-6 space-y-2.5 font-mono text-[11px] uppercase tracking-[0.14em]">
           <MetaRow
-            term="Sector"
-            value={sector ? sector.full : program.category}
+            term={sectorLabels.length > 1 ? "Sectors" : "Sector"}
+            value={sectorLabels.join(", ")}
           />
           {siteHref && siteHost && (
             <div className="flex justify-between gap-3 border-b border-rule-soft pb-2">
@@ -130,7 +139,20 @@ function ProgramBlock({
               </dd>
             </div>
           )}
-          <MetaRow term="Status" value={program.status} />
+          {program.startsOn ? (
+            <MetaRow
+              term={program.endsOn ? "Dates" : "Date"}
+              value={
+                program.endsOn
+                  ? `${formatDate(program.startsOn)} to ${formatDate(program.endsOn)}`
+                  : formatDate(program.startsOn)
+              }
+            />
+          ) : program.tentativeStart ? (
+            <MetaRow term="Tentative start" value={program.tentativeStart} />
+          ) : (
+            <MetaRow term="Status" value="Upcoming" />
+          )}
         </dl>
       </div>
 

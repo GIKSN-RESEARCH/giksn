@@ -82,17 +82,19 @@ export function ProductsAdmin({ onFlash, onError, onUnauthorized }: Props) {
       </div>
 
       {openId === "new" && (
-        <ProductEditor
-          mode="create"
-          onCancel={() => setOpenId(null)}
-          onSaved={(next) => {
-            setProducts((curr) => (curr ? [...curr, next] : [next]));
-            setOpenId(next.slug);
-            onFlash(`${next.name} added`);
-          }}
-          onError={onError}
-          onUnauthorized={onUnauthorized}
-        />
+        <div className="border border-rule bg-paper px-4 py-5 sm:px-5">
+          <ProductEditor
+            mode="create"
+            onCancel={() => setOpenId(null)}
+            onSaved={(next) => {
+              setProducts((curr) => (curr ? [...curr, next] : [next]));
+              setOpenId(next.slug);
+              onFlash(`${next.name} added`);
+            }}
+            onError={onError}
+            onUnauthorized={onUnauthorized}
+          />
+        </div>
       )}
 
       {!products ? (
@@ -392,7 +394,7 @@ function ProductEditor({
             className={fieldClass}
           />
         </Field>
-        <Field label="Listing" className="col-span-12 sm:col-span-3">
+        <Field label="Listing" className="col-span-6 sm:col-span-3">
           <select
             value={listed ? "listed" : "delisted"}
             onChange={(e) => setListed(e.target.value === "listed")}
@@ -402,7 +404,7 @@ function ProductEditor({
             <option value="delisted">Delisted</option>
           </select>
         </Field>
-        <Field label="Sector" className="col-span-12 sm:col-span-3">
+        <Field label="Sector" className="col-span-6 sm:col-span-3">
           <select
             value={category}
             onChange={(e) =>
@@ -416,6 +418,14 @@ function ProductEditor({
               </option>
             ))}
           </select>
+        </Field>
+        <Field label="Install label" className="col-span-12 sm:col-span-6">
+          <input
+            value={installLabel}
+            onChange={(e) => setInstallLabel(e.target.value)}
+            placeholder="Install (macOS or Linux)"
+            className={fieldClass}
+          />
         </Field>
         <Field label="Tagline" className="col-span-12">
           <input
@@ -436,15 +446,7 @@ function ProductEditor({
             className={`${fieldClass} leading-relaxed resize-y min-h-[6rem]`}
           />
         </Field>
-        <Field label="Install label" className="col-span-12 sm:col-span-4">
-          <input
-            value={installLabel}
-            onChange={(e) => setInstallLabel(e.target.value)}
-            placeholder="Install (macOS or Linux)"
-            className={fieldClass}
-          />
-        </Field>
-        <Field label="Install command" className="col-span-12 sm:col-span-8">
+        <Field label="Install command" className="col-span-12">
           <input
             value={installCommand}
             onChange={(e) => setInstallCommand(e.target.value)}

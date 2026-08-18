@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-import { PAPER_CATEGORIES } from "@/lib/papers";
 import {
+  PROGRAM_PRESET_SECTORS,
   PROGRAM_STATUSES,
   type Program,
   type ProgramStatus,
@@ -82,17 +82,19 @@ export function ProgramsAdmin({ onFlash, onError, onUnauthorized }: Props) {
       </div>
 
       {openId === "new" && (
-        <ProgramEditor
-          mode="create"
-          onCancel={() => setOpenId(null)}
-          onSaved={(next) => {
-            setPrograms((curr) => (curr ? [...curr, next] : [next]));
-            setOpenId(next.slug);
-            onFlash(`${next.name} added`);
-          }}
-          onError={onError}
-          onUnauthorized={onUnauthorized}
-        />
+        <div className="border border-rule bg-paper px-4 py-5 sm:px-5">
+          <ProgramEditor
+            mode="create"
+            onCancel={() => setOpenId(null)}
+            onSaved={(next) => {
+              setPrograms((curr) => (curr ? [...curr, next] : [next]));
+              setOpenId(next.slug);
+              onFlash(`${next.name} added`);
+            }}
+            onError={onError}
+            onUnauthorized={onUnauthorized}
+          />
+        </div>
       )}
 
       {!programs ? (
@@ -134,8 +136,18 @@ export function ProgramsAdmin({ onFlash, onError, onUnauthorized }: Props) {
                     </span>
                   )}
                   <span className="ml-auto flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint shrink-0">
-                    <span className="text-accent">{p.status}</span>
-                    <span className="hidden md:inline">{p.category}</span>
+                    <span className="text-accent">
+                      {p.startsOn
+                        ? p.endsOn
+                          ? `${p.startsOn} to ${p.endsOn}`
+                          : p.startsOn
+                        : p.tentativeStart
+                          ? p.tentativeStart
+                          : "Upcoming"}
+                    </span>
+                    <span className="hidden md:inline">
+                      {(p.sectors ?? [p.category]).join(" · ")}
+                    </span>
                   </span>
                 </button>
                 {expanded && (
@@ -195,15 +207,24 @@ function ProgramEditor({
   const [status, setStatus] = useState<ProgramStatus>(
     program?.status ?? "Upcoming"
   );
-  const [category, setCategory] = useState<Program["category"]>(
-    program?.category ?? "AI"
+  const [sectors, setSectors] = useState<string[]>(
+    program?.sectors?.length ? program.sectors : program?.category ? [program.category] : []
   );
+  const [customSector, setCustomSector] = useState("");
   const [description, setDescription] = useState(program?.description ?? "");
   const [website, setWebsite] = useState(program?.website ?? "");
   const [highlightsText, setHighlightsText] = useState(
     program?.highlights.join("\n") ?? ""
   );
   const [listed, setListed] = useState(program?.listed ?? true);
+  const [hasDate, setHasDate] = useState(
+    Boolean(program?.startsOn || program?.endsOn)
+  );
+  const [startsOn, setStartsOn] = useState(program?.startsOn ?? "");
+  const [endsOn, setEndsOn] = useState(program?.endsOn ?? "");
+  const [tentativeStart, setTentativeStart] = useState(
+    program?.tentativeStart ?? ""
+  );
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -212,12 +233,39 @@ function ProgramEditor({
     setName(program.name);
     setTagline(program.tagline);
     setStatus(program.status);
-    setCategory(program.category);
+    setSectors(
+      program.sectors?.length
+        ? program.sectors
+        : program.category
+          ? [program.category]
+          : []
+    );
+    setCustomSector("");
     setDescription(program.description);
     setWebsite(program.website ?? "");
     setHighlightsText(program.highlights.join("\n"));
     setListed(program.listed);
+    setHasDate(Boolean(program.startsOn || program.endsOn));
+    setStartsOn(program.startsOn ?? "");
+    setEndsOn(program.endsOn ?? "");
+    setTentativeStart(program.tentativeStart ?? "");
   }, [program]);
+
+  function toggleSector(code: string) {
+    setSectors((curr) =>
+      curr.includes(code) ? curr.filter((s) => s !== code) : [...curr, code]
+    );
+  }
+
+  function addCustomSector() {
+    const next = customSector.trim();
+    if (!next) return;
+    const exists = sectors.some(
+      (s) => s.toLowerCase() === next.toLowerCase()
+    );
+    if (!exists) setSectors((curr) => [...curr, next]);
+    setCustomSector("");
+  }
 
   function normalizeUrl(raw: string): string | null {
     const trimmed = raw.trim();
@@ -240,7 +288,7 @@ function ProgramEditor({
       name: name.trim(),
       tagline: tagline.trim(),
       status,
-      category,
+      sectors,
       description: description.trim(),
       website: normalizeUrl(website),
       highlights: highlightsText
@@ -248,6 +296,9 @@ function ProgramEditor({
         .map((s) => s.trim())
         .filter(Boolean),
       listed,
+      startsOn: hasDate && startsOn ? startsOn : null,
+      endsOn: hasDate && endsOn ? endsOn : null,
+      tentativeStart: tentativeStart.trim() || null,
     };
   }
 
@@ -255,6 +306,14 @@ function ProgramEditor({
     e.preventDefault();
     setSaving(true);
     onError(null);
+    if (sectors.length === 0) {
+      onError("Pick at least one sector.");
+      return;
+    }
+    if (hasDate && startsOn && endsOn && endsOn < startsOn) {
+      onError("End date cannot be before the start date.");
+      return;
+    }
     try {
       const payload = buildPayload();
       const res =
@@ -353,22 +412,7 @@ function ProgramEditor({
             <option value="delisted">Delisted</option>
           </select>
         </Field>
-        <Field label="Sector" className="col-span-12 sm:col-span-3">
-          <select
-            value={category}
-            onChange={(e) =>
-              setCategory(e.target.value as Program["category"])
-            }
-            className={fieldClass}
-          >
-            {PAPER_CATEGORIES.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Website or apply link" className="col-span-12 sm:col-span-9">
+        <Field label="Website or apply link" className="col-span-12 sm:col-span-6">
           <input
             type="text"
             inputMode="url"
@@ -378,6 +422,119 @@ function ProgramEditor({
             className={fieldClass}
           />
         </Field>
+        <Field label="Tentative start" className="col-span-12 sm:col-span-6">
+          <input
+            type="text"
+            value={tentativeStart}
+            onChange={(e) => setTentativeStart(e.target.value)}
+            disabled={hasDate}
+            placeholder="e.g. Fall 2026"
+            className={`${fieldClass} ${hasDate ? "opacity-50 cursor-not-allowed" : ""}`}
+          />
+        </Field>
+        <div className="col-span-6 sm:col-span-3">
+          <div className="flex items-center justify-between gap-2 mb-2 min-h-[1rem]">
+            <span className="kicker mb-0">Start</span>
+            <label className="inline-flex items-center gap-1.5 cursor-pointer shrink-0">
+              <input
+                type="checkbox"
+                checked={hasDate}
+                onChange={(e) => {
+                  setHasDate(e.target.checked);
+                  if (!e.target.checked) {
+                    setStartsOn("");
+                    setEndsOn("");
+                  }
+                }}
+                className="h-3.5 w-3.5 accent-[var(--accent)] cursor-pointer"
+              />
+              <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-faint">
+                {hasDate ? "On" : "Off"}
+              </span>
+            </label>
+          </div>
+          <input
+            type="date"
+            value={startsOn}
+            onChange={(e) => setStartsOn(e.target.value)}
+            disabled={!hasDate}
+            required={hasDate}
+            className={`${fieldClass} ${hasDate ? "" : "opacity-50 cursor-not-allowed"}`}
+          />
+        </div>
+        <Field label="End" className="col-span-6 sm:col-span-3">
+          <input
+            type="date"
+            value={endsOn}
+            onChange={(e) => setEndsOn(e.target.value)}
+            disabled={!hasDate}
+            required={hasDate}
+            min={startsOn || undefined}
+            className={`${fieldClass} ${hasDate ? "" : "opacity-50 cursor-not-allowed"}`}
+          />
+        </Field>
+        <div className="col-span-12">
+          <div className="kicker mb-2">Sectors</div>
+          <div className="flex flex-wrap gap-1.5 mb-2">
+            {PROGRAM_PRESET_SECTORS.map((code) => {
+              const on = sectors.includes(code);
+              return (
+                <button
+                  key={code}
+                  type="button"
+                  onClick={() => toggleSector(code)}
+                  className={[
+                    "px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] border cursor-pointer transition-colors",
+                    on
+                      ? "bg-accent !text-white border-accent"
+                      : "border-rule text-ink-soft hover:border-accent hover:text-accent",
+                  ].join(" ")}
+                  aria-pressed={on}
+                >
+                  {code}
+                </button>
+              );
+            })}
+            {sectors
+              .filter(
+                (s) =>
+                  !(PROGRAM_PRESET_SECTORS as readonly string[]).includes(s)
+              )
+              .map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => toggleSector(s)}
+                  className="px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] border border-accent bg-accent !text-white cursor-pointer"
+                  aria-pressed
+                  title="Click to remove"
+                >
+                  {s} ×
+                </button>
+              ))}
+          </div>
+          <div className="flex gap-2">
+            <input
+              value={customSector}
+              onChange={(e) => setCustomSector(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addCustomSector();
+                }
+              }}
+              placeholder="Add a custom sector"
+              className={fieldClass}
+            />
+            <button
+              type="button"
+              onClick={addCustomSector}
+              className="shrink-0 border border-rule px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-ink hover:border-accent hover:text-accent transition-colors cursor-pointer"
+            >
+              Add
+            </button>
+          </div>
+        </div>
         <Field label="Tagline" className="col-span-12">
           <input
             value={tagline}

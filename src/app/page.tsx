@@ -16,7 +16,12 @@ import {
   shortDate,
   type Paper,
 } from "@/lib/papers";
-import { listPapersSortedByUpdatedPublic, listProductsPublic } from "@/db/queries";
+import { newsHrefIsExternal, type NewsItem } from "@/lib/news";
+import {
+  listNewsPublic,
+  listPapersSortedByUpdatedPublic,
+  listProductsPublic,
+} from "@/db/queries";
 
 // Rendered fresh at most every hour; admin mutations force revalidation
 // immediately via revalidateTag('papers').
@@ -25,9 +30,10 @@ export const revalidate = 60;
 const DESKTOP_PAGE_SIZE = 5;
 
 export default async function HomePage() {
-  const [all, PRODUCTS] = await Promise.all([
+  const [all, PRODUCTS, news] = await Promise.all([
     listPapersSortedByUpdatedPublic(),
     listProductsPublic(),
+    listNewsPublic(),
   ]);
   const papersOnly = all.filter((p) => isPaper(p.category));
 
@@ -58,6 +64,10 @@ export default async function HomePage() {
         {/* MOBILE LAYOUT */}
         <div className="md:hidden">
           <FeaturedArticle p={featured} />
+
+          <section className="mt-10 pt-8 border-t border-rule">
+            <FeaturedNewsBlock items={news} />
+          </section>
 
           <section className="mt-10 pt-8 border-t border-rule">
             <div className="mb-5">
@@ -182,7 +192,11 @@ export default async function HomePage() {
             <FeaturedArticleInner p={featured} />
           </article>
           <aside className="col-span-12 md:col-span-4 min-w-0 md:border-l md:border-rule md:pl-8">
-            <SectionsBlock papers={papersOnly} />
+            <FeaturedNewsBlock items={news} />
+            <div className="mt-8 divider-dashed" />
+            <div className="mt-8">
+              <SectionsBlock papers={papersOnly} />
+            </div>
           </aside>
         </section>
 
@@ -340,6 +354,64 @@ function FeaturedArticleInner({ p }: { p: Paper }) {
         </Link>
       </div>
     </>
+  );
+}
+
+function FeaturedNewsBlock({ items }: { items: NewsItem[] }) {
+  return (
+    <div>
+      <div className="flex items-baseline justify-between mb-4">
+        <div className="kicker">Featured news</div>
+      </div>
+      {items.length === 0 ? (
+        <p className="font-display italic text-ink-soft text-[14px] leading-[1.55]">
+          No news listed yet.
+        </p>
+      ) : (
+        <ul>
+          {items.slice(0, 6).map((item) => {
+            const href = item.href ?? null;
+            const titleClass =
+              "font-display font-medium text-[14px] sm:text-[15px] leading-[1.3] tracking-[-0.01em] text-ink wrap-anywhere group-hover:text-accent-deep transition-colors";
+            const body = (
+              <>
+                {item.updated && (
+                  <div className="mb-1.5">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-faint">
+                      {shortDate(item.updated)}
+                    </span>
+                  </div>
+                )}
+                <div className={titleClass}>{item.title}</div>
+              </>
+            );
+            return (
+              <li
+                key={item.slug}
+                className="border-t border-rule first:border-t-0"
+              >
+                {href ? (
+                  <a
+                    href={href}
+                    target={newsHrefIsExternal(href) ? "_blank" : undefined}
+                    rel={
+                      newsHrefIsExternal(href)
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
+                    className="block py-3 group"
+                  >
+                    {body}
+                  </a>
+                ) : (
+                  <div className="py-3">{body}</div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
   );
 }
 

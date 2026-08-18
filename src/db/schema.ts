@@ -7,6 +7,7 @@ import {
   text,
   integer,
   timestamp,
+  date,
   jsonb,
   varchar,
   uniqueIndex,
@@ -169,8 +170,12 @@ export const programs = pgTable(
     name: text("name").notNull(),
     tagline: text("tagline").notNull(),
     status: programStatusEnum("status").notNull().default("Upcoming"),
+    startsOn: date("starts_on", { mode: "string" }),
+    endsOn: date("ends_on", { mode: "string" }),
+    tentativeStart: varchar("tentative_start", { length: 80 }),
     website: text("website"),
     category: categoryEnum("category").notNull(),
+    sectors: jsonb("sectors").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
     description: text("description").notNull(),
     highlights: jsonb("highlights").$type<string[]>().notNull(),
     listed: boolean("listed").notNull().default(true),
@@ -188,7 +193,31 @@ export const programs = pgTable(
   })
 );
 
+export const news = pgTable(
+  "news",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    slug: varchar("slug", { length: 80 }).notNull(),
+    title: text("title").notNull(),
+    href: text("href"),
+    listed: boolean("listed").notNull().default(true),
+    sortOrder: integer("sort_order").notNull().default(0),
+    updated: timestamp("updated", { withTimezone: true })
+      .notNull()
+      .default(sql`now()`),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .default(sql`now()`),
+  },
+  (t) => ({
+    slugUniq: uniqueIndex("news_slug_uniq").on(t.slug),
+    bySort: index("news_sort_idx").on(t.sortOrder),
+  })
+);
+
 export type ProductRow = typeof products.$inferSelect;
 export type ProductInsert = typeof products.$inferInsert;
 export type ProgramRow = typeof programs.$inferSelect;
 export type ProgramInsert = typeof programs.$inferInsert;
+export type NewsRow = typeof news.$inferSelect;
+export type NewsInsert = typeof news.$inferInsert;

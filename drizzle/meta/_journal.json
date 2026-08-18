@@ -50,6 +50,41 @@
       "when": 1786590800000,
       "tag": "0006_programs_table",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1786594400000,
+      "tag": "0007_programs_starts_on",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1786598000000,
+      "tag": "0008_programs_sectors",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1787112000000,
+      "tag": "0009_programs_ends_on",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1787115600000,
+      "tag": "0010_programs_tentative_start",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1787119200000,
+      "tag": "0011_news_table",
+      "breakpoints": true
     }
   ]
 }

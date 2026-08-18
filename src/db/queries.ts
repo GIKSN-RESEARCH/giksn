@@ -2,7 +2,7 @@ import { and, asc, desc, eq, max, ne, sql } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 
 import { db } from "./index";
-import { admins, comments, papers, products, programs } from "./schema";
+import { admins, comments, papers, products, programs, news } from "./schema";
 import type {
   Category,
   Comment,
@@ -18,8 +18,19 @@ import type {
   ProductPaperRef,
   ProductStatus,
 } from "@/lib/products";
-import type { Program, ProgramStatus } from "@/lib/programs";
-import type { CommentRow, PaperRow, ProductRow, ProgramRow } from "./schema";
+import {
+  primaryProgramCategory,
+  type Program,
+  type ProgramStatus,
+} from "@/lib/programs";
+import type { NewsItem } from "@/lib/news";
+import type {
+  CommentRow,
+  PaperRow,
+  ProductRow,
+  ProgramRow,
+  NewsRow,
+} from "./schema";
 
 function toIso(d: Date | string): string {
   return d instanceof Date ? d.toISOString() : new Date(d).toISOString();
@@ -620,8 +631,15 @@ function rowToProgram(row: ProgramRow): Program {
     name: row.name,
     tagline: row.tagline,
     status: row.status as ProgramStatus,
+    startsOn: row.startsOn ?? null,
+    endsOn: row.endsOn ?? null,
+    tentativeStart: row.tentativeStart ?? null,
     website: row.website ?? null,
     category: row.category as Program["category"],
+    sectors:
+      Array.isArray(row.sectors) && row.sectors.length > 0
+        ? row.sectors
+        : [row.category],
     description: row.description,
     highlights: (row.highlights ?? []) as string[],
     listed: row.listed,
@@ -664,8 +682,12 @@ export async function createProgram(input: {
   name: string;
   tagline: string;
   status?: ProgramStatus;
+  startsOn?: string | null;
+  endsOn?: string | null;
+  tentativeStart?: string | null;
   website?: string | null;
-  category: Program["category"];
+  category?: Program["category"];
+  sectors?: string[];
   description: string;
   highlights?: string[];
   listed?: boolean;
@@ -675,6 +697,9 @@ export async function createProgram(input: {
     .from(programs);
   const nextOrder = (maxRow?.max ?? 0) + 1;
 
+  const sectors =
+    input.sectors && input.sectors.length > 0 ? input.sectors : ["AI"];
+
   const [row] = await db
     .insert(programs)
     .values({
@@ -682,8 +707,12 @@ export async function createProgram(input: {
       name: input.name,
       tagline: input.tagline,
       status: input.status ?? "Upcoming",
+      startsOn: input.startsOn || null,
+      endsOn: input.endsOn || null,
+      tentativeStart: input.tentativeStart || null,
       website: input.website || null,
-      category: input.category,
+      category: primaryProgramCategory(sectors),
+      sectors,
       description: input.description,
       highlights: input.highlights ?? [],
       listed: input.listed ?? true,
@@ -700,17 +729,25 @@ export async function updateProgram(
     name?: string;
     tagline?: string;
     status?: ProgramStatus;
+    startsOn?: string | null;
+    endsOn?: string | null;
+    tentativeStart?: string | null;
     website?: string | null;
     category?: Program["category"];
+    sectors?: string[];
     description?: string;
     highlights?: string[];
     listed?: boolean;
   }
 ): Promise<Program | null> {
+  const next = { ...patch };
+  if (patch.sectors) {
+    next.category = primaryProgramCategory(patch.sectors);
+  }
   const [row] = await db
     .update(programs)
     .set({
-      ...patch,
+      ...next,
       updated: new Date(),
     })
     .where(eq(programs.slug, slug))
@@ -734,5 +771,98 @@ export const listProgramsPublic = IS_DEV
   ? listProgramsPublicUncached
   : unstable_cache(listProgramsPublicUncached, ["listProgramsPublic"], {
       tags: [PROGRAMS_TAG],
+      revalidate: CACHE_TTL_SECONDS,
+    });
+
+export const NEWS_TAG = "news";
+
+function rowToNews(row: NewsRow): NewsItem {
+  return {
+    slug: row.slug,
+    title: row.title,
+    href: row.href ?? null,
+    listed: row.listed,
+    updated: toIso(row.updated),
+  };
+}
+
+export async function listNews(opts?: {
+  listedOnly?: boolean;
+}): Promise<NewsItem[]> {
+  const rows = opts?.listedOnly
+    ? await db
+        .select()
+        .from(news)
+        .where(eq(news.listed, true))
+        .orderBy(desc(news.updated))
+    : await db.select().from(news).orderBy(desc(news.updated));
+  return rows.map(rowToNews);
+}
+
+export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
+  const [row] = await db
+    .select()
+    .from(news)
+    .where(eq(news.slug, slug))
+    .limit(1);
+  return row ? rowToNews(row) : null;
+}
+
+export async function createNews(input: {
+  slug: string;
+  title: string;
+  href?: string | null;
+  listed?: boolean;
+}): Promise<NewsItem> {
+  const [maxRow] = await db.select({ max: max(news.sortOrder) }).from(news);
+  const nextOrder = (maxRow?.max ?? 0) + 1;
+  const [row] = await db
+    .insert(news)
+    .values({
+      slug: input.slug,
+      title: input.title,
+      href: input.href || null,
+      listed: input.listed ?? true,
+      sortOrder: nextOrder,
+    })
+    .returning();
+  return rowToNews(row);
+}
+
+export async function updateNews(
+  slug: string,
+  patch: {
+    title?: string;
+    href?: string | null;
+    listed?: boolean;
+  }
+): Promise<NewsItem | null> {
+  const [row] = await db
+    .update(news)
+    .set({
+      ...patch,
+      updated: new Date(),
+    })
+    .where(eq(news.slug, slug))
+    .returning();
+  return row ? rowToNews(row) : null;
+}
+
+export async function deleteNews(slug: string): Promise<boolean> {
+  const deleted = await db
+    .delete(news)
+    .where(eq(news.slug, slug))
+    .returning({ slug: news.slug });
+  return deleted.length > 0;
+}
+
+async function listNewsPublicUncached() {
+  return listNews({ listedOnly: true });
+}
+
+export const listNewsPublic = IS_DEV
+  ? listNewsPublicUncached
+  : unstable_cache(listNewsPublicUncached, ["listNewsPublic"], {
+      tags: [NEWS_TAG],
       revalidate: CACHE_TTL_SECONDS,
     });
