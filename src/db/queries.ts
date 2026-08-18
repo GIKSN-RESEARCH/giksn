@@ -767,12 +767,24 @@ async function listProgramsPublicUncached() {
   return listPrograms({ listedOnly: true });
 }
 
+async function getProgramBySlugPublicUncached(slug: string) {
+  return getProgramBySlug(slug, { listedOnly: true });
+}
+
 export const listProgramsPublic = IS_DEV
   ? listProgramsPublicUncached
   : unstable_cache(listProgramsPublicUncached, ["listProgramsPublic"], {
       tags: [PROGRAMS_TAG],
       revalidate: CACHE_TTL_SECONDS,
     });
+
+export const getProgramBySlugPublic = IS_DEV
+  ? getProgramBySlugPublicUncached
+  : unstable_cache(
+      getProgramBySlugPublicUncached,
+      ["getProgramBySlugPublic"],
+      { tags: [PROGRAMS_TAG], revalidate: CACHE_TTL_SECONDS }
+    );
 
 export const NEWS_TAG = "news";
 

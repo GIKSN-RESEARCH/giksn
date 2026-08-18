@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { ProgramBlock } from "@/components/ProgramBlock";
 import {
   PROGRAM_PRESET_SECTORS,
   PROGRAM_STATUSES,
@@ -227,6 +228,7 @@ function ProgramEditor({
   );
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   useEffect(() => {
     if (!program) return;
@@ -302,9 +304,41 @@ function ProgramEditor({
     };
   }
 
+  function formatIssues(data: {
+    issues?: { message?: string; path?: (string | number)[] }[];
+  }): string | null {
+    if (!data.issues?.length) return null;
+    return data.issues
+      .map((issue) => {
+        const path = issue.path?.filter(Boolean).join(".") || "field";
+        return `${path}: ${issue.message ?? "invalid"}`;
+      })
+      .join(" · ");
+  }
+
+  function previewProgram(): Program {
+    const payload = buildPayload();
+    return {
+      slug: program?.slug ?? "preview",
+      name: payload.name || "Untitled program",
+      tagline: payload.tagline || "Tagline appears here.",
+      status: payload.status,
+      startsOn: payload.startsOn,
+      endsOn: payload.endsOn,
+      tentativeStart: payload.tentativeStart,
+      website: payload.website,
+      category: "AI",
+      sectors: payload.sectors.length > 0 ? payload.sectors : ["AI"],
+      description:
+        payload.description ||
+        "Description appears here. Separate paragraphs with a blank line.",
+      highlights: payload.highlights,
+      listed: payload.listed,
+    };
+  }
+
   async function save(e: React.FormEvent) {
     e.preventDefault();
-    setSaving(true);
     onError(null);
     if (sectors.length === 0) {
       onError("Pick at least one sector.");
@@ -314,6 +348,7 @@ function ProgramEditor({
       onError("End date cannot be before the start date.");
       return;
     }
+    setSaving(true);
     try {
       const payload = buildPayload();
       const res =
@@ -336,7 +371,11 @@ function ProgramEditor({
             );
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        onError(data.error ?? `Save rejected (HTTP ${res.status}).`);
+        onError(
+          formatIssues(data) ||
+            data.error ||
+            `Save rejected (HTTP ${res.status}).`
+        );
         if (res.status === 401) onUnauthorized();
         return;
       }
@@ -379,6 +418,7 @@ function ProgramEditor({
   }
 
   return (
+    <>
     <form onSubmit={save} className="space-y-4">
       <div className="grid grid-cols-12 gap-4">
         <Field label="Name" className="col-span-12 sm:col-span-6">
@@ -550,17 +590,24 @@ function ProgramEditor({
             onChange={(e) => setDescription(e.target.value)}
             required
             minLength={20}
-            rows={4}
-            className={`${fieldClass} leading-relaxed resize-y min-h-[6rem]`}
+            rows={8}
+            className={`${fieldClass} leading-relaxed resize-y min-h-[10rem]`}
           />
+          <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-faint">
+            Blank line starts a new paragraph. Use **bold**, *italic*, `code`
+            and [links](https://…).
+          </p>
         </Field>
-        <Field label="Highlights (one per line)" className="col-span-12">
+        <Field label="Highlights" className="col-span-12">
           <textarea
             value={highlightsText}
             onChange={(e) => setHighlightsText(e.target.value)}
-            rows={4}
-            className={`${fieldClass} leading-relaxed resize-y min-h-[6rem]`}
+            rows={5}
+            className={`${fieldClass} leading-relaxed resize-y min-h-[7rem]`}
           />
+          <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-faint">
+            One highlight per line. Same **bold** / *italic* / link markup.
+          </p>
         </Field>
       </div>
 
@@ -572,6 +619,13 @@ function ProgramEditor({
             className="border border-rule px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-soft hover:text-ink hover:bg-tint transition-colors"
           >
             Close
+          </button>
+          <button
+            type="button"
+            onClick={() => setPreviewOpen((v) => !v)}
+            className="border border-rule px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-ink hover:border-accent hover:text-accent transition-colors"
+          >
+            {previewOpen ? "Hide preview" : "Preview"}
           </button>
           {mode === "edit" && onDeleted && (
             <button
@@ -597,6 +651,13 @@ function ProgramEditor({
         </button>
       </div>
     </form>
+      {previewOpen && (
+        <div className="mt-6 pt-6 border-t border-rule">
+          <div className="kicker mb-4">Live preview</div>
+          <ProgramBlock program={previewProgram()} index={0} />
+        </div>
+      )}
+    </>
   );
 }
 

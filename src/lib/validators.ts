@@ -214,11 +214,11 @@ export const programStatusSchema = z.enum([
 const programWebsiteSchema = z
   .string()
   .max(400)
+  .nullable()
   .optional()
-  .or(z.literal(""))
   .refine(
     (v) => !v || /^https?:\/\/.+/i.test(v),
-    "Use a full URL starting with http:// or https://"
+    "Paste a full URL starting with http:// or https://"
   );
 
 export const createProgramSchema = z.object({
@@ -244,8 +244,8 @@ export const createProgramSchema = z.object({
   website: programWebsiteSchema,
   category: productSectorSchema.optional(),
   sectors: z.array(z.string().min(1).max(40)).min(1).max(12),
-  description: z.string().min(20).max(2000),
-  highlights: z.array(z.string().min(1).max(400)).max(12).optional(),
+  description: z.string().min(20).max(8000),
+  highlights: z.array(z.string().min(1).max(800)).max(20).optional(),
   listed: z.boolean().optional(),
 });
 
@@ -276,8 +276,8 @@ export const updateProgramSchema = z
       ),
     category: productSectorSchema.optional(),
     sectors: z.array(z.string().min(1).max(40)).min(1).max(12).optional(),
-    description: z.string().min(20).max(2000).optional(),
-    highlights: z.array(z.string().min(1).max(400)).max(12).optional(),
+    description: z.string().min(20).max(8000).optional(),
+    highlights: z.array(z.string().min(1).max(800)).max(20).optional(),
     listed: z.boolean().optional(),
   })
   .refine((d) => Object.values(d).some((v) => v !== undefined), {
