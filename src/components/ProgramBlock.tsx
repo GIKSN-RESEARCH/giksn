@@ -32,7 +32,13 @@ export function ProgramBlock({
           : "grid grid-cols-12 gap-6 md:gap-10 border border-rule bg-paper p-5 sm:p-8"
       }
     >
-      <div className={collapsed ? "min-w-0" : "col-span-12 md:col-span-4 min-w-0"}>
+      <div
+        className={
+          collapsed
+            ? "min-w-0 flex flex-col"
+            : "col-span-12 md:col-span-4 min-w-0 flex flex-col"
+        }
+      >
         <div className="flex items-baseline gap-3 mb-3 flex-wrap">
           <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
             Program {String(index + 1).padStart(2, "0")}
@@ -79,18 +85,20 @@ export function ProgramBlock({
           )}
         </dl>
         {siteHref && (
-          <a
-            href={siteHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={
-              collapsed
-                ? "mt-6 inline-flex items-center justify-center gap-2 bg-white !text-ink border border-rule px-7 py-3.5 font-mono text-[15px] sm:text-[16px] uppercase tracking-[0.14em] hover:border-accent hover:text-accent transition-colors cursor-pointer"
-                : "mt-6 inline-flex items-center justify-center gap-2 bg-accent !text-white px-7 py-3.5 font-mono text-[15px] sm:text-[16px] uppercase tracking-[0.14em] hover:bg-accent-deep transition-colors cursor-pointer"
-            }
-          >
-            Apply →
-          </a>
+          <div className={collapsed ? "mt-5 md:mt-auto pt-5" : "mt-5"}>
+            <a
+              href={siteHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={
+                collapsed
+                  ? "inline-flex items-center gap-2 bg-white !text-ink border border-rule px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] hover:border-accent hover:text-accent transition-colors cursor-pointer"
+                  : "inline-flex items-center gap-2 bg-accent !text-white px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] hover:bg-accent-deep transition-colors cursor-pointer"
+              }
+            >
+              Apply →
+            </a>
+          </div>
         )}
       </div>
 
@@ -123,10 +131,10 @@ export function ProgramBlock({
             <p className="shrink-0 mt-1 text-[16px] leading-none text-ink-soft tracking-[0.16em]">
               ...
             </p>
-            <div className="shrink-0 pt-4">
+            <div className="shrink-0 pt-5">
               <Link
                 href={href}
-                className="inline-flex items-center justify-center gap-2 bg-accent !text-white px-7 py-3.5 font-mono text-[15px] sm:text-[16px] uppercase tracking-[0.14em] hover:bg-accent-deep transition-colors cursor-pointer"
+                className="inline-flex items-center gap-2 bg-accent !text-white px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] hover:bg-accent-deep transition-colors cursor-pointer"
               >
                 Learn more →
               </Link>
