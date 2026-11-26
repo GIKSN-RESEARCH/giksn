@@ -20,9 +20,15 @@ function getClient(): Sql {
       "DATABASE_URL is not set. Copy .env.example to .env.local and fill it in."
     );
   }
-  const ssl = process.env.DATABASE_SSL === "1" ? "require" : undefined;
+  // Neon requires TLS. postgres.js defaults ssl to false, and passing
+  // `ssl: undefined` still counts as an explicit option so it overrides
+  // `sslmode=require` in DATABASE_URL. That shows up as 28P01
+  // "password authentication failed for user 'neondb_owner'".
+  // Only omit ssl for local Postgres (no neon.tech host).
+  const wantSsl =
+    process.env.DATABASE_SSL === "1" || /neon\.tech/i.test(url);
   const client = postgres(url, {
-    ssl,
+    ...(wantSsl ? { ssl: "require" as const } : {}),
     max: 10,
     idle_timeout: 30,
     // Neon's pooler does not support prepared statement caching across

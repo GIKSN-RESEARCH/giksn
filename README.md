@@ -66,3 +66,29 @@ The lab does its own research first. The community is where GIKSN meets other re
 For questions, feedback or takedown requests: `research@giksn.com`.
 
 Independent. Open. Ambitious.
+
+## Deploying to Vercel
+
+Set `DATABASE_URL` in Vercel for each environment you deploy. Use the intended
+database and branch; a new database starts with an empty paper archive.
+
+The build command in `vercel.json` runs `npm run db:migrate` before
+`npm run build`. The homepage reads Postgres during prerendering, so its tables
+must exist before Next.js builds the site. All SQL migrations referenced by
+`drizzle/meta/_journal.json` must be committed. Drizzle records applied migrations
+and only runs pending ones on subsequent builds.
+
+For a manual migration, set `DATABASE_URL` in your shell or `.env.local`, then run:
+
+```sh
+npm run db:migrate
+```
+
+To check the full migration chain and verify that rerunning it preserves content,
+point `TEST_DATABASE_URL` at an empty, disposable PostgreSQL database and run:
+
+```sh
+npm run test:db
+```
+
+The test refuses to run against a database that already has application tables.

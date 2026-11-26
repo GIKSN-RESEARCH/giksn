@@ -1,5 +1,8 @@
-import "dotenv/config";
+import { config } from "dotenv";
 import { defineConfig } from "drizzle-kit";
+
+// Match Next.js's local env file while preserving Vercel's injected variables.
+config({ path: [".env.local", ".env"], quiet: true });
 
 // `drizzle-kit generate` runs without a live database, so we don't fail when
 // DATABASE_URL is missing — only the runtime commands (migrate/push/studio)
