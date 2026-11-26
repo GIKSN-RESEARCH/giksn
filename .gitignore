@@ -68,3 +68,5 @@ package-lock.json
 # turbo / cache
 .turbo/
 .gstack/
+
+bun.lock

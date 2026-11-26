@@ -25,10 +25,11 @@ function FooterInner() {
               aria-label="GIKSN Research home"
             >
               <Image
-                src="/logo.png"
+                src="/logo.svg"
                 alt="GIKSN"
                 width={80}
                 height={80}
+                unoptimized
                 className="block h-10 w-10 sm:h-11 sm:w-11 object-contain"
               />
               <h3 className="font-blanka text-2xl leading-[0.95] text-ink">

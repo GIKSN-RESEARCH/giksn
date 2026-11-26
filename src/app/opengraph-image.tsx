@@ -11,12 +11,9 @@ export const size = {
 export const contentType = "image/png";
 
 export default async function Image() {
-  const [logoData, blankaData] = await Promise.all([
-    readFile(join(process.cwd(), "public/logo.png")),
-    readFile(join(process.cwd(), "public/fonts/Blanka-Regular.woff")),
-  ]);
-
-  const logoSrc = `data:image/png;base64,${logoData.toString("base64")}`;
+  const blankaData = await readFile(
+    join(process.cwd(), "public/fonts/Blanka-Regular.woff"),
+  );
 
   return new ImageResponse(
     (
@@ -57,14 +54,19 @@ export default async function Image() {
               gap: 18,
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={logoSrc}
-              width={72}
-              height={72}
-              alt=""
-              style={{ objectFit: "contain" }}
-            />
+            {/* Five-cell mark inlined — Satori cannot load SVG as <img>. */}
+            <svg
+              width="72"
+              height="72"
+              viewBox="0 0 24 24"
+              fill="#0B0B0C"
+            >
+              <rect x="8.5" y="0" width="7" height="7" />
+              <rect x="17" y="8.5" width="7" height="7" />
+              <rect x="0" y="17" width="7" height="7" />
+              <rect x="8.5" y="17" width="7" height="7" />
+              <rect x="17" y="17" width="7" height="7" />
+            </svg>
             <div
               style={{
                 fontFamily: "Blanka",

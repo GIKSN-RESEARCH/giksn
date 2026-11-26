@@ -57,12 +57,13 @@ export function MastheadNav() {
           onClick={close}
         >
           <Image
-            src="/logo.png"
+            src="/logo.svg"
             alt=""
             aria-hidden
             width={28}
             height={28}
             priority
+            unoptimized
             className="block h-[22px] w-[22px] sm:h-[26px] sm:w-[26px] object-contain"
           />
         </Link>

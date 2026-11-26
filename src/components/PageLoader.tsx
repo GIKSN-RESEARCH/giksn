@@ -46,12 +46,13 @@ export function PageLoader() {
             />
           </svg>
           <Image
-            src="/logo.png"
+            src="/logo.svg"
             alt=""
             aria-hidden
             width={96}
             height={96}
             priority
+            unoptimized
             className="relative w-14 h-14 sm:w-16 sm:h-16 object-contain animate-giksn-breathe"
           />
         </div>
