@@ -7,7 +7,7 @@ import { Footer } from "@/components/Footer";
 import { CommentThread } from "@/components/CommentThread";
 import { StatusPill } from "@/components/StatusPill";
 import { KindBadge } from "@/components/KindBadge";
-import { categoryByCode, formatDate, isUpdate, paperRef } from "@/lib/papers";
+import { categoryByCode, formatDate, isUpdate, kindLabel, paperRef } from "@/lib/papers";
 import { getPaperBySlugPublic, listPapersPublic } from "@/db/queries";
 import { renderInline } from "@/lib/inlineMarkdown";
 import { ProseBody } from "@/components/ProseBody";
@@ -161,7 +161,7 @@ export default async function PaperPage({
                 ) : null
               ) : (
                 <>
-                  <Meta term="Kind" value={paper.kind} />
+                  <Meta term="Kind" value={kindLabel(paper.kind)} />
                   <Meta term="Category" value={paper.status} />
                 </>
               )}

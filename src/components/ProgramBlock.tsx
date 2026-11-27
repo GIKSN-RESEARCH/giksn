@@ -50,7 +50,7 @@ export function ProgramBlock({
                 : formatDate(program.startsOn)
               : program.tentativeStart
                 ? program.tentativeStart
-                : "Upcoming"}
+                : program.status}
           </span>
         </div>
         <h2
@@ -81,7 +81,7 @@ export function ProgramBlock({
           ) : program.tentativeStart ? (
             <MetaRow term="Tentative start" value={program.tentativeStart} />
           ) : (
-            <MetaRow term="Status" value="Upcoming" />
+            <MetaRow term="Status" value={program.status} />
           )}
         </dl>
         {siteHref && (
@@ -96,7 +96,7 @@ export function ProgramBlock({
                   : "inline-flex items-center gap-2 bg-accent !text-white px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] hover:bg-accent-deep transition-colors cursor-pointer"
               }
             >
-              Apply →
+              {siteHref.startsWith("https://t.me/") ? "Join the public channel" : "Apply"} →
             </a>
           </div>
         )}

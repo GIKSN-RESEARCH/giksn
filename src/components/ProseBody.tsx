@@ -3,18 +3,21 @@ import { normalizeSection } from "@/lib/parseBody";
 import { renderInline } from "@/lib/inlineMarkdown";
 
 export function ProseBody({ sections }: { sections: PaperSection[] }) {
-  let firstParagraph = true;
+  const normalizedSections = sections.map(normalizeSection);
+  const firstParagraphSection = normalizedSections.findIndex((blocks) =>
+    blocks.some((block) => block.type === "paragraph")
+  );
 
   return (
     <>
       {sections.map((section, i) => {
-        const blocks = normalizeSection(section);
+        const blocks = normalizedSections[i];
         return (
           <section key={i} className="mb-2">
             {section.heading && <h2>{renderInline(section.heading)}</h2>}
             {blocks.map((block, j) => {
-              const dropcap = firstParagraph && block.type === "paragraph";
-              if (block.type === "paragraph") firstParagraph = false;
+              const dropcap = i === firstParagraphSection &&
+                j === blocks.findIndex((candidate) => candidate.type === "paragraph");
               return (
                 <BodyBlockView key={j} block={block} dropcap={dropcap} />
               );

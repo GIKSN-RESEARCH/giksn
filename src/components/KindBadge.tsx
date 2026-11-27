@@ -1,4 +1,4 @@
-import type { Kind } from "@/lib/papers";
+import { kindLabel, type Kind } from "@/lib/papers";
 
 type Props = {
   kind: Kind;
@@ -22,9 +22,9 @@ export function KindBadge({ kind, size = "sm", variant = "outline" }: Props) {
   return (
     <span
       className={`inline-flex items-center font-mono uppercase tracking-[0.14em] ${text} ${padding} ${tone}`}
-      aria-label={`Kind: ${kind}`}
+      aria-label={`Kind: ${kindLabel(kind)}`}
     >
-      {kind}
+      {kindLabel(kind)}
     </span>
   );
 }

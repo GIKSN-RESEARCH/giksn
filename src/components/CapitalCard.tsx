@@ -15,7 +15,7 @@ export async function CapitalCard() {
           className="font-blanka text-ink text-center leading-[0.95] tracking-[-0.01em] mb-8 sm:mb-10"
           style={{ fontSize: "clamp(1.75rem, 4.2vw, 3.25rem)" }}
         >
-          The community <span className="text-accent">preneurs</span>
+          The community<span className="text-accent">{""}</span>
         </h2>
 
         <div className="grid grid-cols-12 gap-8 md:gap-0">
@@ -75,10 +75,7 @@ export async function CapitalCard() {
               Join on <span className="text-accent">Telegram</span>
             </h3>
             <p className="text-[14px] sm:text-[15px] leading-[1.7] text-ink-soft max-w-[52ch] mx-auto">
-              Day-to-day discussion, working groups and research in progress live
-              here. Public channels are open to anyone. Private channels sit
-              behind an application so contributors are vetted before they get
-              the keys.
+              Discussion, working groups and research in progress happen here, including the working groups for the Rust agent framework and the inference engine. Public channels are open to anyone. Private channels need an application so contributors can be vetted.
             </p>
             <div className="mt-5 sm:mt-6 flex flex-col items-center gap-3">
               <a

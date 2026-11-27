@@ -57,7 +57,7 @@ export default async function ArchivePage({
   const initialStatuses = parseList<Status>(params.status, STATUSES);
   const kindParam = (params.kind ?? "").trim();
   const initialKind: Kind | "all" =
-    kindParam === "Original" || kindParam === "Survey" ? kindParam : "all";
+    kindParam === "Original" || kindParam === "Survey" || kindParam === "implementation" ? kindParam : "all";
   const sortParam = (params.sort ?? "").trim() as SortKey;
   const initialSort: SortKey = (VALID_SORTS as readonly string[]).includes(
     sortParam

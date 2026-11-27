@@ -170,6 +170,8 @@ export function SubmitForm({
   const bodyPlaceholder =
     submissionType === "update"
       ? `One-paragraph lede stating what is being announced.\n\n## What it is\nThe factual description of the update.\n\n## Key dates and eligibility\nOpen / close dates, who can participate, how to sign up.\n\n## Why it matters now\nThe editorial context. What changed, why this matters this cycle.\n\n## Open questions\nWhat is unclear. What is contestable.\n\n## Reference\n[Official link](https://example.com)`
+      : kind === "implementation"
+        ? "A write-up of building something yourself, with code."
       : kind === "Original"
         ? `One-sentence framing of the research question.\n\n## Problem\nThe specific gap or failure mode this addresses.\n\n## Approach\nThe angle or method. Why this shape, not another.\n\n## Why now\nWhat changed in the last 12 months that makes this tractable.\n\n## Prior work\n- Existing attempts and what they left on the table\n- Related lines of research and how they relate\n\n## Open questions\nThe honest ones, not rhetorical.`
         : `The first paragraph names the subfield and the state of it.\n\n## The landscape\nWho is working on what, with citations where possible.\n\n## What is settled\nThe results the field has converged on.\n\n## What is open\nThe questions still worth spending compute on.\n\n## Where the lab thinks the leverage is\nA specific position, argued.`;
@@ -184,9 +186,9 @@ export function SubmitForm({
             {
               code: "paper" as const,
               label: "Paper",
-              full: "Original research or a survey",
+              full: "Original research, a survey or an implementation",
               blurb:
-                "AI, Deeptech, Hardware, or Distributed Systems. Original work or a survey of a subfield the lab wants to reason about.",
+                "AI, Deeptech, Hardware or Distributed Systems. Original work, a survey or a write-up of building something yourself.",
             },
             {
               code: "update" as const,
@@ -276,8 +278,7 @@ export function SubmitForm({
             <div className="flex items-baseline justify-between gap-3 mb-3 flex-wrap">
               <div className="kicker">Step 02: Kind</div>
               <span className="font-display italic text-ink-soft text-[13px] max-w-[42ch]">
-                Original research or a survey of the existing landscape? Both
-                are valid in any sector.
+                Original research, a survey or an implementation. All are valid in any sector.
               </span>
             </div>
             <EditorialSelect
