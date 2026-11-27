@@ -19,8 +19,7 @@ export function Masthead() {
             </h1>
           </Link>
           <p className="mt-5 sm:mt-6 max-w-4xl sm:max-w-none font-display italic text-[15px] sm:text-[17px] md:text-[18px] text-ink-soft px-2 sm:whitespace-nowrap">
-            An independent research lab exploring what comes next in
-            intelligence, computing and systems.
+            An independent lab rebuilding the AI stack in Rust, from GPU kernels to agents, in public.
           </p>
         </div>
       </div>

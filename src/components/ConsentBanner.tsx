@@ -1,23 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
+import { CONSENT_EVENT, CONSENT_STORAGE_KEY, useAnalyticsConsent, type ConsentState } from "@/lib/consent";
 
-export const CONSENT_STORAGE_KEY = "giksn_analytics_consent";
-export const CONSENT_EVENT = "giksn:consent-change";
-
-export type ConsentState = "granted" | "denied";
-
-function readStored(): ConsentState | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.localStorage.getItem(CONSENT_STORAGE_KEY);
-    if (raw === "granted" || raw === "denied") return raw;
-    return null;
-  } catch {
-    return null;
-  }
-}
+export { CONSENT_EVENT, CONSENT_STORAGE_KEY, type ConsentState } from "@/lib/consent";
 
 function persist(state: ConsentState) {
   try {
@@ -31,22 +18,19 @@ function persist(state: ConsentState) {
 }
 
 export function ConsentBanner() {
-  const [mounted, setMounted] = useState(false);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    setVisible(readStored() === null);
-  }, []);
+  const consent = useAnalyticsConsent();
+  const [dismissed, setDismissed] = useState(false);
+  const mounted = consent !== undefined;
+  const visible = consent === null && !dismissed;
 
   function accept() {
     persist("granted");
-    setVisible(false);
+    setDismissed(true);
   }
 
   function decline() {
     persist("denied");
-    setVisible(false);
+    setDismissed(true);
   }
 
   if (!mounted || !visible) return null;

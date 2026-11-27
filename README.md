@@ -1,26 +1,26 @@
 # GIKSN Research
 
-An independent research lab tackling open problems across **Artificial Intelligence**, **Deeptech**, **Hardware** and **Distributed Systems**.
+An independent lab rebuilding the AI stack in Rust, from GPU kernels to agents, in public.
 
-The lab publishes what it is working on and why. It ships the tools that come out of the work.
+Every layer ships as open source with a paper explaining how it works and where it falls short. Go implementations follow Rust.
 
 ## Current focus
 
-Two research threads run in parallel today.
+Two halves of the stack run in parallel today.
 
-- **AI memory.** Building the memory layer that gives an AI agent the right context at the moment it needs to reason. Structured queryable state rather than a text dump. Written durably, indexed hierarchically, retrieved at agent speed, forgotten deliberately. Not a bigger vector store. A rethink of what memory looks like.
-- **Small language model limits.** What stays hard for compact models even when memory is excellent: reasoning depth, planning under uncertainty, integrating long retrieved contexts, calibration under aggressive compression, safety after distillation. Where architectural or training work is genuinely needed rather than more retrieval.
+- **Inference engine.** A Qwen3 forward pass on the CPU, then CUDA kernels, a paged KV cache, continuous batching, quantization, speculative decoding and an OpenAI-compatible server.
+- **Agent framework.** Typed messages and tools, chains, a stateful graph runtime with checkpoints and interrupts and an agent server. A Go implementation follows.
 
-These threads are why the archive exists. Rinne, the lab's first shipped tool, came out of them. More will follow.
+Each piece is tested against a reference implementation before it counts as done. The write-ups become the record.
 
 ## The four sectors
 
 | Code | Sector                  | How the lab treats it                                                          |
 | ---- | ----------------------- | ------------------------------------------------------------------------------ |
-| `AI` | Artificial Intelligence | Where the lab's own research sits today. Memory + SLMs.                        |
-| `DT` | Deeptech                | Tracked and surveyed. Contributor-heavy.                                       |
-| `HW` | Hardware                | Where our AI work touches compute substrate. Honest numbers matter here.       |
-| `DS` | Distributed Systems     | Where our memory work touches indexing and coordination. Systems writing here. |
+| `AI` | Artificial Intelligence | Agent frameworks, models and evals. |
+| `DT` | Deeptech                | The longer-horizon survey track. |
+| `HW` | Hardware                | GPU kernels, quantization and memory bandwidth. |
+| `DS` | Distributed Systems     | Serving: batching, paged KV cache, tensor parallelism and routing. |
 
 ## Categories
 
@@ -33,7 +33,8 @@ Category marks what kind of work a post is (stored in the `status` column).
 | `Products` | Shipped tools and releases.                        |
 | `Programs` | Cohorts, fellowships and community work.           |
 
-Kinds: `Original` (new research) or `Survey` (synthesis of an existing subfield).
+Kinds: `Original` (new research), `Survey` (synthesis of an existing subfield) or
+`implementation` (a write-up of building something yourself, with code).
 
 ## What you can do
 
@@ -92,3 +93,15 @@ npm run test:db
 ```
 
 The test refuses to run against a database that already has application tables.
+
+The Rust stack content seed is separate from schema migrations and deployment.
+It adds the two Rust products and the open build program without changing
+existing entries. Preview it with:
+
+```sh
+bunx tsx scripts/_seed-rust-stack.ts
+```
+
+To apply it to an explicitly selected database, first apply schema migrations,
+then set `DATABASE_URL` in your shell and pass `--apply`. The seed does not load
+`.env.local`. The launch post remains a draft in the PR description.

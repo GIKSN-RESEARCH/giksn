@@ -18,9 +18,9 @@ type Props = {
 };
 
 export function FilteredUpdatesList({ updates, pageSize = 12 }: Props) {
-  const [query, setQuery] = useState("");
-  const [source, setSource] = useState<string>("");
-  const [sort, setSort] = useState<SortKey>("recent");
+  const [query, updateQuery] = useState("");
+  const [source, updateSource] = useState<string>("");
+  const [sort, updateSort] = useState<SortKey>("recent");
   const [page, setPage] = useState(1);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -63,16 +63,26 @@ export function FilteredUpdatesList({ updates, pageSize = 12 }: Props) {
     return list;
   }, [updates, query, source, sort]);
 
-  // Reset page when filters change
-  const sig = `${query}|${source}|${sort}`;
-  useMemo(() => {
-    setPage(1);
-  }, [sig]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const currentPage = Math.min(totalPages, page);
   const pageStartIndex = (currentPage - 1) * pageSize;
   const paged = filtered.slice(pageStartIndex, currentPage * pageSize);
+
+  function setQuery(next: string) {
+    updateQuery(next);
+    setPage(1);
+  }
+
+  function setSource(next: string) {
+    updateSource(next);
+    setPage(1);
+  }
+
+  function setSort(next: SortKey) {
+    updateSort(next);
+    setPage(1);
+  }
 
   function clearAll() {
     setQuery("");

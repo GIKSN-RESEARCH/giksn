@@ -54,8 +54,13 @@ export function AdminPanel() {
   }, []);
 
   useEffect(() => {
-    refreshSession();
-  }, [refreshSession]);
+    const controller = new AbortController();
+    fetch("/api/admin/session", { cache: "no-store", signal: controller.signal })
+      .then((response) => response.json())
+      .then((data: SessionInfo) => { if (!controller.signal.aborted) setSession(data); })
+      .catch(() => { if (!controller.signal.aborted) setSession({ authenticated: false }); });
+    return () => controller.abort();
+  }, []);
 
   const loadPapers = useCallback(async () => {
     setLoading(true);
@@ -80,8 +85,26 @@ export function AdminPanel() {
   }, []);
 
   useEffect(() => {
-    if (session?.authenticated) loadPapers();
-  }, [session?.authenticated, loadPapers]);
+    if (!session?.authenticated) return;
+    const controller = new AbortController();
+    fetch("/api/papers?sort=updated&includeHidden=1", { cache: "no-store", signal: controller.signal })
+      .then(async (response) => {
+        const data = await response.json();
+        if (controller.signal.aborted) return;
+        if (!response.ok) {
+          setError(data.error ?? "Failed to load papers.");
+          setPapers([]);
+        } else {
+          setPapers(data.papers);
+        }
+      })
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) return;
+        setError(error instanceof Error ? error.message : "Network error.");
+        setPapers([]);
+      });
+    return () => controller.abort();
+  }, [session?.authenticated]);
 
   async function purgeCache() {
     setPurging(true);

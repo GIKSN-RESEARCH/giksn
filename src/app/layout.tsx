@@ -26,18 +26,16 @@ const ubuntu = Ubuntu({
 });
 
 const siteTitle =
-  "GIKSN Research. An independent research lab at the frontier.";
+  "GIKSN Research · Rebuilding the AI stack in Rust, in public";
 const siteDescription =
-  "An independent research lab exploring what comes next in intelligence, computing and systems.";
+  "An independent lab rebuilding the AI stack in Rust, from GPU kernels and inference engines to agent frameworks. Open source, written up in public. Go follows Rust.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://giksn.com"),
   title: siteTitle,
   description: siteDescription,
-  // Favicon is auto-picked up from src/app/icon.png and apple-icon.png
-  // (Next.js App Router convention). No manual `icons` field needed.
-  // OG + Twitter images come from app/opengraph-image.tsx and
-  // app/twitter-image.tsx (Next.js file convention).
+  // Icons use the App Router file convention. Both share cards use the
+  // supplied 1200 by 630 image; legacy share-image URLs remain available.
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -45,11 +43,13 @@ export const metadata: Metadata = {
     siteName: "GIKSN Research",
     title: siteTitle,
     description: siteDescription,
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "GIKSN Research" }],
   },
   twitter: {
     card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
+    images: ["/og-image.png"],
   },
 };
 

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const categorySchema = z.enum(["AI", "DT", "HW", "DS", "UP"]);
-export const kindSchema = z.enum(["Original", "Survey"]);
+export const kindSchema = z.enum(["Original", "Survey", "implementation"]);
 export const statusSchema = z.enum([
   "Research",
   "Writings",
@@ -113,7 +113,7 @@ export type CreatePaperInput = z.infer<typeof createPaperSchema>;
 export type UpdateStatusInput = z.infer<typeof updateStatusSchema>;
 export type CreateCommentInput = z.infer<typeof createCommentSchema>;
 
-export const productStatusSchema = z.enum(["Alpha", "Beta", "Stable"]);
+export const productStatusSchema = z.enum(["Alpha", "Beta", "Stable", "In development"]);
 export const productSectorSchema = z.enum(["AI", "DT", "HW", "DS"]);
 
 const productLinkSchema = z.object({

@@ -1,39 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
   CONSENT_EVENT,
   CONSENT_STORAGE_KEY,
-} from "@/components/ConsentBanner";
-
-type State = "granted" | "denied" | "pending";
-
-function readState(): State {
-  if (typeof window === "undefined") return "pending";
-  try {
-    const raw = window.localStorage.getItem(CONSENT_STORAGE_KEY);
-    if (raw === "granted" || raw === "denied") return raw;
-    return "pending";
-  } catch {
-    return "pending";
-  }
-}
+  useAnalyticsConsent,
+} from "@/lib/consent";
 
 export function AnalyticsControls() {
-  const [state, setState] = useState<State>("pending");
-  const [mounted, setMounted] = useState(false);
+  const consent = useAnalyticsConsent();
+  const state = consent ?? "pending";
+  const mounted = consent !== undefined;
   const [flash, setFlash] = useState<string | null>(null);
-
-  useEffect(() => {
-    setMounted(true);
-    setState(readState());
-    function onChange() {
-      setState(readState());
-    }
-    window.addEventListener(CONSENT_EVENT, onChange);
-    return () => window.removeEventListener(CONSENT_EVENT, onChange);
-  }, []);
 
   function set(next: "granted" | "denied") {
     try {

@@ -31,13 +31,8 @@ export function StatusSelect({
     right: number;
     flipUp: boolean;
   } | null>(null);
-  const [mounted, setMounted] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popRef = useRef<HTMLUListElement>(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   function reposition() {
     if (!triggerRef.current) return;
@@ -101,7 +96,7 @@ export function StatusSelect({
   }
 
   const popover =
-    open && coords && mounted
+    open && coords
       ? createPortal(
           <ul
             ref={popRef}

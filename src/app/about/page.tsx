@@ -27,100 +27,43 @@ export default function AboutPage() {
               <span>General Intelligence Kinetic Systems Node</span>
             </div>
             <p className="mt-5 sm:mt-7 max-w-[62ch] text-[16px] sm:text-[19px] leading-[1.55] text-ink-soft font-display italic">
-              GIKSN Research is an independent lab working on AI and
-              memory. Two questions we&apos;re on right now. How to give AI
-              agents real memory that surfaces the right context at agent
-              speed. What a small language model can actually do with that
-              memory once it has it. A community of researchers and
-              builders across AI, Deeptech, Hardware and Distributed
-              Systems takes shape alongside.
+              GIKSN Research builds the AI stack from first principles in Rust: the inference engine underneath and the agent frameworks on top. Every layer ships as open source with a paper explaining how it works and where it falls short. Go implementations follow Rust.
             </p>
           </header>
 
           <div className="col-span-12 md:col-span-8 pt-6 md:pt-8 prose-body">
             <p className="dropcap">
-              Most days the lab is working on two questions. Both are
-              about why AI agents keep almost working and then falling
-              apart the moment the task gets real. The first is memory.
-              The second is what a small model can actually do with that
-              memory once it has it.
+              The work runs from GPU kernels to agents, in public.
             </p>
 
-            <h2>What we mean by memory</h2>
+            <h2>What we mean by implementing the stack</h2>
             <p>
-              Not chat history. Not vector search over documents you
-              dropped into a folder. The kind of memory that remembers
-              what happened yesterday, that knows what led to a decision,
-              that connects a file to the thread you were reading to the
-              command you ran three minutes later.
+              Two halves. On the inference side: a Qwen3 forward pass on the CPU, then CUDA kernels, a paged KV cache, continuous batching, quantization, speculative decoding and an OpenAI-compatible server.
             </p>
             <p>
-              The standard answer right now is roughly &ldquo;shove more into
-              the context window and use a bigger vector store.&rdquo; That
-              gets you demos. It does not get you a system that still
-              works six months in. Vector search is right about the wrong
-              things too often. Longer context windows dilute attention
-              instead of using it. Retrieval that grabs the top-k similar
-              chunks is not the same thing as retrieval that grabs the
-              one piece of state the model actually needs.
+              On the agent side: messages and tools, chains, a stateful graph runtime with checkpoints and interrupts and an agent server.
             </p>
             <p>
-              So the memory work is not building a bigger vector store.
-              It is rethinking what the memory is. What shape it takes.
-              What kinds of queries make sense against it. How it survives
-              a schema change six months in when what you thought was one
-              kind of entity turns out to be three. How compaction keeps
-              the useful bits and drops the noise, rather than throwing
-              away last week&apos;s activity because disk got tight. How
-              forgetting works when it needs to feel intentional instead
-              of arbitrary.
+              Each piece is tested against a reference implementation before it counts as done.
             </p>
 
-            <h2>What we mean by the model doing the reading</h2>
+            <h2>Why Rust, then Go</h2>
             <p>
-              Give a small language model perfect memory tomorrow. It
-              still hits ceilings. Multi-step reasoning gets brittle
-              around move three or four. Planning under uncertainty falls
-              back to heuristics baked in during pretraining. Retrieved
-              context of any real size dilutes across attention until
-              coherence starts to slip. Quantisation trades calibration
-              for footprint. Distillation preserves the average case and
-              drops the tail. Safety after aggressive fine-tuning is
-              qualitatively different from safety in the base model.
+              Production AI is long-running, concurrent and stateful. Rust gives static binaries, low memory per concurrent agent, types that catch malformed tool calls before a model does and a direct path to the GPU.
             </p>
             <p>
-              None of that gets fixed with better retrieval. That is the
-              second thread. It runs at the same time as the memory
-              thread because the two are the same problem seen from
-              opposite ends. Memory decides what the model gets to see.
-              The model decides what to do with what it sees. A lab that
-              only works one side ships something that looks smart until
-              it has to actually think.
+              Go follows for the backend teams who already run it.
             </p>
 
-            <h2>Why these two</h2>
+            <h2>Why rebuild what exists</h2>
             <p>
-              Both problems have been &ldquo;next quarter&rdquo; at every major
-              lab for the last two years. Neither has been convincingly
-              answered. What we noticed while sitting with the actual
-              details is that the published research thins out fast once
-              you get past the surface.
+              vLLM, Candle, Rig and LangGraph already exist. Building them again is the fastest way to understand them, and the write-ups become the record.
             </p>
             <p>
-              There is a lot of high-level writing on &ldquo;memory for
-              agents.&rdquo; There is much less on what to do when the
-              schema stops matching reality six months in, or when the
-              retrieval ranker is right for the wrong reasons, or when
-              the model confidently pulls from the wrong session because
-              two similar-looking states got embedded near each other.
+              Where our version is slower or less complete, the paper says so.
             </p>
             <p>
-              Small model limits get the opposite treatment. Everyone
-              benchmarks. Almost nobody writes down the specific failure
-              modes that ruin real deployments. The bet is that the space
-              between surface writing and actual working systems still
-              has room. A small independent lab can meaningfully add to
-              the record if it works carefully.
+              Agent memory and small-model research continue as a thread inside the AI sector.
             </p>
 
             <h2>What Rinne is doing in the middle of this</h2>
@@ -200,38 +143,19 @@ export default function AboutPage() {
 
             <h2>How the four sectors fit</h2>
             <p>
-              The archive is organised across four sectors: AI, Deeptech,
-              Hardware and Distributed Systems.
+              The archive is organised across four sectors: AI, Deeptech, Hardware and Distributed Systems.
             </p>
             <p>
-              AI is where the lab actively researches. Almost every paper
-              written by the lab itself is going to sit here for the
-              foreseeable future.
+              AI covers agent frameworks, models and evals.
             </p>
             <p>
-              Hardware and Distributed Systems are the two adjacent
-              surfaces our AI work leans on. Any AI system that has to run
-              somewhere is a hardware question. The compute substrate
-              decides whether things are actually feasible or just
-              interesting. Any memory system that has to survive real use
-              is a distributed systems question. How do you shard it. How
-              do you replicate it. How do you keep it consistent when
-              everything is being written at once. The lab writes in
-              these two sectors when the AI work produces something worth
-              writing down about the surrounding infrastructure.
+              Hardware covers GPU kernels, quantization and memory bandwidth. Distributed Systems covers serving: batching, paged KV cache, tensor parallelism and routing.
             </p>
             <p>
-              Deeptech is a longer horizon. Bio, materials, energy,
-              quantum and robotics shape what is possible at the AI
-              substrate over years rather than months. The lab keeps a
-              small amount of survey writing here to stay honest about
-              where things are actually moving.
+              Deeptech stays the longer-horizon survey track, and Updates carries announcements.
             </p>
             <p>
-              Contributor writing is welcome in all four sectors and
-              expected to be the majority in Deeptech, Hardware and
-              Distributed Systems for the foreseeable future. Contribution
-              is gated for reasons explained further down.
+              Contributor writing is welcome in all four sectors and expected to be the majority in Deeptech, Hardware and Distributed Systems for the foreseeable future. Contribution is gated for reasons explained further down.
             </p>
             <ul>
               {CATEGORIES.map((c) => (
@@ -327,17 +251,17 @@ export default function AboutPage() {
               {[
                 {
                   n: "01",
-                  t: "Own research first",
-                  b: "The lab picks a problem and works it until something ships. Right now: giving AI agents real memory. And what happens when a small model has to reason about that memory.",
+                  t: "Implement it ourselves first.",
+                  b: "The lab builds each layer from first principles and tests it against a reference implementation.",
                 },
                 {
                   n: "02",
-                  t: "Ship out of the work",
-                  b: "Tools land on the products page when they are useful. Each one arrives with the paper that argues for its design.",
+                  t: "Ship every layer as an open crate with a paper.",
+                  b: "Each crate lands with the benchmarks and the paper explaining how it works and where it falls short.",
                 },
                 {
                   n: "03",
-                  t: "Community alongside",
+                  t: "Build community alongside.",
                   b: "Readers and vetted contributors form around the research. Not the point of the site. Not an afterthought either.",
                 },
               ].map((r) => (
@@ -360,19 +284,16 @@ export default function AboutPage() {
             <div className="mt-8 kicker mb-3">The bet</div>
             <ul className="space-y-3 text-[14px] text-ink-soft leading-[1.55]">
               <li>
-                AI agents keep almost working and then falling apart when
-                the task gets real. Two reasons at once.
+                Engineers who build every layer of the stack
               </li>
               <li>
-                First reason: they do not have memory that gives them the
-                right context at the right time.
+                understand it better than those who only call it.
               </li>
               <li>
-                Second reason: even with good memory, small models hit
-                ceilings that retrieval alone cannot fix.
+                Publishing each layer, with its benchmarks and its mistakes,
               </li>
               <li>
-                Working both sides is what shapes the tools we ship.
+                is how a small lab earns a place in the record.
               </li>
             </ul>
             <div className="mt-10 divider-dashed" />

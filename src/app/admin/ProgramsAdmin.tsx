@@ -18,27 +18,25 @@ type Props = {
 
 type OpenId = string | "new" | null;
 
+async function fetchPrograms(): Promise<Program[]> {
+  const response = await fetch("/api/programs?includeDelisted=1", { cache: "no-store" });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error ?? "Failed to load programs.");
+  return data.programs;
+}
+
 export function ProgramsAdmin({ onFlash, onError, onUnauthorized }: Props) {
   const [programs, setPrograms] = useState<Program[] | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [openId, setOpenId] = useState<OpenId>(null);
 
   async function load() {
     setLoading(true);
     onError(null);
     try {
-      const res = await fetch("/api/programs?includeDelisted=1", {
-        cache: "no-store",
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        onError(data.error ?? "Failed to load programs.");
-        setPrograms([]);
-        return;
-      }
-      setPrograms(data.programs);
-    } catch (e) {
-      onError(e instanceof Error ? e.message : "Network error.");
+      setPrograms(await fetchPrograms());
+    } catch (error) {
+      onError(error instanceof Error ? error.message : "Network error.");
       setPrograms([]);
     } finally {
       setLoading(false);
@@ -46,9 +44,20 @@ export function ProgramsAdmin({ onFlash, onError, onUnauthorized }: Props) {
   }
 
   useEffect(() => {
-    load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    let active = true;
+    fetchPrograms().then((entries) => {
+      if (!active) return;
+      setPrograms(entries);
+      onError(null);
+    }).catch((error: unknown) => {
+      if (!active) return;
+      onError(error instanceof Error ? error.message : "Network error.");
+      setPrograms([]);
+    }).finally(() => {
+      if (active) setLoading(false);
+    });
+    return () => { active = false; };
+  }, [onError]);
 
   function toggle(id: OpenId) {
     setOpenId((curr) => (curr === id ? null : id));
@@ -154,6 +163,7 @@ export function ProgramsAdmin({ onFlash, onError, onUnauthorized }: Props) {
                 {expanded && (
                   <div className="border-t border-rule-soft px-4 pb-5 pt-4 bg-paper">
                     <ProgramEditor
+                      key={JSON.stringify(p)}
                       mode="edit"
                       program={p}
                       onCancel={() => setOpenId(null)}
@@ -230,28 +240,6 @@ function ProgramEditor({
   const [deleting, setDeleting] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
 
-  useEffect(() => {
-    if (!program) return;
-    setName(program.name);
-    setTagline(program.tagline);
-    setStatus(program.status);
-    setSectors(
-      program.sectors?.length
-        ? program.sectors
-        : program.category
-          ? [program.category]
-          : []
-    );
-    setCustomSector("");
-    setDescription(program.description);
-    setWebsite(program.website ?? "");
-    setHighlightsText(program.highlights.join("\n"));
-    setListed(program.listed);
-    setHasDate(Boolean(program.startsOn || program.endsOn));
-    setStartsOn(program.startsOn ?? "");
-    setEndsOn(program.endsOn ?? "");
-    setTentativeStart(program.tentativeStart ?? "");
-  }, [program]);
 
   function toggleSector(code: string) {
     setSectors((curr) =>

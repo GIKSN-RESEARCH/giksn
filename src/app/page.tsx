@@ -475,7 +475,7 @@ function EmptyState() {
           Nothing published <span className="text-accent">yet</span>.
         </h1>
         <p className="mt-6 mx-auto max-w-[55ch] text-[15px] sm:text-[17px] leading-[1.6] text-ink-soft font-display italic">
-          Submit the first paper, or post the first lab update.
+          The first write-ups from the Rust stack land here. Have something specific to argue? Submit a paper.
         </p>
         <div className="mt-10 flex items-center justify-center gap-3 flex-wrap">
           <Link

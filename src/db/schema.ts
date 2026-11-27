@@ -33,12 +33,13 @@ export const statusEnum = pgEnum("status", [
   "Programs",
 ]);
 
-export const kindEnum = pgEnum("kind", ["Original", "Survey"]);
+export const kindEnum = pgEnum("kind", ["Original", "Survey", "implementation"]);
 
 export const productStatusEnum = pgEnum("product_status", [
   "Alpha",
   "Beta",
   "Stable",
+  "In development",
 ]);
 
 export const programStatusEnum = pgEnum("program_status", [

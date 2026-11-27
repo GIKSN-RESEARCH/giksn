@@ -50,7 +50,7 @@ export const db = new Proxy({} as ReturnType<typeof drizzle<typeof schema>>, {
   get(_target, prop) {
     const real = getDb() as unknown as Record<string | symbol, unknown>;
     const value = real[prop];
-    return typeof value === "function" ? (value as Function).bind(real) : value;
+    return typeof value === "function" ? value.bind(real) : value;
   },
 });
 

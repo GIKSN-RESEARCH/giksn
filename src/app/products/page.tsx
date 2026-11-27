@@ -31,8 +31,8 @@ export default async function ProductsPage() {
           </h1>
           <p className="mt-5 sm:mt-7 max-w-[60ch] text-[15px] sm:text-[18px] leading-[1.55] text-ink-soft font-display italic">
             The lab writes and the lab builds. Products are open source unless
-            noted otherwise, live at their own URLs, and are argued for in a
-            companion paper in the archive.
+            noted otherwise, live at their own URLs and are argued for in a
+            companion paper in the archive. Most entries are Rust crates.
           </p>
         </header>
 
@@ -179,7 +179,7 @@ function ProductBlock({ product, index }: { product: Product; index: number }) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 border border-rule px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-soft hover:text-accent hover:border-accent transition-colors"
             >
-              {siteHost} →
+              {product.links.find((link) => link.href === siteHref)?.label ?? siteHost} →
             </a>
           )}
           {product.paperRef && (

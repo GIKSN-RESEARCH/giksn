@@ -12,27 +12,25 @@ type Props = {
 
 type OpenId = string | "new" | null;
 
+async function fetchNews(): Promise<NewsItem[]> {
+  const response = await fetch("/api/news?includeDelisted=1", { cache: "no-store" });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error ?? "Failed to load news.");
+  return data.news;
+}
+
 export function NewsAdmin({ onFlash, onError, onUnauthorized }: Props) {
   const [items, setItems] = useState<NewsItem[] | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [openId, setOpenId] = useState<OpenId>(null);
 
   async function load() {
     setLoading(true);
     onError(null);
     try {
-      const res = await fetch("/api/news?includeDelisted=1", {
-        cache: "no-store",
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        onError(data.error ?? "Failed to load news.");
-        setItems([]);
-        return;
-      }
-      setItems(data.news);
-    } catch (e) {
-      onError(e instanceof Error ? e.message : "Network error.");
+      setItems(await fetchNews());
+    } catch (error) {
+      onError(error instanceof Error ? error.message : "Network error.");
       setItems([]);
     } finally {
       setLoading(false);
@@ -40,9 +38,20 @@ export function NewsAdmin({ onFlash, onError, onUnauthorized }: Props) {
   }
 
   useEffect(() => {
-    load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    let active = true;
+    fetchNews().then((entries) => {
+      if (!active) return;
+      setItems(entries);
+      onError(null);
+    }).catch((error: unknown) => {
+      if (!active) return;
+      onError(error instanceof Error ? error.message : "Network error.");
+      setItems([]);
+    }).finally(() => {
+      if (active) setLoading(false);
+    });
+    return () => { active = false; };
+  }, [onError]);
 
   function toggle(id: OpenId) {
     setOpenId((curr) => (curr === id ? null : id));
@@ -139,6 +148,7 @@ export function NewsAdmin({ onFlash, onError, onUnauthorized }: Props) {
                 {expanded && (
                   <div className="border-t border-rule-soft px-4 pb-5 pt-4 bg-paper">
                     <NewsEditor
+                      key={JSON.stringify(item)}
                       mode="edit"
                       item={item}
                       onCancel={() => setOpenId(null)}
@@ -194,12 +204,6 @@ function NewsEditor({
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  useEffect(() => {
-    if (!item) return;
-    setTitle(item.title);
-    setHref(item.href ?? "");
-    setListed(item.listed);
-  }, [item]);
 
   function slugifyTitle(value: string) {
     const base = value

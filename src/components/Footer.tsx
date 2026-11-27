@@ -37,8 +37,7 @@ function FooterInner() {
               </h3>
             </Link>
             <p className="mt-3 text-[14px] text-ink-soft max-w-[40ch] leading-relaxed">
-              An independent research lab exploring what comes next in
-              intelligence, computing and systems.
+              An independent lab rebuilding the AI stack in Rust, from GPU kernels to agents, in public.
             </p>
           </div>
           <div className="col-span-12 md:col-span-3">

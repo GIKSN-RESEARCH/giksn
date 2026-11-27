@@ -1,8 +1,8 @@
 export const RINNE_SITE_URL = "https://rinne.giksn.com";
 
-export type ProductStatus = "Alpha" | "Beta" | "Stable";
+export type ProductStatus = "Alpha" | "Beta" | "Stable" | "In development";
 
-export const PRODUCT_STATUSES: ProductStatus[] = ["Alpha", "Beta", "Stable"];
+export const PRODUCT_STATUSES: ProductStatus[] = ["Alpha", "Beta", "Stable", "In development"];
 
 export type ProductLink = {
   label: string;

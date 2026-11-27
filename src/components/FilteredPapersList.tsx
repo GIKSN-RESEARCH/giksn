@@ -73,15 +73,15 @@ export function FilteredPapersList({
     initialKind !== "all" ||
     initialSort !== "recent";
 
-  const [query, setQuery] = useState(initialQuery);
-  const [activeCategories, setActiveCategories] = useState<Set<Category>>(
+  const [query, updateQuery] = useState(initialQuery);
+  const [activeCategories, updateActiveCategories] = useState<Set<Category>>(
     new Set(initialCategories ?? [])
   );
-  const [activeStatuses, setActiveStatuses] = useState<Set<Status>>(
+  const [activeStatuses, updateActiveStatuses] = useState<Set<Status>>(
     new Set(initialStatuses ?? [])
   );
-  const [kindFilter, setKindFilter] = useState<Kind | "all">(initialKind);
-  const [sort, setSort] = useState<SortKey>(initialSort);
+  const [kindFilter, updateKindFilter] = useState<Kind | "all">(initialKind);
+  const [sort, updateSort] = useState<SortKey>(initialSort);
   const [page, setPage] = useState(1);
   // When the page loads with filters already applied (from hero search),
   // open the filter panel so users can see what's active.
@@ -131,13 +131,6 @@ export function FilteredPapersList({
     return list;
   }, [papers, query, activeCategories, activeStatuses, kindFilter, sort]);
 
-  // Reset to page 1 whenever filters change
-  const filterSignature = `${query}|${[...activeCategories].join(",")}|${[
-    ...activeStatuses,
-  ].join(",")}|${kindFilter}|${sort}`;
-  useMemo(() => {
-    setPage(1);
-  }, [filterSignature]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const currentPage = Math.min(totalPages, page);
@@ -149,6 +142,31 @@ export function FilteredPapersList({
     if (next.has(value)) next.delete(value);
     else next.add(value);
     setter(next);
+  }
+
+  function setQuery(next: string) {
+    updateQuery(next);
+    setPage(1);
+  }
+
+  function setActiveCategories(next: Set<Category>) {
+    updateActiveCategories(next);
+    setPage(1);
+  }
+
+  function setActiveStatuses(next: Set<Status>) {
+    updateActiveStatuses(next);
+    setPage(1);
+  }
+
+  function setKindFilter(next: Kind | "all") {
+    updateKindFilter(next);
+    setPage(1);
+  }
+
+  function setSort(next: SortKey) {
+    updateSort(next);
+    setPage(1);
   }
 
   function clearAll() {

@@ -17,27 +17,25 @@ type Props = {
 
 type OpenId = string | "new" | null;
 
+async function fetchProducts(): Promise<Product[]> {
+  const response = await fetch("/api/products?includeDelisted=1", { cache: "no-store" });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error ?? "Failed to load products.");
+  return data.products;
+}
+
 export function ProductsAdmin({ onFlash, onError, onUnauthorized }: Props) {
   const [products, setProducts] = useState<Product[] | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [openId, setOpenId] = useState<OpenId>(null);
 
   async function load() {
     setLoading(true);
     onError(null);
     try {
-      const res = await fetch("/api/products?includeDelisted=1", {
-        cache: "no-store",
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        onError(data.error ?? "Failed to load products.");
-        setProducts([]);
-        return;
-      }
-      setProducts(data.products);
-    } catch (e) {
-      onError(e instanceof Error ? e.message : "Network error.");
+      setProducts(await fetchProducts());
+    } catch (error) {
+      onError(error instanceof Error ? error.message : "Network error.");
       setProducts([]);
     } finally {
       setLoading(false);
@@ -45,9 +43,20 @@ export function ProductsAdmin({ onFlash, onError, onUnauthorized }: Props) {
   }
 
   useEffect(() => {
-    load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    let active = true;
+    fetchProducts().then((entries) => {
+      if (!active) return;
+      setProducts(entries);
+      onError(null);
+    }).catch((error: unknown) => {
+      if (!active) return;
+      onError(error instanceof Error ? error.message : "Network error.");
+      setProducts([]);
+    }).finally(() => {
+      if (active) setLoading(false);
+    });
+    return () => { active = false; };
+  }, [onError]);
 
   function toggle(id: OpenId) {
     setOpenId((curr) => (curr === id ? null : id));
@@ -145,6 +154,7 @@ export function ProductsAdmin({ onFlash, onError, onUnauthorized }: Props) {
                 {expanded && (
                   <div className="border-t border-rule-soft px-4 pb-5 pt-4 bg-paper">
                     <ProductEditor
+                      key={JSON.stringify(p)}
                       mode="edit"
                       product={p}
                       onCancel={() => setOpenId(null)}
@@ -219,21 +229,6 @@ function ProductEditor({
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  useEffect(() => {
-    if (!product) return;
-    setName(product.name);
-    setTagline(product.tagline);
-    setVersion(product.version ?? "");
-    setLicense(product.license);
-    setStatus(product.status);
-    setCategory(product.category);
-    setDescription(product.description);
-    setInstallLabel(product.install?.label ?? "");
-    setInstallCommand(product.install?.command ?? "");
-    setHighlightsText(product.highlights.join("\n"));
-    setListed(product.listed);
-    setWebsite(product.website ?? "");
-  }, [product]);
 
   function normalizeUrl(raw: string): string | null {
     const trimmed = raw.trim();

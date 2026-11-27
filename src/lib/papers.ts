@@ -3,7 +3,7 @@ export type Category = "AI" | "DT" | "HW" | "DS" | "UP";
 export type PaperCategory = "AI" | "DT" | "HW" | "DS";
 export type UpdateCategory = "UP";
 
-export type Kind = "Original" | "Survey";
+export type Kind = "Original" | "Survey" | "implementation";
 
 /** Content category (formerly lifecycle status). Not the same as sector (AI/DT/HW/DS). */
 export type Status =
@@ -76,35 +76,35 @@ export const CATEGORIES: {
     label: "AI",
     full: "Artificial Intelligence",
     blurb:
-      "Where the lab actively works. Building the memory layer that gives AI agents the right context at the moment they need it. Researching the ceiling of small language models where retrieval alone stops helping.",
+      "AI covers agent frameworks, models and evals.",
   },
   {
     code: "DT",
     label: "DT",
     full: "Deeptech",
     blurb:
-      "Bio, materials, energy, quantum, robotics. A longer-horizon track the lab tracks and surveys, with contributor writing at the centre.",
+      "Deeptech stays the longer-horizon survey track.",
   },
   {
     code: "HW",
     label: "HW",
     full: "Hardware",
     blurb:
-      "Silicon, accelerators, NPUs, embedded systems, sensors. The compute substrate where AI actually runs. Where our AI work meets honest hardware numbers.",
+      "Hardware covers GPU kernels, quantization and memory bandwidth.",
   },
   {
     code: "DS",
     label: "DS",
     full: "Distributed Systems",
     blurb:
-      "Consensus, storage, coordination, protocols. Where our memory work meets indexing and retrieval. The plumbing under any memory system that has to survive real scale.",
+      "Distributed Systems covers serving: batching, paged KV cache, tensor parallelism and routing.",
   },
   {
     code: "UP",
     label: "UP",
     full: "Updates",
     blurb:
-      "Announcements from the lab and the wider frontier. Cohort openings, collaborations, releases, program dates.",
+      "Updates carries announcements.",
   },
 ];
 
@@ -138,7 +138,7 @@ export const KINDS: { code: Kind; label: string; blurb: string }[] = [
     code: "Original",
     label: "Original",
     blurb:
-      "New research. A first-principles investigation, a novel result, or a proposed direction the lab has not written down before.",
+      "New research. A first-principles investigation, a novel result or a proposed direction the lab has not written down before.",
   },
   {
     code: "Survey",
@@ -146,7 +146,16 @@ export const KINDS: { code: Kind; label: string; blurb: string }[] = [
     blurb:
       "A synthesis of existing work. Maps the state of a subfield, its tooling, its open questions and where the lab thinks the leverage sits.",
   },
+  {
+    code: "implementation",
+    label: "Implementation",
+    blurb: "A write-up of building something yourself, with code.",
+  },
 ];
+
+export function kindLabel(kind: Kind): string {
+  return KINDS.find((entry) => entry.code === kind)?.label ?? kind;
+}
 
 export function categoryByCode(
   code: string

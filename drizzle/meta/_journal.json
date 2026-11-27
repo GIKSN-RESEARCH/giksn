@@ -85,6 +85,13 @@
       "when": 1787119200000,
       "tag": "0011_news_table",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1795787615082,
+      "tag": "0012_rust_stack_enums",
+      "breakpoints": true
     }
   ]
 }
